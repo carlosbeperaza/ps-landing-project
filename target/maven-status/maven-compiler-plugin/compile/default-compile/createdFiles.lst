@@ -1,0 +1,13 @@
+com\ps\landing\project\SpringBootBackendApirestApplication.class
+com\ps\landing\project\auth\InfoAdicionalToken.class
+com\ps\landing\project\services\UsuarioService.class
+com\ps\landing\project\models\Usuario.class
+com\ps\landing\project\auth\ResourceServerConfig.class
+com\ps\landing\project\models\Role.class
+com\ps\landing\project\models\Modulo.class
+com\ps\landing\project\controllers\UsuariosController.class
+com\ps\landing\project\repos\UsuarioRepo.class
+com\ps\landing\project\auth\AuthorizationServerConfig.class
+com\ps\landing\project\auth\JwtConfig.class
+com\ps\landing\project\servicesImpls\UsuarioServiceImpl.class
+com\ps\landing\project\auth\SpringSecurityConfig.class
