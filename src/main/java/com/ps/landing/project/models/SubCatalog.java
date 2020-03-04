@@ -3,11 +3,10 @@ package com.ps.landing.project.models;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Timestamp;
-import java.util.List;
 
 @Entity
-@Table(name = "catalogs")
-public class Catalog implements Serializable {
+@Table(name = "sub_catalogs")
+public class SubCatalog implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,6 +18,8 @@ public class Catalog implements Serializable {
     @Column(length = 100, nullable = false)
     private String description;
 
+    private Long parent;
+
     private boolean status;
 
     @Temporal(TemporalType.TIMESTAMP)
@@ -26,10 +27,6 @@ public class Catalog implements Serializable {
 
     @Temporal(TemporalType.TIMESTAMP)
     private Timestamp lastUpdateDate;
-
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinTable(name = "sub_catalogs", joinColumns = @JoinColumn(name = "parent"))
-    private List<SubCatalog> subCatalogs;
 
     public Long getId() {
         return id;
@@ -55,6 +52,14 @@ public class Catalog implements Serializable {
         this.description = description;
     }
 
+    public Long getParent() {
+        return parent;
+    }
+
+    public void setParent(Long parent) {
+        this.parent = parent;
+    }
+
     public boolean isStatus() {
         return status;
     }
@@ -77,13 +82,5 @@ public class Catalog implements Serializable {
 
     public void setLastUpdateDate(Timestamp lastUpdateDate) {
         this.lastUpdateDate = lastUpdateDate;
-    }
-
-    public List<SubCatalog> getSubCatalogs() {
-        return subCatalogs;
-    }
-
-    public void setSubCatalogs(List<SubCatalog> subCatalogs) {
-        this.subCatalogs = subCatalogs;
     }
 }

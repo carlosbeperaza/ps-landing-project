@@ -1,5 +1,7 @@
 package com.ps.landing.project.servicesImpls;
 
+import com.ps.landing.project.converters.CatalogConverter;
+import com.ps.landing.project.dto.CatalogDTO;
 import com.ps.landing.project.models.Catalog;
 import com.ps.landing.project.repos.CatalogRepo;
 import com.ps.landing.project.services.CatalogService;
@@ -15,35 +17,45 @@ import java.util.Optional;
 public class CatalogServiceImpl implements CatalogService {
 
     private Logger log = LoggerFactory.getLogger(CatalogServiceImpl.class.getName());
-    private CatalogRepo catalogRepo;
+    private CatalogRepo repo;
+    private CatalogConverter converter;
 
     @Autowired
-    void setCatalogRepo(CatalogRepo catalogRepo) {
-        this.catalogRepo = catalogRepo;
+    void setRepo(CatalogRepo repo) {
+        this.repo = repo;
+    }
+
+    @Autowired
+    void setConverter(CatalogConverter converter) {
+        this.converter = converter;
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Catalog findById(long id) {
+    public CatalogDTO findById(long id) {
 
-        Optional<Catalog> optionalCatalog = catalogRepo.findById(id);
-        return optionalCatalog.orElse(null);
+        Optional<Catalog> optionalCatalog = repo.findById(id);
+        Catalog catalog = optionalCatalog.orElse(null);
+
+        return (catalog != null) ? converter.convertToDTO(catalog) : null;
     }
 
     @Override
-    public Catalog save() {
+    public CatalogDTO save(Catalog catalog) {
 
-
-        return null;
+        repo.save(catalog);
+        return converter.convertToDTO(catalog);
     }
 
     @Override
-    public Catalog modify(long id) {
-        return null;
+    public CatalogDTO update(Catalog catalog) {
+
+        repo.save(catalog);
+        return converter.convertToDTO(catalog);
     }
 
     @Override
     public void delete(long id) {
-
+        repo.deleteById(id);
     }
 }
