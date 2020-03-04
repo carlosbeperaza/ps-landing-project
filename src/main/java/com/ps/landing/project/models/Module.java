@@ -2,14 +2,10 @@ package com.ps.landing.project.models;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import java.util.List;
+
+import javax.persistence.*;
+
 
 
 @Entity
@@ -47,6 +43,10 @@ public class Module implements Serializable{
 	
 	@Temporal(TemporalType.TIMESTAMP)
 	private Timestamp last_update_date;
+	
+	@OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+	@JoinTable(name = "sub_modules", joinColumns = @JoinColumn(name = "parent") )
+	private List<SubModule> subModule;
 	
 	
 
