@@ -4,8 +4,8 @@ import javax.persistence.*;
 import java.sql.Timestamp;
 
 @Entity
-@Table(name = "catalogs")
-public class Catalog {
+@Table(name = "system_parameters")
+public class SystemsParameters {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -14,10 +14,11 @@ public class Catalog {
     @Column(length = 60, nullable = false)
     private String name;
 
+    @Column(length = 60, nullable = false)
+    private String value;
+
     @Column(length = 100, nullable = false)
     private String description;
-
-    private Catalog parent;
 
     private boolean status;
 
@@ -43,20 +44,20 @@ public class Catalog {
         this.name = name;
     }
 
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
+    }
+
     public String getDescription() {
         return description;
     }
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public Catalog getParent() {
-        return parent;
-    }
-
-    public void setParent(Catalog parent) {
-        this.parent = parent;
     }
 
     public boolean isStatus() {
