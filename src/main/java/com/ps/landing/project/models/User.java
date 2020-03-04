@@ -1,5 +1,6 @@
 package com.ps.landing.project.models;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
@@ -23,7 +24,7 @@ import javax.persistence.UniqueConstraint;
 
 @Entity
 @Table(name = "users")
-public class User {
+public class User implements Serializable{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
