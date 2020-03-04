@@ -1,11 +1,12 @@
 package com.ps.landing.project.models;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 @Entity
 @Table(name = "system_parameters")
-public class SystemsParameters {
+public class SystemsParameters implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
