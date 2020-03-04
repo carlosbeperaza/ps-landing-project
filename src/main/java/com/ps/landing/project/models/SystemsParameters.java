@@ -10,7 +10,7 @@ public class SystemsParameters implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @Column(length = 60, nullable = false)
     private String name;
@@ -29,11 +29,11 @@ public class SystemsParameters implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Timestamp lastUpdateDate;
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

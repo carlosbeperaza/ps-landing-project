@@ -2,9 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="15fbc0cb-4575-4833-98ba-7e1df12a1ed3" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/ps/landing/project/models/SystemsParameters.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/ps/landing/project/controllers/CatalogController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/ps/landing/project/repos/CatalogRepo.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/ps/landing/project/services/CatalogService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/ps/landing/project/servicesImpls/CatalogServiceImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/ps/landing/project/models/Catalog.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ps/landing/project/models/Catalog.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ps/landing/project/models/SystemsParameters.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ps/landing/project/models/SystemsParameters.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -51,6 +55,7 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
+        <option value="Interface" />
         <option value="Class" />
       </list>
     </option>
@@ -116,7 +121,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1583336264500</updated>
-      <workItem from="1583336275678" duration="3297000" />
+      <workItem from="1583336275678" duration="6705000" />
     </task>
     <servers />
   </component>
@@ -146,9 +151,9 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="273" y="17" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1366.728@0.0.1366.728" timestamp="1583337213127" />
-    <state x="486" y="75" key="#com.intellij.ide.util.MemberChooser" timestamp="1583339171928">
+    <state x="486" y="75" key="#com.intellij.ide.util.MemberChooser" timestamp="1583343286139">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="486" y="75" key="#com.intellij.ide.util.MemberChooser/0.0.1366.728@0.0.1366.728" timestamp="1583339171928" />
+    <state x="486" y="75" key="#com.intellij.ide.util.MemberChooser/0.0.1366.728@0.0.1366.728" timestamp="1583343286139" />
   </component>
 </project>
