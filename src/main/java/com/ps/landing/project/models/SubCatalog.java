@@ -3,6 +3,7 @@ package com.ps.landing.project.models;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.Date;
 
 @Entity
 @Table(name = "sub_catalogs")
@@ -23,10 +24,10 @@ public class SubCatalog implements Serializable {
     private boolean status;
 
     @Temporal(TemporalType.TIMESTAMP)
-    private Timestamp createDate;
+    private Date createDate;
 
     @Temporal(TemporalType.TIMESTAMP)
-    private Timestamp lastUpdateDate;
+    private Date lastUpdateDate;
 
     public Long getId() {
         return id;
@@ -68,7 +69,7 @@ public class SubCatalog implements Serializable {
         this.status = status;
     }
 
-    public Timestamp getCreateDate() {
+    public Date getCreateDate() {
         return createDate;
     }
 
@@ -76,7 +77,7 @@ public class SubCatalog implements Serializable {
         this.createDate = createDate;
     }
 
-    public Timestamp getLastUpdateDate() {
+    public Date getLastUpdateDate() {
         return lastUpdateDate;
     }
 

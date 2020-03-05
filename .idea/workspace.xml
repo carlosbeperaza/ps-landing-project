@@ -2,18 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="15fbc0cb-4575-4833-98ba-7e1df12a1ed3" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/dictionaries/Aleja.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/ps/landing/project/converters/CatalogConverter.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/ps/landing/project/dto/CatalogDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/ps/landing/project/dto/SubCatalogDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/ps/landing/project/models/SubCatalog.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/ps/landing/project/controllers/CatalogController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ps/landing/project/controllers/CatalogController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/ps/landing/project/models/Catalog.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ps/landing/project/models/Catalog.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ps/landing/project/services/CatalogService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ps/landing/project/services/CatalogService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ps/landing/project/servicesImpls/CatalogServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ps/landing/project/servicesImpls/CatalogServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ps/landing/project/servicesImpls/UsuarioServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ps/landing/project/servicesImpls/UsuarioServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ps/landing/project/models/SubCatalog.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ps/landing/project/models/SubCatalog.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -90,6 +83,10 @@
   <component name="PropertiesComponent">
     <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="DatabaseDriversLRU" value="mysql" />
+    <property name="RequestMappingsPanelOrder0" value="0" />
+    <property name="RequestMappingsPanelOrder1" value="1" />
+    <property name="RequestMappingsPanelWidth0" value="75" />
+    <property name="RequestMappingsPanelWidth1" value="75" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
@@ -128,7 +125,8 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1583336264500</updated>
-      <workItem from="1583336275678" duration="15886000" />
+      <workItem from="1583336275678" duration="16085000" />
+      <workItem from="1583425438704" duration="499000" />
     </task>
     <servers />
   </component>
@@ -140,7 +138,9 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="COLUMN_ORDER" />
+            </State>
           </value>
         </entry>
       </map>
@@ -166,9 +166,61 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="461" y="114" key="FileChooserDialogImpl/0.0.1366.728@0.0.1366.728" timestamp="1583354378627" />
+    <state width="1290" height="532" key="GridCell.Tab.0.bottom" timestamp="1583426054432">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state width="1290" height="532" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1583426054432" />
+    <state width="1290" height="532" key="GridCell.Tab.0.center" timestamp="1583426054432">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state width="1290" height="532" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1583426054432" />
+    <state width="1290" height="532" key="GridCell.Tab.0.left" timestamp="1583426054432">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state width="1290" height="532" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1583426054432" />
+    <state width="1290" height="532" key="GridCell.Tab.0.right" timestamp="1583426054432">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state width="1290" height="532" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1583426054432" />
+    <state width="1290" height="532" key="GridCell.Tab.1.bottom" timestamp="1583426054432">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state width="1290" height="532" key="GridCell.Tab.1.bottom/0.0.1366.728@0.0.1366.728" timestamp="1583426054432" />
+    <state width="1290" height="532" key="GridCell.Tab.1.center" timestamp="1583426054432">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state width="1290" height="532" key="GridCell.Tab.1.center/0.0.1366.728@0.0.1366.728" timestamp="1583426054432" />
+    <state width="1290" height="532" key="GridCell.Tab.1.left" timestamp="1583426054432">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state width="1290" height="532" key="GridCell.Tab.1.left/0.0.1366.728@0.0.1366.728" timestamp="1583426054432" />
+    <state width="1290" height="532" key="GridCell.Tab.1.right" timestamp="1583426054432">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state width="1290" height="532" key="GridCell.Tab.1.right/0.0.1366.728@0.0.1366.728" timestamp="1583426054432" />
+    <state width="1290" height="532" key="GridCell.Tab.2.bottom" timestamp="1583425929417">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state width="1290" height="532" key="GridCell.Tab.2.bottom/0.0.1366.728@0.0.1366.728" timestamp="1583425929417" />
+    <state width="1290" height="532" key="GridCell.Tab.2.center" timestamp="1583425929417">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state width="1290" height="532" key="GridCell.Tab.2.center/0.0.1366.728@0.0.1366.728" timestamp="1583425929417" />
+    <state width="1290" height="532" key="GridCell.Tab.2.left" timestamp="1583425929417">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state width="1290" height="532" key="GridCell.Tab.2.left/0.0.1366.728@0.0.1366.728" timestamp="1583425929417" />
+    <state width="1290" height="532" key="GridCell.Tab.2.right" timestamp="1583425929417">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state width="1290" height="532" key="GridCell.Tab.2.right/0.0.1366.728@0.0.1366.728" timestamp="1583425929417" />
     <state x="182" y="2" key="SettingsEditor" timestamp="1583354440596">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="182" y="2" key="SettingsEditor/0.0.1366.728@0.0.1366.728" timestamp="1583354440596" />
+    <state x="377" y="183" key="com.intellij.ide.util.TipDialog" timestamp="1583425449631">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="377" y="183" key="com.intellij.ide.util.TipDialog/0.0.1366.728@0.0.1366.728" timestamp="1583425449631" />
   </component>
 </project>

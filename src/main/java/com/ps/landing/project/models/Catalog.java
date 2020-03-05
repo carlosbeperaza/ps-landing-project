@@ -3,6 +3,7 @@ package com.ps.landing.project.models;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -22,10 +23,10 @@ public class Catalog implements Serializable {
     private boolean status;
 
     @Temporal(TemporalType.TIMESTAMP)
-    private Timestamp createDate;
+    private Date createDate;
 
     @Temporal(TemporalType.TIMESTAMP)
-    private Timestamp lastUpdateDate;
+    private Date lastUpdateDate;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name = "sub_catalogs", joinColumns = @JoinColumn(name = "parent"))
@@ -63,7 +64,7 @@ public class Catalog implements Serializable {
         this.status = status;
     }
 
-    public Timestamp getCreateDate() {
+    public Date getCreateDate() {
         return createDate;
     }
 
@@ -71,7 +72,7 @@ public class Catalog implements Serializable {
         this.createDate = createDate;
     }
 
-    public Timestamp getLastUpdateDate() {
+    public Date getLastUpdateDate() {
         return lastUpdateDate;
     }
 
