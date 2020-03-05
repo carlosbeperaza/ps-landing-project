@@ -38,10 +38,10 @@ public class SubModule implements Serializable{
 	private Boolean status;
 	
 	@Temporal(TemporalType.TIMESTAMP)
-	private Timestamp creation_date;
-	
-	@Temporal(TemporalType.TIMESTAMP)
-	private Timestamp last_update_date;
+    private Timestamp createDate;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    private Timestamp lastUpdateDate;
 	
 	
 	

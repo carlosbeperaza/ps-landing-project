@@ -39,10 +39,10 @@ public class Module implements Serializable{
 	private Boolean status;
 	
 	@Temporal(TemporalType.TIMESTAMP)
-	private Timestamp creation_date;
-	
-	@Temporal(TemporalType.TIMESTAMP)
-	private Timestamp last_update_date;
+    private Timestamp createDate;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    private Timestamp lastUpdateDate;
 	
 	@OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
 	@JoinTable(name = "sub_modules", joinColumns = @JoinColumn(name = "parent") )
