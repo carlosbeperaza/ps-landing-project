@@ -10,7 +10,12 @@ import java.util.List;
 @Table(name = "catalogs")
 public class Catalog implements Serializable {
 
-    @Id
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 

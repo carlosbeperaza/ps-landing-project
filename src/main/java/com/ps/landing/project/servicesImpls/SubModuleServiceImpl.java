@@ -14,12 +14,9 @@ import com.ps.landing.project.services.SubModuleService;
 public class SubModuleServiceImpl implements SubModuleService{
 	
 	private Logger log = LoggerFactory.getLogger(SubModuleServiceImpl.class.getName());
+	
+	@Autowired
     private SubModuleRepo submoduleRepo;
-
-    @Autowired
-    void setRoleRepo(SubModuleRepo submoduleRepo) {
-        this.submoduleRepo = submoduleRepo;
-    }
 
     @Override
     @Transactional(readOnly = true)

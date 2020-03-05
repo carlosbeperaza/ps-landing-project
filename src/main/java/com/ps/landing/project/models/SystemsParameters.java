@@ -9,7 +9,12 @@ import java.util.Date;
 @Table(name = "system_parameters")
 public class SystemsParameters implements Serializable {
 
-    @Id
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 

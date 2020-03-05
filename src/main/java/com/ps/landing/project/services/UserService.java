@@ -2,18 +2,17 @@ package com.ps.landing.project.services;
 
 import java.util.List;
 
-import com.ps.landing.project.models.User;
-import com.ps.landing.project.models.Usuario;
+import com.ps.landing.project.models.PSUser;
 
 public interface UserService {
 
 	// Rest
 		//public List<Usuario> findAll();
-		 User save();
-		 User findById(Long id);
+		 PSUser save();
+		 PSUser findById(Long id);
 		 void delete(Long id);
-		 User modify(Long id);
-		 User findByFirstName(String fistName);
+		 PSUser modify(Long id);
+		 PSUser findByFirstName(String fistName);
 		
 		// Generic Methods
 //		public Usuario findByEmailAndPassword(String email, String password);

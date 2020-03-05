@@ -17,12 +17,10 @@ import java.util.Optional;
 public class RoleServiceImpl implements RoleService {
 
     private Logger log = LoggerFactory.getLogger(RoleServiceImpl.class.getName());
+    
+    @Autowired
     private RoleRepo roleRepo;
 
-    @Autowired
-    void setRoleRepo(RoleRepo roleRepo) {
-        this.roleRepo = roleRepo;
-    }
 
     @Override
     @Transactional(readOnly = true)

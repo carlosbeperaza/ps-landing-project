@@ -17,14 +17,11 @@ import com.ps.landing.project.services.ModuleService;
 @Service
 public class ModuleServiceImpl implements ModuleService {
 
-	
 	private Logger log = LoggerFactory.getLogger(ModuleServiceImpl.class.getName());
+	
+	@Autowired
     private ModuleRepo moduleRepo;
 
-    @Autowired
-    void setRoleRepo(ModuleRepo moduleRepo) {
-        this.moduleRepo = moduleRepo;
-    }
     
     @Override
     @Transactional(readOnly = true)

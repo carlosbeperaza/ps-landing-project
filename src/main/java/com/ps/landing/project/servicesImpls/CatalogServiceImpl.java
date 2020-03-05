@@ -17,18 +17,13 @@ import java.util.Optional;
 public class CatalogServiceImpl implements CatalogService {
 
     private Logger log = LoggerFactory.getLogger(CatalogServiceImpl.class.getName());
+    
+    @Autowired
     private CatalogRepo repo;
+    
+    @Autowired
     private CatalogConverter converter;
 
-    @Autowired
-    void setRepo(CatalogRepo repo) {
-        this.repo = repo;
-    }
-
-    @Autowired
-    void setConverter(CatalogConverter converter) {
-        this.converter = converter;
-    }
 
     @Override
     @Transactional(readOnly = true)

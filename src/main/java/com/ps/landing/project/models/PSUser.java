@@ -24,7 +24,12 @@ import javax.persistence.UniqueConstraint;
 
 @Entity
 @Table(name = "users")
-public class User implements Serializable{
+public class PSUser implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,6 +37,9 @@ public class User implements Serializable{
 
 	@Column(name = "first_name",length = 60)
 	private String name;
+	
+	@Column(name = "user_name",length = 60)
+	private String username;
 
 	@Column(name = "last_name",length = 60)
 	private String lastname;
@@ -41,6 +49,8 @@ public class User implements Serializable{
 	
 	@Column(length = 255)
 	private String password;
+	
+	private Boolean status;
 	
 	@Column(name = "registration_date")
 	@Temporal(TemporalType.TIMESTAMP)
@@ -119,6 +129,21 @@ public class User implements Serializable{
 	public void setRoles(List<Role> roles) {
 		this.roles = roles;
 	}
-	
+
+	public Boolean getStatus() {
+		return status;
+	}
+
+	public void setStatus(Boolean status) {
+		this.status = status;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
 	
 }
