@@ -34,10 +34,10 @@ public class Role implements Serializable{
 	private String description;
 	
 	@Temporal(TemporalType.TIMESTAMP)
-	private Timestamp creation_date;
-	
-	@Temporal(TemporalType.TIMESTAMP)
-	private Timestamp last_update_date;
+    private Timestamp createDate;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    private Timestamp lastUpdateDate;
 	
 	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinTable(name="role_modules", joinColumns= @JoinColumn(name="id_role"),
