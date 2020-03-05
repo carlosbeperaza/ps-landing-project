@@ -2,6 +2,7 @@ package com.ps.landing.project.models;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.*;
@@ -39,10 +40,10 @@ public class Module implements Serializable{
 	private Boolean status;
 	
 	@Temporal(TemporalType.TIMESTAMP)
-    private Timestamp createDate;
+    private Date createDate;
 
     @Temporal(TemporalType.TIMESTAMP)
-    private Timestamp lastUpdateDate;
+    private Date lastUpdateDate;
 	
 	@OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
 	@JoinTable(name = "sub_modules", joinColumns = @JoinColumn(name = "parent") )
@@ -98,20 +99,30 @@ public class Module implements Serializable{
 		this.status = status;
 	}
 
-	public Timestamp getCreation_date() {
-		return creation_date;
+	
+	public Date getCreateDate() {
+		return createDate;
 	}
 
-	public void setCreation_date(Timestamp creation_date) {
-		this.creation_date = creation_date;
+	public void setCreateDate(Date createDate) {
+		this.createDate = createDate;
 	}
 
-	public Timestamp getLast_update_date() {
-		return last_update_date;
+	public Date getLastUpdateDate() {
+		return lastUpdateDate;
 	}
 
-	public void setLast_update_date(Timestamp last_update_date) {
-		this.last_update_date = last_update_date;
+	public void setLastUpdateDate(Date lastUpdateDate) {
+		this.lastUpdateDate = lastUpdateDate;
+	}
+	
+
+	public List<SubModule> getSubModule() {
+		return subModule;
+	}
+
+	public void setSubModule(List<SubModule> subModule) {
+		this.subModule = subModule;
 	}
 
 	public static long getSerialversionuid() {
