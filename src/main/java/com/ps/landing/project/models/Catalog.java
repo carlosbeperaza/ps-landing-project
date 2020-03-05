@@ -28,8 +28,8 @@ public class Catalog implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date lastUpdateDate;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinTable(name = "sub_catalogs", joinColumns = @JoinColumn(name = "parent"))
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "parent")
     private List<SubCatalog> subCatalogs;
 
     public Long getId() {

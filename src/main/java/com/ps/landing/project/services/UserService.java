@@ -13,6 +13,7 @@ public interface UserService {
 		 User findById(Long id);
 		 void delete(Long id);
 		 User modify(Long id);
+		 User findByFirstName(String fistName);
 		
 		// Generic Methods
 //		public Usuario findByEmailAndPassword(String email, String password);

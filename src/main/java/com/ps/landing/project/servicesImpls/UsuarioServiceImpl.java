@@ -51,10 +51,10 @@ public class UsuarioServiceImpl implements UsuarioService, UserDetailsService {
 	public void delete(Long id) {
 		usuarioRepo.deleteById(id);
 	}
-	
-	
+
+
 	// Generic Methods
-	
+
 	@Override
 	@Transactional(readOnly = true)
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

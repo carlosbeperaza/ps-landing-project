@@ -16,13 +16,13 @@ import com.ps.landing.project.services.UserService;
 @Service
 public class UserServiceImpl implements UserService{
 
-	  private Logger log = LoggerFactory.getLogger(UserServiceImpl.class.getName());
-	    private UserRepo userRepo;
+	private Logger log = LoggerFactory.getLogger(UserServiceImpl.class.getName());
+	private UserRepo repo;
 
-	    @Autowired
-	    void setUserRepo(UserRepo UserRepo) {
-	        this.userRepo = userRepo;
-	    }
+	@Autowired
+	void setRepo(UserRepo repo) {
+		this.repo = repo;
+	}
 	    
 	@Override
 	public User save() {
@@ -32,7 +32,7 @@ public class UserServiceImpl implements UserService{
 
 	@Override
 	public User findById(Long id) {
-		Optional<User> optionalUser = userRepo.findById(id);
+		Optional<User> optionalUser = repo.findById(id);
         return optionalUser.orElse(null);
 	}
 
@@ -46,6 +46,11 @@ public class UserServiceImpl implements UserService{
 	public User modify(Long id) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public User findByFirstName(String firstName) {
+		return repo.findByName(firstName);
 	}
 
 }
