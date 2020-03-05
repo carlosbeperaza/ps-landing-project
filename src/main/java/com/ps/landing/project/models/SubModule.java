@@ -2,6 +2,7 @@ package com.ps.landing.project.models;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -38,10 +39,10 @@ public class SubModule implements Serializable{
 	private Boolean status;
 	
 	@Temporal(TemporalType.TIMESTAMP)
-    private Timestamp createDate;
+    private Date createDate;
 
     @Temporal(TemporalType.TIMESTAMP)
-    private Timestamp lastUpdateDate;
+    private Date lastUpdateDate;
 	
 	
 	
@@ -144,29 +145,34 @@ public class SubModule implements Serializable{
 
 
 
-	public Timestamp getCreation_date() {
-		return creation_date;
+	
+
+
+
+
+	public Date getCreateDate() {
+		return createDate;
 	}
 
 
 
 
-	public void setCreation_date(Timestamp creation_date) {
-		this.creation_date = creation_date;
+	public void setCreateDate(Date createDate) {
+		this.createDate = createDate;
 	}
 
 
 
 
-	public Timestamp getLast_update_date() {
-		return last_update_date;
+	public Date getLastUpdateDate() {
+		return lastUpdateDate;
 	}
 
 
 
 
-	public void setLast_update_date(Timestamp last_update_date) {
-		this.last_update_date = last_update_date;
+	public void setLastUpdateDate(Date lastUpdateDate) {
+		this.lastUpdateDate = lastUpdateDate;
 	}
 
 
