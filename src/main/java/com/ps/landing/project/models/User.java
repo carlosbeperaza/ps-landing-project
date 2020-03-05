@@ -44,11 +44,11 @@ public class User implements Serializable{
 	
 	@Column(name = "registration_date")
 	@Temporal(TemporalType.TIMESTAMP)
-	private Timestamp registrationDate;
+	private Date registrationDate;
 	
 	@Column(name = "last_update_date")
 	@Temporal(TemporalType.TIMESTAMP)
-	private Timestamp updateDate;
+	private Date updateDate;
 	
 	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "id_user"), inverseJoinColumns = @JoinColumn(name = "id_role"), uniqueConstraints = {
@@ -95,21 +95,20 @@ public class User implements Serializable{
 		this.password = password;
 	}
 
-	
 
-	public Timestamp getRegistrationDate() {
+	public Date getRegistrationDate() {
 		return registrationDate;
 	}
 
-	public void setRegistrationDate(Timestamp registrationDate) {
+	public void setRegistrationDate(Date registrationDate) {
 		this.registrationDate = registrationDate;
 	}
 
-	public Timestamp getUpdateDate() {
+	public Date getUpdateDate() {
 		return updateDate;
 	}
 
-	public void setUpdateDate(Timestamp updateDate) {
+	public void setUpdateDate(Date updateDate) {
 		this.updateDate = updateDate;
 	}
 
