@@ -3,6 +3,7 @@ package com.ps.landing.project.models;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.Date;
 
 @Entity
 @Table(name = "system_parameters")
@@ -24,10 +25,10 @@ public class SystemsParameters implements Serializable {
     private boolean status;
 
     @Temporal(TemporalType.TIMESTAMP)
-    private Timestamp createDate;
+    private Date createDate;
 
     @Temporal(TemporalType.TIMESTAMP)
-    private Timestamp lastUpdateDate;
+    private Date lastUpdateDate;
 
     public Long getId() {
         return id;
@@ -69,19 +70,19 @@ public class SystemsParameters implements Serializable {
         this.status = status;
     }
 
-    public Timestamp getCreateDate() {
+    public Date getCreateDate() {
         return createDate;
     }
 
-    public void setCreateDate(Timestamp createDate) {
+    public void setCreateDate(Date createDate) {
         this.createDate = createDate;
     }
 
-    public Timestamp getLastUpdateDate() {
+    public Date getLastUpdateDate() {
         return lastUpdateDate;
     }
 
-    public void setLastUpdateDate(Timestamp lastUpdateDate) {
+    public void setLastUpdateDate(Date lastUpdateDate) {
         this.lastUpdateDate = lastUpdateDate;
     }
 }
