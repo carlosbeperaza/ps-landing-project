@@ -1,5 +1,8 @@
 package com.ps.landing.project.models;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Timestamp;
@@ -29,9 +32,11 @@ public class SubCatalog implements Serializable {
     private boolean status;
 
     @Temporal(TemporalType.TIMESTAMP)
+    @CreationTimestamp
     private Date createDate;
 
     @Temporal(TemporalType.TIMESTAMP)
+    @UpdateTimestamp
     private Date lastUpdateDate;
 
     public Long getId() {

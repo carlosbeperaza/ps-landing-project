@@ -26,19 +26,22 @@ public class CatalogConverter {
         catalog.setCreateDate((Timestamp) dto.getCreateDate());
         catalog.setLastUpdateDate((Timestamp) dto.getLastUpdateDate());
 
-        for(SubCatalogDTO subCatalogDTO : subCatalogDTOS) {
+        if(subCatalogDTOS != null) {
 
-            SubCatalog subCatalog = new SubCatalog();
+            for(SubCatalogDTO subCatalogDTO : subCatalogDTOS) {
 
-            subCatalog.setId(subCatalogDTO.getId());
-            subCatalog.setName(subCatalogDTO.getName());
-            subCatalog.setDescription(subCatalogDTO.getDescription());
-            subCatalog.setParent(dto.getId());
-            subCatalog.setStatus(subCatalogDTO.isStatus());
-            subCatalog.setCreateDate((Timestamp) subCatalogDTO.getCreateDate());
-            subCatalog.setLastUpdateDate((Timestamp) subCatalogDTO.getLastUpdateDate());
+                SubCatalog subCatalog = new SubCatalog();
 
-            subCatalogs.add(subCatalog);
+                subCatalog.setId(subCatalogDTO.getId());
+                subCatalog.setName(subCatalogDTO.getName());
+                subCatalog.setDescription(subCatalogDTO.getDescription());
+                subCatalog.setParent(dto.getId());
+                subCatalog.setStatus(subCatalogDTO.isStatus());
+                subCatalog.setCreateDate((Timestamp) subCatalogDTO.getCreateDate());
+                subCatalog.setLastUpdateDate((Timestamp) subCatalogDTO.getLastUpdateDate());
+
+                subCatalogs.add(subCatalog);
+            }
         }
         catalog.setSubCatalogs(subCatalogs);
 
@@ -71,18 +74,21 @@ public class CatalogConverter {
         catalogDTO.setCreateDate(model.getCreateDate());
         catalogDTO.setLastUpdateDate(model.getLastUpdateDate());
 
-        for(SubCatalog subCatalog : subCatalogs) {
+        if(subCatalogs != null) {
 
-            SubCatalogDTO subCatalogDTO = new SubCatalogDTO();
+            for(SubCatalog subCatalog : subCatalogs) {
 
-            subCatalogDTO.setId(subCatalog.getId());
-            subCatalogDTO.setName(subCatalog.getName());
-            subCatalogDTO.setDescription(subCatalog.getDescription());
-            subCatalogDTO.setStatus(subCatalog.isStatus());
-            subCatalogDTO.setCreateDate(subCatalog.getCreateDate());
-            subCatalogDTO.setLastUpdateDate(subCatalog.getLastUpdateDate());
+                SubCatalogDTO subCatalogDTO = new SubCatalogDTO();
 
-            subCatalogDTOS.add(subCatalogDTO);
+                subCatalogDTO.setId(subCatalog.getId());
+                subCatalogDTO.setName(subCatalog.getName());
+                subCatalogDTO.setDescription(subCatalog.getDescription());
+                subCatalogDTO.setStatus(subCatalog.isStatus());
+                subCatalogDTO.setCreateDate(subCatalog.getCreateDate());
+                subCatalogDTO.setLastUpdateDate(subCatalog.getLastUpdateDate());
+
+                subCatalogDTOS.add(subCatalogDTO);
+            }
         }
         catalogDTO.setSubCatalogs(subCatalogDTOS);
 

@@ -37,16 +37,12 @@ public class CatalogServiceImpl implements CatalogService {
 
     @Override
     public CatalogDTO save(Catalog catalog) {
-
-        repo.save(catalog);
-        return converter.convertToDTO(catalog);
+        return converter.convertToDTO(repo.save(catalog));
     }
 
     @Override
     public CatalogDTO update(Catalog catalog) {
-
-        repo.save(catalog);
-        return converter.convertToDTO(catalog);
+        return converter.convertToDTO(repo.save(catalog));
     }
 
     @Override
