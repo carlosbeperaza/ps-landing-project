@@ -35,7 +35,7 @@ public class Role implements Serializable{
 	private String description;
 	
 	@Temporal(TemporalType.TIMESTAMP)
-    private Date createDate;
+    private Date creationDate;
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date lastUpdateDate;
@@ -97,14 +97,14 @@ public class Role implements Serializable{
 
 
 	public Date getCreateDate() {
-		return createDate;
+		return creationDate;
 	}
 
 
 
 
 	public void setCreateDate(Date createDate) {
-		this.createDate = createDate;
+		this.creationDate = createDate;
 	}
 
 

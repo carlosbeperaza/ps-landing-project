@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/Catalog")
+@RequestMapping("/catalog")
 public class CatalogController {
 
     private CatalogService service;
