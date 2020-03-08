@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -20,6 +21,30 @@ public class CatalogController {
     @Autowired
     void setService(CatalogService service) {
         this.service = service;
+    }
+
+    @GetMapping("/")
+    public ResponseEntity<?> getAllCatalogs() {
+
+        Map<String, Object> response = new HashMap<>();
+        ResponseEntity<?> responseEntity;
+        try {
+
+            List<CatalogDTO> catalogDTOList = service.findAll();
+            if(!catalogDTOList.isEmpty()) {
+
+                response.put("Catalog list", catalogDTOList);
+            } else {
+
+                response.put("No catalogs", "list is empty");
+            }
+            responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
+        } catch (Exception e) {
+
+            response.put("Error", e.getMessage());
+            responseEntity = new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return responseEntity;
     }
 
     @GetMapping("/{id}")
@@ -62,6 +87,7 @@ public class CatalogController {
         try {
 
             CatalogDTO current = service.findById(catalog.getId());
+            //TODO: esta validación debe estar en el método update() del archivo 'CatalogServiceImpl'
             if(current != null) {
 
                 CatalogDTO updatedCatalog = service.update(catalog);
@@ -81,19 +107,17 @@ public class CatalogController {
         return responseEntity;
     }
 
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<?> deleteCatalog(@PathVariable Long id) {
+    @DeleteMapping("/disable/{id}")
+    public ResponseEntity<?> disableCatalog(@PathVariable Long id) {
 
         Map<String, Object> response = new HashMap<>();
         ResponseEntity<?> responseEntity;
         try {
 
-            CatalogDTO formerCatalog = service.findById(id);
-            if(formerCatalog != null) {
+            if(service.findById(id) != null) {
 
-                service.delete(id);
-                response.put("Success", "Catalog deleted");
-                response.put("Former catalog", formerCatalog);
+                service.disable(id);
+                response.put("Success", "Catalog disabled");
                 responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
             } else {
 
