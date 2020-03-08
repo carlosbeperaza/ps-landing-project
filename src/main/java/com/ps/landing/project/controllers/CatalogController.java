@@ -86,12 +86,9 @@ public class CatalogController {
         ResponseEntity<?> responseEntity;
         try {
 
-            CatalogDTO current = service.findById(catalog.getId());
-            //TODO: esta validación debe estar en el método update() del archivo 'CatalogServiceImpl'
-            if(current != null) {
+            CatalogDTO updatedCatalog = service.update(catalog);
+            if(updatedCatalog != null) {
 
-                CatalogDTO updatedCatalog = service.update(catalog);
-                response.put("Old catalog", current);
                 response.put("Updated catalog", updatedCatalog);
                 responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
             } else {
@@ -114,9 +111,8 @@ public class CatalogController {
         ResponseEntity<?> responseEntity;
         try {
 
-            if(service.findById(id) != null) {
+            if(service.disable(id)) {
 
-                service.disable(id);
                 response.put("Success", "Catalog disabled");
                 responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
             } else {
@@ -126,7 +122,8 @@ public class CatalogController {
             }
         } catch(Exception e) {
 
-            response.put("Error", e.getMessage());
+            response.put("Error message", e.getMessage());
+            response.put("Stack trace", e.getStackTrace());
             responseEntity = new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return responseEntity;

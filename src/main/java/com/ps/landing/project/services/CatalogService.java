@@ -15,6 +15,7 @@ public interface CatalogService {
     /**
      * Método que deshabilita al catálogo indicado por su id, de igual manera se deshabilitan los sub-catálogos de este.
      * @param id id del catálogo a deshabilitar.
+     * @return true si el catálogo fue deshabilitado, de lo contrario false.
      * */
-    void disable(long id);
+    boolean disable(long id);
 }

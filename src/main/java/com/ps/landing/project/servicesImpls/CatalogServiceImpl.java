@@ -52,25 +52,33 @@ public class CatalogServiceImpl implements CatalogService {
 
     @Override
     public CatalogDTO update(Catalog catalog) {
-        return converter.convertToDTO(repo.save(catalog));
+
+        if(repo.findById(catalog.getId()).isPresent()) {
+
+            return converter.convertToDTO(repo.save(catalog));
+        }
+        return null;
     }
 
     @Override
-    public void disable(long id) {
+    public boolean disable(long id) {
 
         Catalog catalog = repo.findById(id).orElse(null);
         if(catalog != null) {
 
-            List<SubCatalog> subCatalogs = new ArrayList<>();
+            //TODO: deshabilitar los subCatálogos...
+            /*List<SubCatalog> subCatalogs = new ArrayList<>();
 
             for(SubCatalog subCatalog : catalog.getSubCatalogs()) {
 
                 subCatalog.setStatus(false);
                 subCatalogs.add(subCatalog);
-            }
+            }*/
             catalog.setStatus(false);
-            catalog.setSubCatalogs(subCatalogs);
+            //catalog.setSubCatalogs(subCatalogs);
             repo.save(catalog);
+            return true;
         }
+        return false;
     }
 }
