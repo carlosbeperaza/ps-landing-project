@@ -7,6 +7,9 @@ import java.util.List;
 
 import javax.persistence.*;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 
 
 @Entity
@@ -39,15 +42,19 @@ public class Module implements Serializable{
 	@Column()
 	private Boolean status;
 	
-	@Temporal(TemporalType.TIMESTAMP)
-    private Date createDate;
+	@Column(name = "creation_date")
+	 @Temporal(TemporalType.TIMESTAMP)
+	 @CreationTimestamp
+	 private Date createDate;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date lastUpdateDate;
+	@Column(name = "last_update_date")
+	 @Temporal(TemporalType.TIMESTAMP)
+	 @UpdateTimestamp
+	 private Date lastUpdateDate;
 	
-	@OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-	@JoinTable(name = "sub_modules", joinColumns = @JoinColumn(name = "parent") )
-	private List<SubModule> subModule;
+	 @OneToMany(cascade = CascadeType.ALL)
+	 @JoinColumn(name = "parent")
+	 private List<SubModule> subModules;
 	
 	
 
@@ -118,11 +125,11 @@ public class Module implements Serializable{
 	
 
 	public List<SubModule> getSubModule() {
-		return subModule;
+		return subModules;
 	}
 
 	public void setSubModule(List<SubModule> subModule) {
-		this.subModule = subModule;
+		this.subModules = subModule;
 	}
 
 	public static long getSerialversionuid() {

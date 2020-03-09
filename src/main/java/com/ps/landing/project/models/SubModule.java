@@ -13,6 +13,9 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 @Entity
 @Table(name="sub_modules")
 public class SubModule implements Serializable{
@@ -38,11 +41,15 @@ public class SubModule implements Serializable{
 	@Column()
 	private Boolean status;
 	
-	@Temporal(TemporalType.TIMESTAMP)
-    private Date createDate;
+	@Column(name = "creation_date")
+	 @Temporal(TemporalType.TIMESTAMP)
+	 @CreationTimestamp
+	 private Date createDate;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date lastUpdateDate;
+	@Column(name = "last_update_date")
+	 @Temporal(TemporalType.TIMESTAMP)
+	 @UpdateTimestamp
+	 private Date lastUpdateDate;
 	
 	
 	
