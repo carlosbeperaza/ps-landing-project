@@ -27,6 +27,8 @@ public class ModuleConverter {
         module.setId(dto.getId());
         module.setName(dto.getName());
         module.setDescription(dto.getDescription());
+        module.setUrl(dto.getUrl());
+        module.setIcon(dto.getIcon());
         module.setStatus(dto.isStatus());
         module.setCreateDate((Timestamp) dto.getCreateDate());
         module.setLastUpdateDate((Timestamp) dto.getLastUpdateDate());
@@ -41,6 +43,8 @@ public class ModuleConverter {
                 subModule.setName(subModuleDTO.getName());
                 subModule.setDescription(subModuleDTO.getDescription());
                 subModule.setParent(dto.getId());
+                subModule.setUrl(subModuleDTO.getUrl());
+                subModule.setIcon(subModuleDTO.getIcon());
                 subModule.setStatus(subModuleDTO.isStatus());
                 subModule.setCreateDate((Timestamp) subModuleDTO.getCreateDate());
                 subModule.setLastUpdateDate((Timestamp) subModuleDTO.getLastUpdateDate());
@@ -75,6 +79,8 @@ public class ModuleConverter {
         moduleDTO.setId(model.getId());
         moduleDTO.setName(model.getName());
         moduleDTO.setDescription(model.getDescription());
+        moduleDTO.setUrl(model.getUrl());
+        moduleDTO.setIcon(model.getIcon());
         moduleDTO.setStatus(model.isStatus());
         moduleDTO.setCreateDate(model.getCreateDate());
         moduleDTO.setLastUpdateDate(model.getLastUpdateDate());
@@ -88,6 +94,8 @@ public class ModuleConverter {
                 subModuleDTO.setId(subModule.getId());
                 subModuleDTO.setName(subModule.getName());
                 subModuleDTO.setDescription(subModule.getDescription());
+                subModuleDTO.setUrl(subModule.getUrl());
+                subModuleDTO.setIcon(subModule.getIcon());
                 subModuleDTO.setStatus(subModule.isStatus());
                 subModuleDTO.setCreateDate(subModule.getCreateDate());
                 subModuleDTO.setLastUpdateDate(subModule.getLastUpdateDate());

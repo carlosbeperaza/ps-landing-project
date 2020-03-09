@@ -36,6 +36,8 @@ public class CatalogConverter {
                 subCatalog.setName(subCatalogDTO.getName());
                 subCatalog.setDescription(subCatalogDTO.getDescription());
                 subCatalog.setParent(dto.getId());
+                //url
+                //icon
                 subCatalog.setStatus(subCatalogDTO.isStatus());
                 subCatalog.setCreateDate((Timestamp) subCatalogDTO.getCreateDate());
                 subCatalog.setLastUpdateDate((Timestamp) subCatalogDTO.getLastUpdateDate());
