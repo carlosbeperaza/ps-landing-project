@@ -39,8 +39,7 @@ public class Module implements Serializable{
 	private String icon;
 	
 	
-	@Column()
-	private Boolean status;
+	private boolean status;
 	
 	@Column(name = "creation_date")
 	 @Temporal(TemporalType.TIMESTAMP)
@@ -98,15 +97,17 @@ public class Module implements Serializable{
 		this.icon = icon;
 	}
 
-	public Boolean getStatus() {
+	
+
+	
+	public boolean isStatus() {
 		return status;
 	}
 
-	public void setStatus(Boolean status) {
+	public void setStatus(boolean status) {
 		this.status = status;
 	}
 
-	
 	public Date getCreateDate() {
 		return createDate;
 	}
@@ -122,14 +123,15 @@ public class Module implements Serializable{
 	public void setLastUpdateDate(Date lastUpdateDate) {
 		this.lastUpdateDate = lastUpdateDate;
 	}
+
 	
 
-	public List<SubModule> getSubModule() {
+	public List<SubModule> getSubModules() {
 		return subModules;
 	}
 
-	public void setSubModule(List<SubModule> subModule) {
-		this.subModules = subModule;
+	public void setSubModules(List<SubModule> subModules) {
+		this.subModules = subModules;
 	}
 
 	public static long getSerialversionuid() {

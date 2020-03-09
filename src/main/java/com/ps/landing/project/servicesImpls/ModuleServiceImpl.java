@@ -10,16 +10,56 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ps.landing.project.converters.CatalogConverter;
+import com.ps.landing.project.converters.ModuleConverter;
 import com.ps.landing.project.dto.ModuleDTO;
 import com.ps.landing.project.models.Module;
-import com.ps.landing.project.models.Role;
 import com.ps.landing.project.repos.ModuleRepo;
-import com.ps.landing.project.repos.RoleRepo;
 import com.ps.landing.project.services.ModuleService;
 
 @Service
 public class ModuleServiceImpl implements ModuleService {
+	
+	private Logger log = LoggerFactory.getLogger(ModuleServiceImpl.class.getName());
+    
+    @Autowired
+    private ModuleRepo repo;
+    
+    @Autowired
+    private ModuleConverter converter;
+
+	@Override
+	public List<ModuleDTO> findAll() {
+		List<Module> modules = new ArrayList<>();
+        repo.findAll().forEach(modules::add);
+
+        return converter.convertToDTO(modules);
+	}
+
+	@Override
+	public ModuleDTO findById(long id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ModuleDTO save(Module module) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ModuleDTO update(Module module) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean disable(long id) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	
+	/*
 
 	 private Logger log = LoggerFactory.getLogger(ModuleServiceImpl.class.getName());
 	    
@@ -27,7 +67,7 @@ public class ModuleServiceImpl implements ModuleService {
 	    private ModuleRepo repo;
 	    
 	    @Autowired
-	    private CatalogConverter converter;
+	    private ModuleConverter converter;
 
 
 	    @Override
@@ -56,7 +96,7 @@ public class ModuleServiceImpl implements ModuleService {
 	    @Override
 	    public ModuleDTO update(Module module) {
 
-	        if(repo.findById(catalog.getId()).isPresent()) {
+	        if(repo.findById(module.getId()).isPresent()) {
 
 	            return converter.convertToDTO(repo.save(module));
 	        }
@@ -72,6 +112,6 @@ public class ModuleServiceImpl implements ModuleService {
 	            
 	        }
 	        return false;
-	    }
+	    }*/
 
 }

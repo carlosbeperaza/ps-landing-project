@@ -43,6 +43,7 @@ public class SubModuleDTO {
 	public void setIcon(String icon) {
 		this.icon = icon;
 	}
+	
 	public boolean isStatus() {
 		return status;
 	}

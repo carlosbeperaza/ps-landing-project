@@ -30,15 +30,15 @@ public class SubModule implements Serializable{
 	@Column(length=100, nullable = false)
 	private String description;
 	
-	@Column(nullable = false)
-	private SubModule parent;
+	private Long parent;
 	
 	@Column(length=100, nullable = false)
 	private String url;
 	
 	@Column(length=100, nullable = false)
 	private String icon;
-	@Column()
+	
+	
 	private Boolean status;
 	
 	@Column(name = "creation_date")
@@ -96,16 +96,16 @@ public class SubModule implements Serializable{
 
 
 
-	public SubModule getParent() {
-		return parent;
-	}
+	public Long getParent() {
+        return parent;
+    }
+
+    public void setParent(Long parent) {
+        this.parent = parent;
+    }
 
 
-
-
-	public void setParent(SubModule parent) {
-		this.parent = parent;
-	}
+	
 
 
 
@@ -137,22 +137,14 @@ public class SubModule implements Serializable{
 
 
 
-
-	public Boolean getStatus() {
+	public boolean isStatus() {
 		return status;
 	}
 
-
-
-
-	public void setStatus(Boolean status) {
+	public void setStatus(boolean status) {
 		this.status = status;
 	}
 
-
-
-
-	
 
 
 
