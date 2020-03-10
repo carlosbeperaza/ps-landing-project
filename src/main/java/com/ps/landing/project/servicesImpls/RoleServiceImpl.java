@@ -1,12 +1,10 @@
 package com.ps.landing.project.servicesImpls;
 
 
-import com.ps.landing.project.converters.ModuleConverter;
+
 import com.ps.landing.project.converters.RoleConverter;
 import com.ps.landing.project.dto.RoleDTO;
-import com.ps.landing.project.models.Module;
 import com.ps.landing.project.models.Role;
-import com.ps.landing.project.repos.ModuleRepo;
 import com.ps.landing.project.repos.RoleRepo;
 import com.ps.landing.project.services.RoleService;
 
@@ -18,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+
 
 @Service
 public class RoleServiceImpl implements RoleService {

@@ -8,6 +8,7 @@ public class SubModuleDTO {
 	private Long id;
     private String name;
     private String description;
+    private Long parent;
     private String url;
     private String icon;
     private boolean status;
@@ -30,6 +31,13 @@ public class SubModuleDTO {
 	}
 	public void setDescription(String description) {
 		this.description = description;
+	}
+	
+	public Long getParent() {
+		return parent;
+	}
+	public void setParent(Long parent) {
+		this.parent = parent;
 	}
 	public String getUrl() {
 		return url;
