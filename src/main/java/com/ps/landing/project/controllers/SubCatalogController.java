@@ -1,8 +1,9 @@
 package com.ps.landing.project.controllers;
 
 import com.ps.landing.project.dto.CatalogDTO;
-import com.ps.landing.project.models.Catalog;
-import com.ps.landing.project.services.CatalogService;
+import com.ps.landing.project.dto.SubCatalogDTO;
+import com.ps.landing.project.models.SubCatalog;
+import com.ps.landing.project.services.SubCatalogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,29 +14,28 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/catalog")
-public class CatalogController {
+@RequestMapping("/sub-catalog")
+public class SubCatalogController {
 
-    private CatalogService service;
+    private SubCatalogService service;
 
     @Autowired
-    public CatalogController(CatalogService service) {
+    public SubCatalogController(SubCatalogService service){
         this.service = service;
     }
 
     @GetMapping("/")
-    public ResponseEntity<?> getAllCatalogs() {
+    public ResponseEntity<?> getAllSubCatalogs() {
 
         Map<String, Object> response = new HashMap<>();
         ResponseEntity<?> responseEntity;
         try {
 
-            List<CatalogDTO> catalogDTOList = service.findAll();
-            if(!catalogDTOList.isEmpty())
-                response.put("Catalog list", catalogDTOList);
+            List<SubCatalogDTO> subCatalogDTOList = service.findAll();
+            if(!subCatalogDTOList.isEmpty())
+                response.put("Sub catalog list", subCatalogDTOList);
             else
-                response.put("No catalogs", "list is empty");
-
+                response.put("No sub catalogs", "List is empty");
             responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
         } catch (Exception e) {
 
@@ -46,28 +46,31 @@ public class CatalogController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getCatalog(@PathVariable Long id) {
+    public ResponseEntity<?> getSubCatalog(@PathVariable Long id) {
 
         Map<String, Object> response = new HashMap<>();
-        CatalogDTO catalogDTO = service.findById(id);
+        ResponseEntity<?> responseEntity;
+        SubCatalogDTO subCatalogDTO = service.findById(id);
 
-        if(catalogDTO != null)
-            response.put("Catalog", catalogDTO);
-        else
-            response.put("Catalog", "No catalog with given id");
-
-        return new ResponseEntity<>(response, HttpStatus.ACCEPTED);
+        if(subCatalogDTO != null) {
+            response.put("Sub catalog", subCatalogDTO);
+            responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
+        } else {
+            response.put("Sub catalog", "No sub catalog with given id");
+            responseEntity = new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
+        return responseEntity;
     }
 
     @PostMapping("/add")
-    public ResponseEntity<?> addCatalog(@RequestBody Catalog catalog) {
+    public ResponseEntity<?> addSubCatalog(@RequestBody SubCatalog subCatalog) {
 
         Map<String, Object> response = new HashMap<>();
         ResponseEntity<?> responseEntity;
         try {
 
-            CatalogDTO catalogDTO = service.save(catalog);
-            response.put("New catalog", catalogDTO);
+            SubCatalogDTO subCatalogDTO = service.save(subCatalog);
+            response.put("New sub catalog", subCatalogDTO);
             responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
         } catch(Exception e) {
 
@@ -78,20 +81,20 @@ public class CatalogController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<?> updateCatalog(@RequestBody Catalog catalog) {
+    public ResponseEntity<?> updateSubCatalog(@RequestBody SubCatalog subCatalog) {
 
         Map<String, Object> response = new HashMap<>();
         ResponseEntity<?> responseEntity;
         try {
 
-            CatalogDTO updatedCatalog = service.update(catalog);
-            if(updatedCatalog != null) {
+            SubCatalogDTO updatedSubCatalog = service.update(subCatalog);
+            if(updatedSubCatalog != null) {
 
-                response.put("Updated catalog", updatedCatalog);
+                response.put("Updated sub catalog", updatedSubCatalog);
                 responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
             } else {
 
-                response.put("Bad request", "No catalog with given id");
+                response.put("Bad request", "No sub catalog with given id");
                 responseEntity = new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
             }
         } catch(Exception e) {
@@ -103,7 +106,7 @@ public class CatalogController {
     }
 
     @DeleteMapping("/disable/{id}")
-    public ResponseEntity<?> disableCatalog(@PathVariable Long id) {
+    public ResponseEntity<?> disableSubCatalog(@PathVariable Long id) {
 
         Map<String, Object> response = new HashMap<>();
         ResponseEntity<?> responseEntity;
@@ -111,11 +114,11 @@ public class CatalogController {
 
             if(service.disable(id)) {
 
-                response.put("Success", "Catalog disabled");
+                response.put("Success", "Sub catalog disabled");
                 responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
             } else {
 
-                response.put("Bad request", "No catalog with given id");
+                response.put("Bad request", "No sub catalog with given id");
                 responseEntity = new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
             }
         } catch(Exception e) {

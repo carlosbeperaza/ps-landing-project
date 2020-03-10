@@ -7,6 +7,7 @@ public class SubCatalogDTO {
     private Long id;
     private String name;
     private String description;
+    private Long parent;
     private boolean status;
     private Date createDate;
     private Date lastUpdateDate;
@@ -33,6 +34,14 @@ public class SubCatalogDTO {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Long getParent() {
+        return parent;
+    }
+
+    public void setParent(Long parent) {
+        this.parent = parent;
     }
 
     public boolean isStatus() {

@@ -8,7 +8,7 @@ import java.util.List;
 public interface CatalogService {
 
     List<CatalogDTO> findAll();
-    CatalogDTO findById(long id);
+    CatalogDTO findById(Long id);
     CatalogDTO save(Catalog catalog);
     CatalogDTO update(Catalog catalog);
 
@@ -17,5 +17,5 @@ public interface CatalogService {
      * @param id id del catálogo a deshabilitar.
      * @return true si el catálogo fue deshabilitado, de lo contrario false.
      * */
-    boolean disable(long id);
+    boolean disable(Long id);
 }

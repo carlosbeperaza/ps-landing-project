@@ -1,10 +1,12 @@
 package com.ps.landing.project.servicesImpls;
 
 import com.ps.landing.project.converters.CatalogConverter;
+import com.ps.landing.project.converters.SubCatalogConverter;
 import com.ps.landing.project.dto.CatalogDTO;
 import com.ps.landing.project.models.Catalog;
 import com.ps.landing.project.models.SubCatalog;
 import com.ps.landing.project.repos.CatalogRepo;
+import com.ps.landing.project.repos.SubCatalogRepo;
 import com.ps.landing.project.services.CatalogService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,15 +21,19 @@ import java.util.List;
 public class CatalogServiceImpl implements CatalogService {
 
     private Logger log = LoggerFactory.getLogger(CatalogServiceImpl.class.getName());
-    
-    @Autowired
     private CatalogRepo repo;
-    
-    @Autowired
+    private SubCatalogRepo subRepo;
     private CatalogConverter converter;
 
+    @Autowired
+    public CatalogServiceImpl(CatalogRepo repo, SubCatalogRepo subRepo, CatalogConverter converter) {
+        this.repo = repo;
+        this.subRepo = subRepo;
+        this.converter = converter;
+    }
 
     @Override
+    @Transactional(readOnly = true)
     public List<CatalogDTO> findAll() {
 
         List<Catalog> catalogs = new ArrayList<>();
@@ -38,7 +44,7 @@ public class CatalogServiceImpl implements CatalogService {
 
     @Override
     @Transactional(readOnly = true)
-    public CatalogDTO findById(long id) {
+    public CatalogDTO findById(Long id) {
 
         Catalog catalog = repo.findById(id).orElse(null);
 
@@ -46,11 +52,13 @@ public class CatalogServiceImpl implements CatalogService {
     }
 
     @Override
+    @Transactional
     public CatalogDTO save(Catalog catalog) {
         return converter.convertToDTO(repo.save(catalog));
     }
 
     @Override
+    @Transactional
     public CatalogDTO update(Catalog catalog) {
 
         if(repo.findById(catalog.getId()).isPresent()) {
@@ -61,21 +69,18 @@ public class CatalogServiceImpl implements CatalogService {
     }
 
     @Override
-    public boolean disable(long id) {
+    @Transactional
+    public boolean disable(Long id) {
 
         Catalog catalog = repo.findById(id).orElse(null);
         if(catalog != null) {
 
-            //TODO: deshabilitar los subCatálogos...
-            /*List<SubCatalog> subCatalogs = new ArrayList<>();
-
             for(SubCatalog subCatalog : catalog.getSubCatalogs()) {
 
                 subCatalog.setStatus(false);
-                subCatalogs.add(subCatalog);
-            }*/
+                subRepo.save(subCatalog);
+            }
             catalog.setStatus(false);
-            //catalog.setSubCatalogs(subCatalogs);
             repo.save(catalog);
             return true;
         }
