@@ -29,22 +29,7 @@ public class CatalogConverter {
 
             for(SubCatalogDTO subCatalogDTO : subCatalogDTOS) {
 
-<<<<<<< HEAD
                 SubCatalog subCatalog = new SubCatalogConverter().convertToModel(subCatalogDTO);
-=======
-                SubCatalog subCatalog = new SubCatalog();
-
-                subCatalog.setId(subCatalogDTO.getId());
-                subCatalog.setName(subCatalogDTO.getName());
-                subCatalog.setDescription(subCatalogDTO.getDescription());
-                subCatalog.setParent(dto.getId());
-                //url
-                //icon
-                subCatalog.setStatus(subCatalogDTO.isStatus());
-                subCatalog.setCreateDate((Timestamp) subCatalogDTO.getCreateDate());
-                subCatalog.setLastUpdateDate((Timestamp) subCatalogDTO.getLastUpdateDate());
-
->>>>>>> 48202f47a56bde67a9a3a064792312df333b7a4d
                 subCatalogs.add(subCatalog);
             }
         }
