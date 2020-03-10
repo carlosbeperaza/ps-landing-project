@@ -1,7 +1,12 @@
 package com.ps.landing.project.servicesImpls;
 
 
+import com.ps.landing.project.converters.ModuleConverter;
+import com.ps.landing.project.converters.RoleConverter;
+import com.ps.landing.project.dto.RoleDTO;
+import com.ps.landing.project.models.Module;
 import com.ps.landing.project.models.Role;
+import com.ps.landing.project.repos.ModuleRepo;
 import com.ps.landing.project.repos.RoleRepo;
 import com.ps.landing.project.services.RoleService;
 
@@ -11,39 +16,63 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
 public class RoleServiceImpl implements RoleService {
 
-    private Logger log = LoggerFactory.getLogger(RoleServiceImpl.class.getName());
+	
+	private Logger log = LoggerFactory.getLogger(RoleServiceImpl.class.getName());
     
     @Autowired
-    private RoleRepo roleRepo;
+    private RoleRepo repo;
+    
+    @Autowired
+    private RoleConverter converter;
+    
+	@Override
+	public List<RoleDTO> findAll() {
+		List<Role> roles = new ArrayList<>();
+        repo.findAll().forEach(roles::add);
+        return converter.convertToDTO(roles);
+	}
 
+	 @Override
+	 @Transactional(readOnly = true)
+	public RoleDTO findById(long id) {
+		 Role role = repo.findById(id).orElse(null);
+	     return (role != null) ? converter.convertToDTO(role) : null;
+	}
 
-    @Override
-    @Transactional(readOnly = true)
-    public Role findById(long id) {
+	@Override
+	public RoleDTO save(Role role) {
+		return converter.convertToDTO(repo.save(role));
+	}
 
-        Optional<Role> optionalRole = roleRepo.findById(id);
-        return optionalRole.orElse(null);
-    }
+	@Override
+	public RoleDTO update(Role role) {
+		if(repo.findById(role.getId()).isPresent()) {
 
-    @Override
-    public Role save() {
-
-
+            return converter.convertToDTO(repo.save(role));
+        }
         return null;
-    }
+	}
 
-    @Override
-    public Role modify(long id) {
-        return null;
-    }
+	@Override
+	public boolean disable(long id) {
+		Role role = repo.findById(id).orElse(null);
+        if(role != null) {
 
-    @Override
-    public void delete(long id) {
+            role.setStatus(false);
+            repo.save(role);
+            return true;
+        }
+		
+		
+		return false;
+	}
 
-    }
+   
 }

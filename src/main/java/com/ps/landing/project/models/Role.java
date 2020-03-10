@@ -20,6 +20,9 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 @Entity
 @Table(name="roles")
 public class Role implements Serializable{
@@ -34,17 +37,23 @@ public class Role implements Serializable{
 	@Column(length=100)
 	private String description;
 	
-	@Temporal(TemporalType.TIMESTAMP)
-    private Date creationDate;
+	private boolean status;
+	
+	@Column(name = "creation_date")
+	 @Temporal(TemporalType.TIMESTAMP)
+	 @CreationTimestamp
+	 private Date createDate;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date lastUpdateDate;
+	@Column(name = "last_update_date")
+	 @Temporal(TemporalType.TIMESTAMP)
+	 @UpdateTimestamp
+	 private Date lastUpdateDate;
 	
 	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinTable(name="role_modules", joinColumns= @JoinColumn(name="id_role"),
 	inverseJoinColumns=@JoinColumn(name="id_module"),
 	uniqueConstraints= {@UniqueConstraint(columnNames= {"id_role", "id_module"})})
-	private List<Module> module;
+	private List<Module> modules;
 	
 	
 
@@ -91,23 +100,17 @@ public class Role implements Serializable{
 
 
 
-	
-
-
-
 
 	public Date getCreateDate() {
-		return creationDate;
+		return createDate;
 	}
 
 
 
 
 	public void setCreateDate(Date createDate) {
-		this.creationDate = createDate;
+		this.createDate = createDate;
 	}
-
-
 
 
 	public Date getLastUpdateDate() {
@@ -120,19 +123,27 @@ public class Role implements Serializable{
 	public void setLastUpdateDate(Date lastUpdateDate) {
 		this.lastUpdateDate = lastUpdateDate;
 	}
+	
+	public boolean isStatus() {
+		return status;
+	}
+
+	public void setStatus(boolean status) {
+		this.status = status;
+	}
 
 
 
 
 	public List<Module> getModules() {
-		return module;
+		return modules;
 	}
 
 
 
 
 	public void setModules(List<Module> modules) {
-		this.module = modules;
+		this.modules = modules;
 	}
 
 
