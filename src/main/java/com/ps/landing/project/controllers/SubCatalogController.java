@@ -1,6 +1,5 @@
 package com.ps.landing.project.controllers;
 
-import com.ps.landing.project.dto.CatalogDTO;
 import com.ps.landing.project.dto.SubCatalogDTO;
 import com.ps.landing.project.models.SubCatalog;
 import com.ps.landing.project.services.SubCatalogService;
