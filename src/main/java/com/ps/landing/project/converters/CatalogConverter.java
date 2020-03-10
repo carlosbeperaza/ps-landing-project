@@ -41,9 +41,7 @@ public class CatalogConverter {
     public List<Catalog> convertToModel(List<CatalogDTO> dtoList) {
 
         List<Catalog> catalogs = new ArrayList<>();
-
         for(CatalogDTO catalogDTO : dtoList) {
-
             catalogs.add(convertToModel(catalogDTO));
         }
 
@@ -79,9 +77,7 @@ public class CatalogConverter {
     public List<CatalogDTO> convertToDTO(List<Catalog> models) {
 
         List<CatalogDTO> catalogDTOS = new ArrayList<>();
-
         for(Catalog catalog : models) {
-
             catalogDTOS.add(convertToDTO(catalog));
         }
 

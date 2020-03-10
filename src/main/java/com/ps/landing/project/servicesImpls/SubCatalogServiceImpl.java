@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -61,6 +62,7 @@ public class SubCatalogServiceImpl implements SubCatalogService {
             if(subCatalog.getParent() == null)
                 subCatalog.setParent(formerSubCatalog.getParent());
             subCatalog.setCreateDate(formerSubCatalog.getCreateDate());
+            subCatalog.setCreateDate(new Date());
 
             return converter.convertToDTO(repo.save(subCatalog));
         }

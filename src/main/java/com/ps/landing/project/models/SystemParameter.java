@@ -4,27 +4,23 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 
 @Entity
-@Table(name = "catalogs")
-public class Catalog implements Serializable {
+@Table(name = "system_parameters")
+public class SystemParameter {
 
-    /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
-	@Id
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(length = 60, nullable = false)
+    @Column(length = 60)
     private String name;
 
-    @Column(length = 100, nullable = false)
+    @Column(length = 60)
+    private String value;
+
+    @Column(length = 100)
     private String description;
 
     private boolean status;
@@ -36,10 +32,6 @@ public class Catalog implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     @UpdateTimestamp
     private Date lastUpdateDate;
-
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "parent")
-    private List<SubCatalog> subCatalogs;
 
     public Long getId() {
         return id;
@@ -55,6 +47,14 @@ public class Catalog implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
     }
 
     public String getDescription() {
@@ -87,13 +87,5 @@ public class Catalog implements Serializable {
 
     public void setLastUpdateDate(Date lastUpdateDate) {
         this.lastUpdateDate = lastUpdateDate;
-    }
-
-    public List<SubCatalog> getSubCatalogs() {
-        return subCatalogs;
-    }
-
-    public void setSubCatalogs(List<SubCatalog> subCatalogs) {
-        this.subCatalogs = subCatalogs;
     }
 }

@@ -1,8 +1,8 @@
 package com.ps.landing.project.controllers;
 
-import com.ps.landing.project.dto.CatalogDTO;
-import com.ps.landing.project.models.Catalog;
-import com.ps.landing.project.services.CatalogService;
+import com.ps.landing.project.dto.SystemParameterDTO;
+import com.ps.landing.project.models.SystemParameter;
+import com.ps.landing.project.services.SystemParameterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,28 +13,28 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/catalog")
-public class CatalogController {
+@RequestMapping("/system-parameter")
+public class SystemParameterController {
 
-    private CatalogService service;
+    private SystemParameterService service;
 
     @Autowired
-    public CatalogController(CatalogService service) {
+    public SystemParameterController(SystemParameterService service) {
         this.service = service;
     }
 
     @GetMapping("/")
-    public ResponseEntity<?> getAllCatalogs() {
+    public ResponseEntity<?> getAllSystemParameters() {
 
         Map<String, Object> response = new HashMap<>();
         ResponseEntity<?> responseEntity;
         try {
 
-            List<CatalogDTO> catalogDTOList = service.findAll();
-            if(!catalogDTOList.isEmpty())
-                response.put("Catalog list", catalogDTOList);
+            List<SystemParameterDTO> systemParameterDTOList = service.findAll();
+            if(!systemParameterDTOList.isEmpty())
+                response.put("System parameter list", systemParameterDTOList);
             else
-                response.put("No catalogs", "list is empty");
+                response.put("No system parameter", "list is empty");
 
             responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
         } catch (Exception e) {
@@ -46,17 +46,17 @@ public class CatalogController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getCatalog(@PathVariable Long id) {
+    public ResponseEntity<?> getSystemParameter(@PathVariable Long id) {
 
         Map<String, Object> response = new HashMap<>();
-        CatalogDTO catalogDTO = service.findById(id);
+        SystemParameterDTO systemParameterDTO = service.findById(id);
         ResponseEntity<?> responseEntity;
 
-        if(catalogDTO != null) {
-            response.put("Catalog", catalogDTO);
+        if(systemParameterDTO != null) {
+            response.put("System parameter", systemParameterDTO);
             responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
         } else {
-            response.put("Catalog", "No catalog with given id");
+            response.put("System parameter", "No system parameter with given id");
             responseEntity = new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
 
@@ -64,14 +64,14 @@ public class CatalogController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<?> addCatalog(@RequestBody Catalog catalog) {
+    public ResponseEntity<?> addSystemParameter(@RequestBody SystemParameter systemParameter) {
 
         Map<String, Object> response = new HashMap<>();
         ResponseEntity<?> responseEntity;
         try {
 
-            CatalogDTO catalogDTO = service.save(catalog);
-            response.put("New catalog", catalogDTO);
+            SystemParameterDTO systemParameterDTO = service.save(systemParameter);
+            response.put("New system parameter", systemParameterDTO);
             responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
         } catch(Exception e) {
 
@@ -82,20 +82,20 @@ public class CatalogController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<?> updateCatalog(@RequestBody Catalog catalog) {
+    public ResponseEntity<?> updateSystemParameter(@RequestBody SystemParameter systemParameter) {
 
         Map<String, Object> response = new HashMap<>();
         ResponseEntity<?> responseEntity;
         try {
 
-            CatalogDTO updatedCatalog = service.update(catalog);
-            if(updatedCatalog != null) {
+            SystemParameterDTO updatedSystemParameter = service.update(systemParameter);
+            if(updatedSystemParameter != null) {
 
-                response.put("Updated catalog", updatedCatalog);
+                response.put("Updated system parameter", updatedSystemParameter);
                 responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
             } else {
 
-                response.put("Bad request", "No catalog with given id");
+                response.put("Bad request", "No system parameter with given id");
                 responseEntity = new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
             }
         } catch(Exception e) {
@@ -107,7 +107,7 @@ public class CatalogController {
     }
 
     @DeleteMapping("/disable/{id}")
-    public ResponseEntity<?> disableCatalog(@PathVariable Long id) {
+    public ResponseEntity<?> disableSystemParameter(@PathVariable Long id) {
 
         Map<String, Object> response = new HashMap<>();
         ResponseEntity<?> responseEntity;
@@ -115,11 +115,11 @@ public class CatalogController {
 
             if(service.disable(id)) {
 
-                response.put("Success", "Catalog disabled");
+                response.put("Success", "System parameter disabled");
                 responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
             } else {
 
-                response.put("Bad request", "No catalog with given id");
+                response.put("Bad request", "No system parameter with given id");
                 responseEntity = new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
             }
         } catch(Exception e) {

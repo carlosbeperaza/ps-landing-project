@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -67,9 +68,11 @@ public class CatalogServiceImpl implements CatalogService {
                 catalog.setName(formerCatalog.getName());
             if(catalog.getDescription() == null)
                 catalog.setDescription(formerCatalog.getDescription());
-            catalog.setCreateDate(formerCatalog.getCreateDate());
             if(catalog.getSubCatalogs() == null || catalog.getSubCatalogs().isEmpty())
                 catalog.setSubCatalogs(formerCatalog.getSubCatalogs());
+            catalog.setStatus(formerCatalog.isStatus());
+            catalog.setCreateDate(formerCatalog.getCreateDate());
+            catalog.setLastUpdateDate(new Date());
 
             return converter.convertToDTO(repo.save(catalog));
         }
