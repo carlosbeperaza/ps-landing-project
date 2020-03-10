@@ -51,7 +51,16 @@ public class SubCatalogServiceImpl implements SubCatalogService {
     @Override
     public SubCatalogDTO update(SubCatalog subCatalog) {
 
-        if(repo.findById(subCatalog.getId()).isPresent()) {
+        SubCatalog formerSubCatalog = repo.findById(subCatalog.getId()).orElse(null);
+        if(formerSubCatalog != null) {
+
+            if(subCatalog.getName() == null)
+                subCatalog.setName(formerSubCatalog.getName());
+            if(subCatalog.getDescription() == null)
+                subCatalog.setDescription(formerSubCatalog.getDescription());
+            if(subCatalog.getParent() == null)
+                subCatalog.setParent(formerSubCatalog.getParent());
+            subCatalog.setCreateDate(formerSubCatalog.getCreateDate());
 
             return converter.convertToDTO(repo.save(subCatalog));
         }
