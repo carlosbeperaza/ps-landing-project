@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ps.landing.project.converters.SubModuleConverter;
 import com.ps.landing.project.dto.SubModuleDTO;
+import com.ps.landing.project.models.Module;
 import com.ps.landing.project.models.SubModule;
 import com.ps.landing.project.repos.SubModuleRepo;
 import com.ps.landing.project.services.SubModuleService;
@@ -50,7 +51,26 @@ public class SubModuleServiceImpl implements SubModuleService{
 
 	@Override
 	public SubModuleDTO update(SubModule subModule) {
-		if(repo.findById(subModule.getId()).isPresent()) {
+		SubModule formerSubModule = repo.findById(subModule.getId()).orElse(null);
+        if(formerSubModule != null) {
+
+            if(subModule.getName() == null)
+            	subModule.setName(formerSubModule.getName());
+            
+            if(subModule.getDescription() == null)
+            	subModule.setDescription(formerSubModule.getDescription());
+            
+            if(subModule.getParent() == null)
+            	subModule.setParent(formerSubModule.getParent());
+            
+            if(subModule.getUrl() == null)
+            	subModule.setUrl(formerSubModule.getUrl());
+            
+            if(subModule.getIcon() == null)
+            	subModule.setIcon(formerSubModule.getIcon());
+            
+            subModule.setCreateDate(formerSubModule.getCreateDate());
+            
 
             return converter.convertToDTO(repo.save(subModule));
         }

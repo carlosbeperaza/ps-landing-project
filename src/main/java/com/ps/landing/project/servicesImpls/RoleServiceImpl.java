@@ -51,7 +51,15 @@ public class RoleServiceImpl implements RoleService {
 
 	@Override
 	public RoleDTO update(Role role) {
-		if(repo.findById(role.getId()).isPresent()) {
+		Role formerRole = repo.findById(role.getId()).orElse(null);
+        if(formerRole != null) {
+
+            if(role.getName() == null)
+            	role.setName(formerRole.getName());
+            if(role.getDescription() == null)
+            	role.setDescription(formerRole.getDescription());
+            role.setCreateDate(formerRole.getCreateDate());
+            
 
             return converter.convertToDTO(repo.save(role));
         }

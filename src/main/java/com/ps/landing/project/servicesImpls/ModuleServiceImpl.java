@@ -49,7 +49,19 @@ public class ModuleServiceImpl implements ModuleService {
 
 	@Override
 	public ModuleDTO update(Module module) {
-		if(repo.findById(module.getId()).isPresent()) {
+		Module formerModule = repo.findById(module.getId()).orElse(null);
+        if(formerModule != null) {
+
+            if(module.getName() == null)
+            	module.setName(formerModule.getName());
+            if(module.getDescription() == null)
+            	module.setDescription(formerModule.getDescription());
+            if(module.getUrl() == null)
+            	module.setUrl(formerModule.getUrl());
+            if(module.getIcon() == null)
+            	module.setIcon(formerModule.getIcon());
+            module.setCreateDate(formerModule.getCreateDate());
+            
 
             return converter.convertToDTO(repo.save(module));
         }
