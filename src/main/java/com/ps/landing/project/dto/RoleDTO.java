@@ -10,6 +10,7 @@ public class RoleDTO {
     private String description;
     private Date createDate;
     private Date lastUpdateDate;
+    private boolean status;
     
 	public Long getId() {
 		return id;
@@ -40,6 +41,12 @@ public class RoleDTO {
 	}
 	public void setLastUpdateDate(Date lastUpdateDate) {
 		this.lastUpdateDate = lastUpdateDate;
+	}
+	public boolean isStatus() {
+		return status;
+	}
+	public void setStatus(boolean status) {
+		this.status = status;
 	}
 	
 
