@@ -1,7 +1,6 @@
 package com.ps.landing.project.servicesImpls;
 
 import com.ps.landing.project.converters.CatalogConverter;
-import com.ps.landing.project.converters.SubCatalogConverter;
 import com.ps.landing.project.dto.CatalogDTO;
 import com.ps.landing.project.models.Catalog;
 import com.ps.landing.project.models.SubCatalog;
@@ -61,7 +60,16 @@ public class CatalogServiceImpl implements CatalogService {
     @Transactional
     public CatalogDTO update(Catalog catalog) {
 
-        if(repo.findById(catalog.getId()).isPresent()) {
+        Catalog formerCatalog = repo.findById(catalog.getId()).orElse(null);
+        if(formerCatalog != null) {
+
+            if(catalog.getName() == null)
+                catalog.setName(formerCatalog.getName());
+            if(catalog.getDescription() == null)
+                catalog.setDescription(formerCatalog.getDescription());
+            catalog.setCreateDate(formerCatalog.getCreateDate());
+            if(catalog.getSubCatalogs() == null || catalog.getSubCatalogs().isEmpty())
+                catalog.setSubCatalogs(formerCatalog.getSubCatalogs());
 
             return converter.convertToDTO(repo.save(catalog));
         }
