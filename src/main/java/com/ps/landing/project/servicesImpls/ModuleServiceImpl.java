@@ -54,13 +54,21 @@ public class ModuleServiceImpl implements ModuleService {
 
             if(module.getName() == null)
             	module.setName(formerModule.getName());
+            
             if(module.getDescription() == null)
             	module.setDescription(formerModule.getDescription());
+            
             if(module.getUrl() == null)
             	module.setUrl(formerModule.getUrl());
+            
             if(module.getIcon() == null)
             	module.setIcon(formerModule.getIcon());
+            
+            module.setStatus(formerModule.isStatus());
             module.setCreateDate(formerModule.getCreateDate());
+            
+            if(module.getSubModules() == null || module.getSubModules().isEmpty())
+                module.setSubModules(formerModule.getSubModules());
             
 
             return converter.convertToDTO(repo.save(module));

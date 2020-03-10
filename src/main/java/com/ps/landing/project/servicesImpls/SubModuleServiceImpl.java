@@ -69,8 +69,8 @@ public class SubModuleServiceImpl implements SubModuleService{
             if(subModule.getIcon() == null)
             	subModule.setIcon(formerSubModule.getIcon());
             
+            subModule.setStatus(formerSubModule.isStatus());
             subModule.setCreateDate(formerSubModule.getCreateDate());
-            
 
             return converter.convertToDTO(repo.save(subModule));
         }

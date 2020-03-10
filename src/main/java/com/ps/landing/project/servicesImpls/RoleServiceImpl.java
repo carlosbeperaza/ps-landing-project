@@ -58,6 +58,8 @@ public class RoleServiceImpl implements RoleService {
             	role.setName(formerRole.getName());
             if(role.getDescription() == null)
             	role.setDescription(formerRole.getDescription());
+            
+            role.setStatus(formerRole.isStatus());
             role.setCreateDate(formerRole.getCreateDate());
             
 
