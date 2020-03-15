@@ -7,6 +7,9 @@ import java.util.List;
 
 import javax.persistence.*;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 
 
 @Entity
@@ -36,18 +39,21 @@ public class Module implements Serializable{
 	private String icon;
 	
 	
-	@Column()
-	private Boolean status;
+	private boolean status;
 	
-	@Temporal(TemporalType.TIMESTAMP)
-    private Date createDate;
+	@Column(name = "creation_date")
+	 @Temporal(TemporalType.TIMESTAMP)
+	 @CreationTimestamp
+	 private Date createDate;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date lastUpdateDate;
+	@Column(name = "last_update_date")
+	 @Temporal(TemporalType.TIMESTAMP)
+	 @UpdateTimestamp
+	 private Date lastUpdateDate;
 	
-	@OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-	@JoinTable(name = "sub_modules", joinColumns = @JoinColumn(name = "parent") )
-	private List<SubModule> subModule;
+	 @OneToMany(cascade = CascadeType.ALL)
+	 @JoinColumn(name = "parent")
+	 private List<SubModule> subModules;
 	
 	
 
@@ -91,15 +97,17 @@ public class Module implements Serializable{
 		this.icon = icon;
 	}
 
-	public Boolean getStatus() {
+	
+
+	
+	public boolean isStatus() {
 		return status;
 	}
 
-	public void setStatus(Boolean status) {
+	public void setStatus(boolean status) {
 		this.status = status;
 	}
 
-	
 	public Date getCreateDate() {
 		return createDate;
 	}
@@ -115,14 +123,15 @@ public class Module implements Serializable{
 	public void setLastUpdateDate(Date lastUpdateDate) {
 		this.lastUpdateDate = lastUpdateDate;
 	}
+
 	
 
-	public List<SubModule> getSubModule() {
-		return subModule;
+	public List<SubModule> getSubModules() {
+		return subModules;
 	}
 
-	public void setSubModule(List<SubModule> subModule) {
-		this.subModule = subModule;
+	public void setSubModules(List<SubModule> subModules) {
+		this.subModules = subModules;
 	}
 
 	public static long getSerialversionuid() {

@@ -1,15 +1,36 @@
-package com.ps.landing.project.dto;
+package com.ps.landing.project.models;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import javax.persistence.*;
 import java.util.Date;
 
-public class SubCatalogDTO {
+@Entity
+@Table(name = "system_parameters")
+public class SystemParameter {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(length = 60)
     private String name;
+
+    @Column(length = 60)
+    private String value;
+
+    @Column(length = 100)
     private String description;
-    private Long parent;
+
     private boolean status;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @CreationTimestamp
     private Date createDate;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @UpdateTimestamp
     private Date lastUpdateDate;
 
     public Long getId() {
@@ -28,20 +49,20 @@ public class SubCatalogDTO {
         this.name = name;
     }
 
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
+    }
+
     public String getDescription() {
         return description;
     }
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public Long getParent() {
-        return parent;
-    }
-
-    public void setParent(Long parent) {
-        this.parent = parent;
     }
 
     public boolean isStatus() {

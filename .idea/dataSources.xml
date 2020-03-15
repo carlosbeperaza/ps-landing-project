@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="ps_landing_project@localhost" uuid="6d1a7517-55a5-4938-bed8-d8c2b1cfc867">
+    <data-source source="LOCAL" name="ps_landing_project_db@localhost" uuid="ca760816-704c-416b-b4a9-2813ffd2f383">
       <driver-ref>mysql.8</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
-      <jdbc-url>jdbc:mysql://localhost:3306/ps_landing_project</jdbc-url>
+      <jdbc-url>jdbc:mysql://localhost:3306/ps_landing_project_db</jdbc-url>
       <driver-properties>
         <property name="serverTimezone" value="UTC" />
       </driver-properties>

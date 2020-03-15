@@ -1,5 +1,6 @@
 package com.ps.landing.project.auth;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,9 +27,13 @@ public class InfoAdicionalToken implements TokenEnhancer{
 		Map<String, Object> info = new HashMap<>();
 		info.put("info_adicional", "Hola que tal!: ".concat(authentication.getName()));
 		
-		info.put("nombre", PSUser.getName());
-		info.put("apellido", PSUser.getLastname());
-		info.put("email", PSUser.getEmail());
+		try {
+			info.put("nombre", PSUser.getName());
+			info.put("apellido", PSUser.getLastname());
+			info.put("email", PSUser.getEmail());
+		} catch(Exception e) {
+			System.out.println(e.getMessage());
+		}
 		
 		((DefaultOAuth2AccessToken) accessToken).setAdditionalInformation(info);
 		

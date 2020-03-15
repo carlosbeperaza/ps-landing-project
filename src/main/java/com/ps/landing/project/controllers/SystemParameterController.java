@@ -1,51 +1,41 @@
 package com.ps.landing.project.controllers;
 
+import com.ps.landing.project.dto.SystemParameterDTO;
+import com.ps.landing.project.models.SystemParameter;
+import com.ps.landing.project.services.SystemParameterService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.ps.landing.project.dto.ModuleDTO;
-import com.ps.landing.project.models.Module;
-import com.ps.landing.project.services.ModuleService;
-
 @RestController
-@RequestMapping("/Module")
-public class ModuleController {
-	
-	private ModuleService service;
+@RequestMapping("/system-parameter")
+public class SystemParameterController {
+
+    private SystemParameterService service;
 
     @Autowired
-    void setService(ModuleService service) {
+    public SystemParameterController(SystemParameterService service) {
         this.service = service;
     }
 
     @GetMapping("/")
-    public ResponseEntity<?> getAllModules() {
+    public ResponseEntity<?> getAllSystemParameters() {
 
         Map<String, Object> response = new HashMap<>();
         ResponseEntity<?> responseEntity;
         try {
 
-            List<ModuleDTO> moduleDTOList = service.findAll();
-            if(!moduleDTOList.isEmpty()) {
+            List<SystemParameterDTO> systemParameterDTOList = service.findAll();
+            if(!systemParameterDTOList.isEmpty())
+                response.put("System parameter list", systemParameterDTOList);
+            else
+                response.put("No system parameter", "list is empty");
 
-                response.put("Module list", moduleDTOList);
-            } else {
-
-                response.put("No modules", "list is empty");
-            }
             responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
         } catch (Exception e) {
 
@@ -56,28 +46,32 @@ public class ModuleController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getModule(@PathVariable Long id) {
+    public ResponseEntity<?> getSystemParameter(@PathVariable Long id) {
 
         Map<String, Object> response = new HashMap<>();
-        ModuleDTO moduleDTO = service.findById(id);
+        SystemParameterDTO systemParameterDTO = service.findById(id);
+        ResponseEntity<?> responseEntity;
 
-        if(moduleDTO != null) {
-            response.put("Module", moduleDTO);
+        if(systemParameterDTO != null) {
+            response.put("System parameter", systemParameterDTO);
+            responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
         } else {
-            response.put("Module", "No module with given id");
+            response.put("System parameter", "No system parameter with given id");
+            responseEntity = new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>(response, HttpStatus.ACCEPTED);
+
+        return responseEntity;
     }
 
     @PostMapping("/add")
-    public ResponseEntity<?> addModule(@RequestBody Module module) {
+    public ResponseEntity<?> addSystemParameter(@RequestBody SystemParameter systemParameter) {
 
         Map<String, Object> response = new HashMap<>();
         ResponseEntity<?> responseEntity;
         try {
 
-            ModuleDTO moduleDTO = service.save(module);
-            response.put("New module", moduleDTO);
+            SystemParameterDTO systemParameterDTO = service.save(systemParameter);
+            response.put("New system parameter", systemParameterDTO);
             responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
         } catch(Exception e) {
 
@@ -88,20 +82,20 @@ public class ModuleController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<?> updateModule(@RequestBody Module module) {
+    public ResponseEntity<?> updateSystemParameter(@RequestBody SystemParameter systemParameter) {
 
         Map<String, Object> response = new HashMap<>();
         ResponseEntity<?> responseEntity;
         try {
 
-            ModuleDTO updatedModule = service.update(module);
-            if(updatedModule != null) {
+            SystemParameterDTO updatedSystemParameter = service.update(systemParameter);
+            if(updatedSystemParameter != null) {
 
-                response.put("Updated module", updatedModule);
+                response.put("Updated system parameter", updatedSystemParameter);
                 responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
             } else {
 
-                response.put("Bad request", "No module with given id");
+                response.put("Bad request", "No system parameter with given id");
                 responseEntity = new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
             }
         } catch(Exception e) {
@@ -113,7 +107,7 @@ public class ModuleController {
     }
 
     @DeleteMapping("/disable/{id}")
-    public ResponseEntity<?> disableModule(@PathVariable Long id) {
+    public ResponseEntity<?> disableSystemParameter(@PathVariable Long id) {
 
         Map<String, Object> response = new HashMap<>();
         ResponseEntity<?> responseEntity;
@@ -121,20 +115,18 @@ public class ModuleController {
 
             if(service.disable(id)) {
 
-                response.put("Success", "Module disabled");
+                response.put("Success", "System parameter disabled");
                 responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
             } else {
 
-                response.put("Bad request", "No module with given id");
+                response.put("Bad request", "No system parameter with given id");
                 responseEntity = new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
             }
         } catch(Exception e) {
 
             response.put("Error message", e.getMessage());
-            response.put("Stack trace", e.getStackTrace());
             responseEntity = new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return responseEntity;
     }
-
 }

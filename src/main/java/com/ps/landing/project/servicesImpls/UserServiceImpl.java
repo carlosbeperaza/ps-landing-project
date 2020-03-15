@@ -1,5 +1,7 @@
 package com.ps.landing.project.servicesImpls;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -16,7 +18,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.security.core.userdetails.User;
 
+import com.ps.landing.project.converters.UserConverter;
+import com.ps.landing.project.dto.UserDTO;
+import com.ps.landing.project.models.Catalog;
 import com.ps.landing.project.models.PSUser;
+import com.ps.landing.project.models.Role;
 import com.ps.landing.project.repos.UserRepo;
 import com.ps.landing.project.services.UserService;
 
@@ -28,29 +34,67 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 	@Autowired
 	private UserRepo userRepo;
 
+	@Autowired
+	private UserConverter userconverter;
+
 	@Override
-	public PSUser save() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<UserDTO> findAll() {
+
+		List<PSUser> users = new ArrayList<>();
+		userRepo.findAll().forEach(users::add);
+
+		return userconverter.convertToDTO(users);
 	}
 
 	@Override
-	public PSUser findById(Long id) {
-		Optional<PSUser> optionalUser = userRepo.findById(id);
-		return optionalUser.orElse(null);
+	public UserDTO save(PSUser user) {
+		return userconverter.UsertoUserDTO(userRepo.save(user));
 	}
 
 	@Override
-	public void delete(Long id) {
-		// TODO Auto-generated method stub
+	@Transactional(readOnly = true)
+	public UserDTO findById(long id) {
+		PSUser user = userRepo.findById(id).orElse(null);
 
+		return (user != null) ? userconverter.UsertoUserDTO(user) : null;
 	}
 
 	@Override
-	public PSUser modify(Long id) {
-		// TODO Auto-generated method stub
-		return null;
+	public UserDTO update(PSUser user) {
+		PSUser formerUser = userRepo.findById(user.getId()).orElse(null);
+        if(formerUser != null) {
+
+            if(user.getName() == null)
+            	user.setName(formerUser.getName());
+            if(user.getLastname() == null)
+            	user.setLastname(formerUser.getLastname());
+            if(user.getEmail() == null)
+            	user.setEmail(formerUser.getEmail());
+            if(user.getPassword() == null)
+            	user.setPassword(formerUser.getPassword());
+            
+            user.setStatus(formerUser.isStatus());
+            user.setRegistrationDate(formerUser.getRegistrationDate());
+            user.setUpdateDate(new Date());
+            user.setUsername(formerUser.getUsername());
+            
+
+            return userconverter.UsertoUserDTO(userRepo.save(user));
+        }
+        return null;
 	}
+	
+	@Override
+	public boolean disable(long id) {
+		 PSUser user = userRepo.findById(id).orElse(null);
+	        if(user != null) {
+
+	        	user.setStatus(false);
+	        	userRepo.save(user);
+	            return true;
+	        }
+	        return false;
+	    }
 
 	@Override
 	public PSUser findByFirstName(String firstName) {
@@ -75,7 +119,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 				.map(role -> new SimpleGrantedAuthority(role.getName()))
 				.peek(authority -> log.info("Role: " + authority.getAuthority())).collect(Collectors.toList());
 
-		return new User(user.getUsername(), user.getPassword(), user.getStatus(), true, true, true,
-				authorities);
+		return new User(user.getUsername(), user.getPassword(), user.isStatus(), true, true, true, authorities);
 	}
+
+	
+
 }

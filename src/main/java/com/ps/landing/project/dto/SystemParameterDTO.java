@@ -2,12 +2,12 @@ package com.ps.landing.project.dto;
 
 import java.util.Date;
 
-public class SubCatalogDTO {
+public class SystemParameterDTO {
 
     private Long id;
     private String name;
+    private String value;
     private String description;
-    private Long parent;
     private boolean status;
     private Date createDate;
     private Date lastUpdateDate;
@@ -28,20 +28,20 @@ public class SubCatalogDTO {
         this.name = name;
     }
 
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
+    }
+
     public String getDescription() {
         return description;
     }
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public Long getParent() {
-        return parent;
-    }
-
-    public void setParent(Long parent) {
-        this.parent = parent;
     }
 
     public boolean isStatus() {

@@ -1,10 +1,148 @@
 package com.ps.landing.project.controllers;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.jboss.logging.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ps.landing.project.dto.CatalogDTO;
+import com.ps.landing.project.dto.UserDTO;
+import com.ps.landing.project.models.Catalog;
+import com.ps.landing.project.models.PSUser;
+import com.ps.landing.project.services.CatalogService;
+import com.ps.landing.project.services.UserService;
+
 @RestController
-@RequestMapping("/User")
+@RequestMapping("/user")
 public class UserController {
+
+	private UserService service;
+
+	@Autowired
+	void setService(UserService service) {
+		this.service = service;
+	}
+
+	@GetMapping("/")
+	public ResponseEntity<?> getAllUser() {
+
+		Map<String, Object> response = new HashMap<>();
+		ResponseEntity<?> responseEntity;
+		try {
+
+			List<UserDTO> userDTOList = service.findAll();
+			if (!userDTOList.isEmpty()) {
+
+				response.put("User list", userDTOList);
+			} else {
+
+				response.put("No user", "list is empty");
+			}
+			responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
+		} catch (Exception e) {
+
+			response.put("Error", e.getMessage());
+			responseEntity = new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		return responseEntity;
+	}
+
+	@GetMapping("/{id}")
+	public ResponseEntity<?> findById(@PathVariable Long id) {
+		Map<String, Object> response = new HashMap<>();
+
+		UserDTO userDto = service.findById(id);
+
+		if (userDto == null) {
+			response.put("data", "Usuario No Existente");
+		} else {
+			response.put("data", userDto);
+		}
+
+		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.ACCEPTED);
+
+		// return userService.getUsers();
+	}
+
+	@PostMapping("/add")
+	public ResponseEntity<?> addUser(@RequestBody PSUser user) {
+
+		Map<String, Object> response = new HashMap<>();
+		ResponseEntity<?> responseEntity;
+		try {
+
+			UserDTO UserDTO = service.save(user);
+			response.put("New User", UserDTO);
+			responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
+		} catch (Exception e) {
+
+			response.put("Error", e.getStackTrace());
+			responseEntity = new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		return responseEntity;
+	}
+	
+	@PutMapping("/update")
+    public ResponseEntity<?> updateUser(@RequestBody PSUser user) {
+
+        Map<String, Object> response = new HashMap<>();
+        ResponseEntity<?> responseEntity;
+        try {
+
+            UserDTO updatedUser = service.update(user);
+            if(updatedUser != null) {
+
+                response.put("Updated user", updatedUser);
+                responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
+            } else {
+
+                response.put("Bad request", "No user with given id");
+                responseEntity = new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+            }
+        } catch(Exception e) {
+
+            response.put("Error", e.getMessage());
+            responseEntity = new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return responseEntity;
+    }
+	
+	 @DeleteMapping("/disable/{id}")
+	    public ResponseEntity<?> disableCatalog(@PathVariable Long id) {
+
+	        Map<String, Object> response = new HashMap<>();
+	        ResponseEntity<?> responseEntity;
+	        try {
+
+	            if(service.disable(id)) {
+
+	                response.put("Success", "User disabled");
+	                responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
+	            } else {
+
+	                response.put("Bad request", "No user with given id");
+	                responseEntity = new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+	            }
+	        } catch(Exception e) {
+
+	            response.put("Error message", e.getMessage());
+	            response.put("Stack trace", e.getStackTrace());
+	            responseEntity = new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+	        }
+	        return responseEntity;
+	    }
+
 
 }

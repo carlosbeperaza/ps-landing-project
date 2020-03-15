@@ -20,6 +20,9 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 //import com.puntosingular.base.models.Role;
 
 @Entity
@@ -50,14 +53,16 @@ public class PSUser implements Serializable{
 	@Column(length = 255)
 	private String password;
 	
-	private Boolean status;
+	private boolean status;
 	
 	@Column(name = "registration_date")
 	@Temporal(TemporalType.TIMESTAMP)
+    @CreationTimestamp 
 	private Date registrationDate;
 	
 	@Column(name = "last_update_date")
 	@Temporal(TemporalType.TIMESTAMP)
+	@UpdateTimestamp
 	private Date updateDate;
 	
 	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -130,11 +135,15 @@ public class PSUser implements Serializable{
 		this.roles = roles;
 	}
 
-	public Boolean getStatus() {
+	
+
+	
+
+	public boolean isStatus() {
 		return status;
 	}
 
-	public void setStatus(Boolean status) {
+	public void setStatus(boolean status) {
 		this.status = status;
 	}
 

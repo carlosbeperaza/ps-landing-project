@@ -10,9 +10,11 @@ public class UserDTO {
 
 	 private Long id;
 		private String name;
+		private String username;
 		private String lastname;
 		private String email;
 		private String password;
+		private boolean status;
 		private Date registrationDate;
 		private Date updateDate;
 		private List<Role> roles;
@@ -27,6 +29,12 @@ public class UserDTO {
 		}
 		public void setName(String name) {
 			this.name = name;
+		}
+		public String getUsername() {
+			return username;
+		}
+		public void setUsername(String username) {
+			this.username = username;
 		}
 		public String getLastname() {
 			return lastname;
@@ -47,7 +55,12 @@ public class UserDTO {
 			this.password = password;
 		}
 		
-		
+		public boolean isStatus() {
+			return status;
+		}
+		public void setStatus(boolean status) {
+			this.status = status;
+		}
 		public Date getRegistrationDate() {
 			return registrationDate;
 		}
@@ -67,5 +80,6 @@ public class UserDTO {
 			this.roles = roles;
 		}
 		
+	
 		
 }

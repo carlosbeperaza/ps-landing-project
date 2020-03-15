@@ -6,7 +6,6 @@ import com.ps.landing.project.models.Catalog;
 import com.ps.landing.project.models.SubCatalog;
 import org.springframework.stereotype.Component;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,22 +22,16 @@ public class CatalogConverter {
         catalog.setName(dto.getName());
         catalog.setDescription(dto.getDescription());
         catalog.setStatus(dto.isStatus());
-        catalog.setCreateDate((Timestamp) dto.getCreateDate());
-        catalog.setLastUpdateDate((Timestamp) dto.getLastUpdateDate());
+        catalog.setCreateDate(dto.getCreateDate());
+        catalog.setLastUpdateDate(dto.getLastUpdateDate());
 
-        for(SubCatalogDTO subCatalogDTO : subCatalogDTOS) {
+        if(subCatalogDTOS != null) {
 
-            SubCatalog subCatalog = new SubCatalog();
+            for(SubCatalogDTO subCatalogDTO : subCatalogDTOS) {
 
-            subCatalog.setId(subCatalogDTO.getId());
-            subCatalog.setName(subCatalogDTO.getName());
-            subCatalog.setDescription(subCatalogDTO.getDescription());
-            subCatalog.setParent(dto.getId());
-            subCatalog.setStatus(subCatalogDTO.isStatus());
-            subCatalog.setCreateDate((Timestamp) subCatalogDTO.getCreateDate());
-            subCatalog.setLastUpdateDate((Timestamp) subCatalogDTO.getLastUpdateDate());
-
-            subCatalogs.add(subCatalog);
+                SubCatalog subCatalog = new SubCatalogConverter().convertToModel(subCatalogDTO);
+                subCatalogs.add(subCatalog);
+            }
         }
         catalog.setSubCatalogs(subCatalogs);
 
@@ -48,11 +41,8 @@ public class CatalogConverter {
     public List<Catalog> convertToModel(List<CatalogDTO> dtoList) {
 
         List<Catalog> catalogs = new ArrayList<>();
-
         for(CatalogDTO catalogDTO : dtoList) {
-
-            Catalog catalog = convertToModel(catalogDTO);
-            catalogs.add(catalog);
+            catalogs.add(convertToModel(catalogDTO));
         }
 
         return catalogs;
@@ -71,32 +61,24 @@ public class CatalogConverter {
         catalogDTO.setCreateDate(model.getCreateDate());
         catalogDTO.setLastUpdateDate(model.getLastUpdateDate());
 
-        for(SubCatalog subCatalog : subCatalogs) {
+        if(subCatalogs != null) {
 
-            SubCatalogDTO subCatalogDTO = new SubCatalogDTO();
+            for(SubCatalog subCatalog : subCatalogs) {
 
-            subCatalogDTO.setId(subCatalog.getId());
-            subCatalogDTO.setName(subCatalog.getName());
-            subCatalogDTO.setDescription(subCatalog.getDescription());
-            subCatalogDTO.setStatus(subCatalog.isStatus());
-            subCatalogDTO.setCreateDate(subCatalog.getCreateDate());
-            subCatalogDTO.setLastUpdateDate(subCatalog.getLastUpdateDate());
-
-            subCatalogDTOS.add(subCatalogDTO);
+                SubCatalogDTO subCatalogDTO = new SubCatalogConverter().convertToDTO(subCatalog);
+                subCatalogDTOS.add(subCatalogDTO);
+            }
         }
         catalogDTO.setSubCatalogs(subCatalogDTOS);
 
         return catalogDTO;
     }
 
-    public List<CatalogDTO> convertToDTO(List<Catalog> catalogs) {
+    public List<CatalogDTO> convertToDTO(List<Catalog> models) {
 
         List<CatalogDTO> catalogDTOS = new ArrayList<>();
-
-        for(Catalog catalog : catalogs) {
-
-            CatalogDTO catalogDTO = convertToDTO(catalog);
-            catalogDTOS.add(catalogDTO);
+        for(Catalog catalog : models) {
+            catalogDTOS.add(convertToDTO(catalog));
         }
 
         return catalogDTOS;

@@ -13,6 +13,9 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 @Entity
 @Table(name="sub_modules")
 public class SubModule implements Serializable{
@@ -27,22 +30,26 @@ public class SubModule implements Serializable{
 	@Column(length=100, nullable = false)
 	private String description;
 	
-	@Column(nullable = false)
-	private SubModule parent;
+	private Long parent;
 	
 	@Column(length=100, nullable = false)
 	private String url;
 	
 	@Column(length=100, nullable = false)
 	private String icon;
-	@Column()
+	
+	
 	private Boolean status;
 	
-	@Temporal(TemporalType.TIMESTAMP)
-    private Date createDate;
+	@Column(name = "creation_date")
+	 @Temporal(TemporalType.TIMESTAMP)
+	 @CreationTimestamp
+	 private Date createDate;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date lastUpdateDate;
+	@Column(name = "last_update_date")
+	 @Temporal(TemporalType.TIMESTAMP)
+	 @UpdateTimestamp
+	 private Date lastUpdateDate;
 	
 	
 	
@@ -89,16 +96,16 @@ public class SubModule implements Serializable{
 
 
 
-	public SubModule getParent() {
-		return parent;
-	}
+	public Long getParent() {
+        return parent;
+    }
+
+    public void setParent(Long parent) {
+        this.parent = parent;
+    }
 
 
-
-
-	public void setParent(SubModule parent) {
-		this.parent = parent;
-	}
+	
 
 
 
@@ -130,22 +137,14 @@ public class SubModule implements Serializable{
 
 
 
-
-	public Boolean getStatus() {
+	public boolean isStatus() {
 		return status;
 	}
 
-
-
-
-	public void setStatus(Boolean status) {
+	public void setStatus(boolean status) {
 		this.status = status;
 	}
 
-
-
-
-	
 
 
 
