@@ -1,6 +1,7 @@
 package com.ps.landing.project.servicesImpls;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -44,36 +45,48 @@ public class ModuleServiceImpl implements ModuleService {
 
 	@Override
 	public ModuleDTO save(Module module) {
-		return converter.convertToDTO(repo.save(module));
+		Module coincidence = repo.findByName(module.getName()).orElse(null);
+        if(coincidence == null) {
+            module.setSubModules(new ArrayList<>());
+            return converter.convertToDTO(repo.save(module));
+        }
+        else
+            return null;
+	
 	}
 
 	@Override
 	public ModuleDTO update(Module module) {
-		Module formerModule = repo.findById(module.getId()).orElse(null);
-        if(formerModule != null) {
+		
+		 Module formerModule = repo.findById(module.getId()).orElse(null);
+	        if(formerModule != null) {
 
-            if(module.getName() == null)
-            	module.setName(formerModule.getName());
-            
-            if(module.getDescription() == null)
-            	module.setDescription(formerModule.getDescription());
-            
-            if(module.getUrl() == null)
-            	module.setUrl(formerModule.getUrl());
-            
-            if(module.getIcon() == null)
-            	module.setIcon(formerModule.getIcon());
-            
-            module.setStatus(formerModule.isStatus());
-            module.setCreateDate(formerModule.getCreateDate());
-            
-            if(module.getSubModules() == null || module.getSubModules().isEmpty())
-                module.setSubModules(formerModule.getSubModules());
-            
+	            if(module.getName() == null)
+	                module.setName(formerModule.getName());
+	            
+	            if(module.getDescription() == null)
+	                module.setDescription(formerModule.getDescription());
+	            
+	            if(module.getUrl() == null)
+	                module.setUrl(formerModule.getUrl());
+	            
+	            if(module.getIcon() == null)
+	                module.setIcon(formerModule.getIcon());
+	            
+	            module.setStatus(formerModule.isStatus());
+	            
+	            if(module.getSubModules() == null || module.getSubModules().isEmpty())
+	                module.setSubModules(formerModule.getSubModules());
+	            
+	            module.setCreateDate(formerModule.getCreateDate());
+	            
+	            module.setLastUpdateDate(new Date());
 
-            return converter.convertToDTO(repo.save(module));
-        }
-        return null;
+	            Module coincidence = repo.findByNameAndIdNot(module.getName(), module.getId()).orElse(null);
+	            if(coincidence == null)
+	                return converter.convertToDTO(repo.save(module));
+	        }
+	        return null;
 	}
 
 	@Override
