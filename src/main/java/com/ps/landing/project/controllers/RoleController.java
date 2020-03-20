@@ -78,8 +78,14 @@ public class RoleController {
         try {
 
             RoleDTO roleDTO = service.save(role);
-            response.put("New role", roleDTO);
-            responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
+            if(roleDTO != null) {
+            	response.put("New role", roleDTO);
+                responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
+            }else {
+            	response.put("Error", "this role name is already in use");
+                responseEntity = new ResponseEntity<>(response, HttpStatus.CONFLICT);
+            }
+            
         } catch(Exception e) {
 
             response.put("Error", e.getMessage());
@@ -102,7 +108,7 @@ public class RoleController {
                 responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
             } else {
 
-                response.put("Bad request", "No role with given id");
+                response.put("Error", "No role with given id or name in use");
                 responseEntity = new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
             }
         } catch(Exception e) {
