@@ -57,7 +57,7 @@ public class SubCatalogServiceImpl implements SubCatalogService {
     }
 
     @Override
-    public SubCatalogDTO update(SubCatalog subCatalog) {
+    public Object update(SubCatalog subCatalog) {
 
         SubCatalog formerSubCatalog = repo.findById(subCatalog.getId()).orElse(null);
         if(formerSubCatalog != null) {
@@ -76,8 +76,9 @@ public class SubCatalogServiceImpl implements SubCatalogService {
             ).orElse(null);
             if(coincidence == null)
                 return converter.convertToDTO(repo.save(subCatalog));
+            else return "The parent catalog already have a sub catalog with this name";
         }
-        return null;
+        return "No sub catalog with given id";
     }
 
     @Override

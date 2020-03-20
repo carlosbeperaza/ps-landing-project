@@ -10,6 +10,6 @@ public interface SubCatalogService {
     List<SubCatalogDTO> findAll();
     SubCatalogDTO findById(Long id);
     SubCatalogDTO save(SubCatalog subCatalog);
-    SubCatalogDTO update(SubCatalog subCatalog);
+    Object update(SubCatalog subCatalog);
     boolean disable(Long id);
 }
