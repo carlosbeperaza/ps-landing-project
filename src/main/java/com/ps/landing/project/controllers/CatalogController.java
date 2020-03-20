@@ -71,8 +71,15 @@ public class CatalogController {
         try {
 
             CatalogDTO catalogDTO = service.save(catalog);
-            response.put("New catalog", catalogDTO);
-            responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
+            if(catalogDTO != null) {
+
+                response.put("New catalog", catalogDTO);
+                responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
+            } else {
+
+                response.put("Error", "this catalog name is already in use");
+                responseEntity = new ResponseEntity<>(response, HttpStatus.CONFLICT);
+            }
         } catch(Exception e) {
 
             response.put("Error", e.getMessage());
@@ -95,7 +102,7 @@ public class CatalogController {
                 responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
             } else {
 
-                response.put("Bad request", "No catalog with given id");
+                response.put("Bad request", "No catalog with given id or duplicated name");
                 responseEntity = new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
             }
         } catch(Exception e) {

@@ -54,7 +54,14 @@ public class CatalogServiceImpl implements CatalogService {
     @Override
     @Transactional
     public CatalogDTO save(Catalog catalog) {
-        return converter.convertToDTO(repo.save(catalog));
+
+        Catalog coincidence = repo.findByName(catalog.getName()).orElse(null);
+        if(coincidence == null) {
+            catalog.setSubCatalogs(new ArrayList<>());
+            return converter.convertToDTO(repo.save(catalog));
+        }
+        else
+            return null;
     }
 
     @Override
@@ -74,7 +81,9 @@ public class CatalogServiceImpl implements CatalogService {
             catalog.setCreateDate(formerCatalog.getCreateDate());
             catalog.setLastUpdateDate(new Date());
 
-            return converter.convertToDTO(repo.save(catalog));
+            Catalog coincidence = repo.findByNameAndIdNot(catalog.getName(), catalog.getId()).orElse(null);
+            if(coincidence == null)
+                return converter.convertToDTO(repo.save(catalog));
         }
         return null;
     }
