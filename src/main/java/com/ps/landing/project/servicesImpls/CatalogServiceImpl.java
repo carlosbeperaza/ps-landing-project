@@ -57,8 +57,25 @@ public class CatalogServiceImpl implements CatalogService {
 
         Catalog coincidence = repo.findByName(catalog.getName()).orElse(null);
         if(coincidence == null) {
+
+            List<SubCatalog> subCatalogs = catalog.getSubCatalogs();
             catalog.setSubCatalogs(new ArrayList<>());
-            return converter.convertToDTO(repo.save(catalog));
+            Catalog newCatalog = repo.save(catalog);
+            List<SubCatalog> newSubCatalogs = new ArrayList<>();
+            for(SubCatalog subCatalog: subCatalogs) {
+
+                subCatalog.setParent(newCatalog.getId());
+                SubCatalog subCoincidence = subRepo.findByNameAndParent(
+                        subCatalog.getName(), subCatalog.getParent()
+                ).orElse(null);
+                if(subCoincidence == null) {
+
+                    subRepo.save(subCatalog);
+                    newSubCatalogs.add(subCatalog);
+                }
+            }
+            newCatalog.setSubCatalogs(newSubCatalogs);
+            return converter.convertToDTO(newCatalog);
         }
         else
             return null;
