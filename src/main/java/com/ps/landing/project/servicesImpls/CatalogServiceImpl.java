@@ -83,7 +83,7 @@ public class CatalogServiceImpl implements CatalogService {
 
     @Override
     @Transactional
-    public CatalogDTO update(Catalog catalog) {
+    public Object update(Catalog catalog) {
 
         Catalog formerCatalog = repo.findById(catalog.getId()).orElse(null);
         if(formerCatalog != null) {
@@ -101,8 +101,9 @@ public class CatalogServiceImpl implements CatalogService {
             Catalog coincidence = repo.findByNameAndIdNot(catalog.getName(), catalog.getId()).orElse(null);
             if(coincidence == null)
                 return converter.convertToDTO(repo.save(catalog));
+            else return "This catalog name is already in use";
         }
-        return null;
+        return "No catalog with given id";
     }
 
     @Override

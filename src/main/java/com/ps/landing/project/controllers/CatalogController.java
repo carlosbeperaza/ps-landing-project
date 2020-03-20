@@ -32,9 +32,9 @@ public class CatalogController {
 
             List<CatalogDTO> catalogDTOList = service.findAll();
             if(!catalogDTOList.isEmpty())
-                response.put("Catalog list", catalogDTOList);
+                response.put("Success", catalogDTOList);
             else
-                response.put("No catalogs", "list is empty");
+                response.put("Success", "list is empty");
 
             responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
         } catch (Exception e) {
@@ -53,10 +53,10 @@ public class CatalogController {
         ResponseEntity<?> responseEntity;
 
         if(catalogDTO != null) {
-            response.put("Catalog", catalogDTO);
+            response.put("Success", catalogDTO);
             responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
         } else {
-            response.put("Catalog", "No catalog with given id");
+            response.put("BadRequest", "No catalog with given id");
             responseEntity = new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
 
@@ -73,12 +73,12 @@ public class CatalogController {
             CatalogDTO catalogDTO = service.save(catalog);
             if(catalogDTO != null) {
 
-                response.put("New catalog", catalogDTO);
+                response.put("Success", catalogDTO);
                 responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
             } else {
 
-                response.put("Error", "this catalog name is already in use");
-                responseEntity = new ResponseEntity<>(response, HttpStatus.CONFLICT);
+                response.put("BadRequest", "this catalog name is already in use");
+                responseEntity = new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
             }
         } catch(Exception e) {
 
@@ -92,17 +92,21 @@ public class CatalogController {
     public ResponseEntity<?> updateCatalog(@RequestBody Catalog catalog) {
 
         Map<String, Object> response = new HashMap<>();
-        ResponseEntity<?> responseEntity;
+        ResponseEntity<?> responseEntity = null;
         try {
 
-            CatalogDTO updatedCatalog = service.update(catalog);
-            if(updatedCatalog != null) {
+            Object result = service.update(catalog);
+            String resultType = result.getClass().getName();
 
-                response.put("Updated catalog", updatedCatalog);
+            if(resultType.equals(CatalogDTO.class.getName())) {
+
+                CatalogDTO updatedCatalog = (CatalogDTO) result;
+                response.put("Success", updatedCatalog);
                 responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
-            } else {
+            }
+            else if(resultType.equals(String.class.getName())) {
 
-                response.put("Bad request", "No catalog with given id or duplicated name");
+                response.put("BadRequest", result);
                 responseEntity = new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
             }
         } catch(Exception e) {
@@ -126,12 +130,12 @@ public class CatalogController {
                 responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
             } else {
 
-                response.put("Bad request", "No catalog with given id");
+                response.put("BadRequest", "No catalog with given id");
                 responseEntity = new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
             }
         } catch(Exception e) {
 
-            response.put("Error message", e.getMessage());
+            response.put("Error", e.getMessage());
             responseEntity = new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return responseEntity;
