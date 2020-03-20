@@ -7,6 +7,7 @@ import com.ps.landing.project.models.SubModule;
 
 public interface SubModuleRepo extends CrudRepository<SubModule, Long> {
 	
-	Optional<SubModule>findByName(String name);
+	Optional<SubModule>findByNameAndParent(String name, Long parent);
+	Optional<SubModule>findByNameAndIdNotAndParent(String name,Long id, Long parent);
 
 }

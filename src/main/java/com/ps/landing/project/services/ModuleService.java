@@ -11,7 +11,7 @@ public interface ModuleService {
 	List<ModuleDTO> findAll();
     ModuleDTO findById(long id);
     ModuleDTO save(Module module);
-    ModuleDTO update(Module module);
+    Object update(Module module);
 
     boolean disable(long id);
 }
