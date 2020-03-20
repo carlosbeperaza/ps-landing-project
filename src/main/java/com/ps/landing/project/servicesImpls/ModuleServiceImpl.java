@@ -44,7 +44,14 @@ public class ModuleServiceImpl implements ModuleService {
 
 	@Override
 	public ModuleDTO save(Module module) {
-		return converter.convertToDTO(repo.save(module));
+		Module coincidence = repo.findByName(module.getName()).orElse(null);
+		
+		if(coincidence == null) {
+			return converter.convertToDTO(repo.save(module));
+		}else {
+			return null;
+		}
+	
 	}
 
 	@Override
