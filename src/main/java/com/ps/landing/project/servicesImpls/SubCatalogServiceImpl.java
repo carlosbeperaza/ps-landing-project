@@ -46,7 +46,14 @@ public class SubCatalogServiceImpl implements SubCatalogService {
 
     @Override
     public SubCatalogDTO save(SubCatalog subCatalog) {
-        return converter.convertToDTO(repo.save(subCatalog));
+
+        SubCatalog coincidence = repo.findByNameAndParent(
+                subCatalog.getName(), subCatalog.getParent()
+        ).orElse(null);
+        if(coincidence == null)
+            return converter.convertToDTO(repo.save(subCatalog));
+        else
+            return null;
     }
 
     @Override
@@ -64,7 +71,11 @@ public class SubCatalogServiceImpl implements SubCatalogService {
             subCatalog.setCreateDate(formerSubCatalog.getCreateDate());
             subCatalog.setCreateDate(new Date());
 
-            return converter.convertToDTO(repo.save(subCatalog));
+            SubCatalog coincidence = repo.findByNameAndIdNotAndParent(
+                    subCatalog.getName(), subCatalog.getId(), subCatalog.getParent()
+            ).orElse(null);
+            if(coincidence == null)
+                return converter.convertToDTO(repo.save(subCatalog));
         }
         return null;
     }

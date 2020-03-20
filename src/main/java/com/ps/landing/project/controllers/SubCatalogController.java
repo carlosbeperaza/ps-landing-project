@@ -69,8 +69,13 @@ public class SubCatalogController {
         try {
 
             SubCatalogDTO subCatalogDTO = service.save(subCatalog);
-            response.put("New sub catalog", subCatalogDTO);
-            responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
+            if(subCatalogDTO != null) {
+                response.put("New sub catalog", subCatalogDTO);
+                responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
+            } else {
+                response.put("Error", "there's already a sub catalog with this name and parent");
+                responseEntity = new ResponseEntity<>(response, HttpStatus.CONFLICT);
+            }
         } catch(Exception e) {
 
             response.put("Error", e.getMessage());
@@ -93,7 +98,7 @@ public class SubCatalogController {
                 responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
             } else {
 
-                response.put("Bad request", "No sub catalog with given id");
+                response.put("Bad request", "No sub catalog with given id or duplicated name and parent");
                 responseEntity = new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
             }
         } catch(Exception e) {
