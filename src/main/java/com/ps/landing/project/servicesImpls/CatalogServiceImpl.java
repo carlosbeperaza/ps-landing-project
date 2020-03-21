@@ -54,12 +54,36 @@ public class CatalogServiceImpl implements CatalogService {
     @Override
     @Transactional
     public CatalogDTO save(Catalog catalog) {
-        return converter.convertToDTO(repo.save(catalog));
+
+        Catalog coincidence = repo.findByName(catalog.getName()).orElse(null);
+        if(coincidence == null) {
+
+            List<SubCatalog> subCatalogs = catalog.getSubCatalogs();
+            catalog.setSubCatalogs(new ArrayList<>());
+            Catalog newCatalog = repo.save(catalog);
+            List<SubCatalog> newSubCatalogs = new ArrayList<>();
+            for(SubCatalog subCatalog: subCatalogs) {
+
+                subCatalog.setParent(newCatalog.getId());
+                SubCatalog subCoincidence = subRepo.findByNameAndParent(
+                        subCatalog.getName(), subCatalog.getParent()
+                ).orElse(null);
+                if(subCoincidence == null) {
+
+                    subRepo.save(subCatalog);
+                    newSubCatalogs.add(subCatalog);
+                }
+            }
+            newCatalog.setSubCatalogs(newSubCatalogs);
+            return converter.convertToDTO(newCatalog);
+        }
+        else
+            return null;
     }
 
     @Override
     @Transactional
-    public CatalogDTO update(Catalog catalog) {
+    public Object update(Catalog catalog) {
 
         Catalog formerCatalog = repo.findById(catalog.getId()).orElse(null);
         if(formerCatalog != null) {
@@ -74,9 +98,12 @@ public class CatalogServiceImpl implements CatalogService {
             catalog.setCreateDate(formerCatalog.getCreateDate());
             catalog.setLastUpdateDate(new Date());
 
-            return converter.convertToDTO(repo.save(catalog));
+            Catalog coincidence = repo.findByNameAndIdNot(catalog.getName(), catalog.getId()).orElse(null);
+            if(coincidence == null)
+                return converter.convertToDTO(repo.save(catalog));
+            else return "This catalog name is already in use";
         }
-        return null;
+        return "No catalog with given id";
     }
 
     @Override

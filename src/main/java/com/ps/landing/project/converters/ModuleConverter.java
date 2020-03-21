@@ -8,7 +8,9 @@ import org.springframework.stereotype.Component;
 
 
 import com.ps.landing.project.models.Module;
+import com.ps.landing.project.models.SubCatalog;
 import com.ps.landing.project.dto.ModuleDTO;
+import com.ps.landing.project.dto.SubCatalogDTO;
 import com.ps.landing.project.dto.SubModuleDTO;
 import com.ps.landing.project.models.SubModule;
 
@@ -35,20 +37,9 @@ public class ModuleConverter {
 
         if(subModuleDTOS != null) {
 
-            for(SubModuleDTO subModuleDTO : subModuleDTOS) {
+        	for(SubModuleDTO subModuleDTO : subModuleDTOS) {
 
-                SubModule subModule = new SubModule();
-
-                subModule.setId(subModuleDTO.getId());
-                subModule.setName(subModuleDTO.getName());
-                subModule.setDescription(subModuleDTO.getDescription());
-                subModule.setParent(dto.getId());
-                subModule.setUrl(subModuleDTO.getUrl());
-                subModule.setIcon(subModuleDTO.getIcon());
-                subModule.setStatus(subModuleDTO.isStatus());
-                subModule.setCreateDate((Timestamp) subModuleDTO.getCreateDate());
-                subModule.setLastUpdateDate((Timestamp) subModuleDTO.getLastUpdateDate());
-
+                SubModule subModule = new SubModuleConverter().convertToModel(subModuleDTO);
                 subModules.add(subModule);
             }
         }
@@ -57,13 +48,11 @@ public class ModuleConverter {
         return module;
     }
 	
-	//aqui me quede
+	
 	public List<Module> convertToModel(List<ModuleDTO> dtoList) {
 
         List<Module> modules = new ArrayList<>();
-
         for(ModuleDTO moduleDTO : dtoList) {
-
             Module module = convertToModel(moduleDTO);
             modules.add(module);
         }
@@ -88,19 +77,9 @@ public class ModuleConverter {
 
         if(subModules != null) {
 
-            for(SubModule subModule : subModules) {
+        	for(SubModule subModule : subModules) {
 
-                SubModuleDTO subModuleDTO = new SubModuleDTO();
-
-                subModuleDTO.setId(subModule.getId());
-                subModuleDTO.setName(subModule.getName());
-                subModuleDTO.setDescription(subModule.getDescription());
-                subModuleDTO.setUrl(subModule.getUrl());
-                subModuleDTO.setIcon(subModule.getIcon());
-                subModuleDTO.setStatus(subModule.isStatus());
-                subModuleDTO.setCreateDate(subModule.getCreateDate());
-                subModuleDTO.setLastUpdateDate(subModule.getLastUpdateDate());
-
+                SubModuleDTO subModuleDTO = new SubModuleConverter().convertToDTO(subModule);
                 subModuleDTOS.add(subModuleDTO);
             }
         }

@@ -4,6 +4,7 @@ package com.ps.landing.project.servicesImpls;
 
 import com.ps.landing.project.converters.RoleConverter;
 import com.ps.landing.project.dto.RoleDTO;
+import com.ps.landing.project.models.Catalog;
 import com.ps.landing.project.models.Role;
 import com.ps.landing.project.repos.RoleRepo;
 import com.ps.landing.project.services.RoleService;
@@ -45,11 +46,18 @@ public class RoleServiceImpl implements RoleService {
 	}
 
 	@Override
+	@Transactional
 	public RoleDTO save(Role role) {
-		return converter.convertToDTO(repo.save(role));
+		Role formerRole = repo.findByName(role.getName()).orElse(null);
+		if(formerRole == null) {
+            return converter.convertToDTO(repo.save(role));
+        }
+        else
+            return null;
 	}
 
 	@Override
+	@Transactional
 	public RoleDTO update(Role role) {
 		Role formerRole = repo.findById(role.getId()).orElse(null);
         if(formerRole != null) {
@@ -62,8 +70,9 @@ public class RoleServiceImpl implements RoleService {
             role.setStatus(formerRole.isStatus());
             role.setCreateDate(formerRole.getCreateDate());
             
-
-            return converter.convertToDTO(repo.save(role));
+            Role formerRoleUpdate = repo.findByName(role.getName()).orElse(null);
+            if(formerRoleUpdate == null)
+            	return converter.convertToDTO(repo.save(role));
         }
         return null;
 	}

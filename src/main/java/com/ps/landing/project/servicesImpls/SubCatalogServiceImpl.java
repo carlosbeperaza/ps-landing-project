@@ -46,11 +46,18 @@ public class SubCatalogServiceImpl implements SubCatalogService {
 
     @Override
     public SubCatalogDTO save(SubCatalog subCatalog) {
-        return converter.convertToDTO(repo.save(subCatalog));
+
+        SubCatalog coincidence = repo.findByNameAndParent(
+                subCatalog.getName(), subCatalog.getParent()
+        ).orElse(null);
+        if(coincidence == null)
+            return converter.convertToDTO(repo.save(subCatalog));
+        else
+            return null;
     }
 
     @Override
-    public SubCatalogDTO update(SubCatalog subCatalog) {
+    public Object update(SubCatalog subCatalog) {
 
         SubCatalog formerSubCatalog = repo.findById(subCatalog.getId()).orElse(null);
         if(formerSubCatalog != null) {
@@ -64,9 +71,14 @@ public class SubCatalogServiceImpl implements SubCatalogService {
             subCatalog.setCreateDate(formerSubCatalog.getCreateDate());
             subCatalog.setCreateDate(new Date());
 
-            return converter.convertToDTO(repo.save(subCatalog));
+            SubCatalog coincidence = repo.findByNameAndIdNotAndParent(
+                    subCatalog.getName(), subCatalog.getId(), subCatalog.getParent()
+            ).orElse(null);
+            if(coincidence == null)
+                return converter.convertToDTO(repo.save(subCatalog));
+            else return "The parent catalog already have a sub catalog with this name";
         }
-        return null;
+        return "No sub catalog with given id";
     }
 
     @Override

@@ -10,7 +10,7 @@ public interface SubModuleService {
 	List<SubModuleDTO> findAll();
     SubModuleDTO findById(Long id);
     SubModuleDTO save(SubModule subModule);
-    SubModuleDTO update(SubModule subModule);
+    Object update(SubModule subModule);
     boolean disable(Long id);
 
 }

@@ -8,6 +8,7 @@ import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,13 +24,19 @@ import com.ps.landing.project.models.Catalog;
 import com.ps.landing.project.models.PSUser;
 import com.ps.landing.project.services.CatalogService;
 import com.ps.landing.project.services.UserService;
+import com.ps.landing.project.servicesImpls.EmailServiceImpl;
 
 @RestController
 @RequestMapping("/user")
 public class UserController {
 
 	private UserService service;
-
+	
+	
+	
+	
+	
+	
 	@Autowired
 	void setService(UserService service) {
 		this.service = service;
@@ -76,9 +83,10 @@ public class UserController {
 		// return userService.getUsers();
 	}
 
+	
 	@PostMapping("/add")
 	public ResponseEntity<?> addUser(@RequestBody PSUser user) {
-
+		
 		Map<String, Object> response = new HashMap<>();
 		ResponseEntity<?> responseEntity;
 		try {
@@ -86,6 +94,7 @@ public class UserController {
 			UserDTO UserDTO = service.save(user);
 			response.put("New User", UserDTO);
 			responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
+			
 		} catch (Exception e) {
 
 			response.put("Error", e.getStackTrace());

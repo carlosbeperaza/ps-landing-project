@@ -10,7 +10,7 @@ public interface CatalogService {
     List<CatalogDTO> findAll();
     CatalogDTO findById(Long id);
     CatalogDTO save(Catalog catalog);
-    CatalogDTO update(Catalog catalog);
+    Object update(Catalog catalog);
 
     /**
      * Método que deshabilita al catálogo indicado por su id, de igual manera se deshabilitan los sub-catálogos de este.

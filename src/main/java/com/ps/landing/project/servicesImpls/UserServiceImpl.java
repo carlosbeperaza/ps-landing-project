@@ -36,19 +36,30 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
 	@Autowired
 	private UserConverter userconverter;
+	
+	@Autowired
+	public EmailServiceImpl Gmail;
 
 	@Override
 	public List<UserDTO> findAll() {
 
 		List<PSUser> users = new ArrayList<>();
 		userRepo.findAll().forEach(users::add);
+		//Gmail.sendSimpleMessage("brianreach117@hotmail.com", "Prueba", "yase");
 
 		return userconverter.convertToDTO(users);
 	}
 
 	@Override
 	public UserDTO save(PSUser user) {
-		return userconverter.UsertoUserDTO(userRepo.save(user));
+		//String username;
+		PSUser formerUser = userRepo.findByUsername(user.getUsername());
+		if(formerUser == null) {
+			//String a =user.setEmail(formerUser.getEmail());
+			Gmail.sendSimpleMessage(user.getEmail(), "Bienvenido "+ user.getName(), "Hola "+ user.getName() +" " + user.getLastname()+", te haz registrado exitosamente uWu");
+			return userconverter.UsertoUserDTO(userRepo.save(user));
+		}
+		return null;
 	}
 
 	@Override
@@ -58,6 +69,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
 		return (user != null) ? userconverter.UsertoUserDTO(user) : null;
 	}
+	
 
 	@Override
 	public UserDTO update(PSUser user) {

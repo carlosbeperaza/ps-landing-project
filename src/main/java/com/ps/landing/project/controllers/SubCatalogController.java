@@ -32,9 +32,9 @@ public class SubCatalogController {
 
             List<SubCatalogDTO> subCatalogDTOList = service.findAll();
             if(!subCatalogDTOList.isEmpty())
-                response.put("Sub catalog list", subCatalogDTOList);
+                response.put("Success", subCatalogDTOList);
             else
-                response.put("No sub catalogs", "List is empty");
+                response.put("Success", "List is empty");
             responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
         } catch (Exception e) {
 
@@ -52,10 +52,10 @@ public class SubCatalogController {
         SubCatalogDTO subCatalogDTO = service.findById(id);
 
         if(subCatalogDTO != null) {
-            response.put("Sub catalog", subCatalogDTO);
+            response.put("Success", subCatalogDTO);
             responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
         } else {
-            response.put("Sub catalog", "No sub catalog with given id");
+            response.put("BadRequest", "No sub catalog with given id");
             responseEntity = new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
         return responseEntity;
@@ -69,8 +69,13 @@ public class SubCatalogController {
         try {
 
             SubCatalogDTO subCatalogDTO = service.save(subCatalog);
-            response.put("New sub catalog", subCatalogDTO);
-            responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
+            if(subCatalogDTO != null) {
+                response.put("Success", subCatalogDTO);
+                responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
+            } else {
+                response.put("BadRequest", "there's already a sub catalog with this name and parent");
+                responseEntity = new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+            }
         } catch(Exception e) {
 
             response.put("Error", e.getMessage());
@@ -83,17 +88,21 @@ public class SubCatalogController {
     public ResponseEntity<?> updateSubCatalog(@RequestBody SubCatalog subCatalog) {
 
         Map<String, Object> response = new HashMap<>();
-        ResponseEntity<?> responseEntity;
+        ResponseEntity<?> responseEntity = null;
         try {
 
-            SubCatalogDTO updatedSubCatalog = service.update(subCatalog);
-            if(updatedSubCatalog != null) {
+            Object result = service.update(subCatalog);
+            String resultType = result.getClass().getName();
 
-                response.put("Updated sub catalog", updatedSubCatalog);
+            if(resultType.equals(SubCatalogDTO.class.getName())) {
+
+                SubCatalogDTO updatedSubCatalog = (SubCatalogDTO) result;
+                response.put("Success", updatedSubCatalog);
                 responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
-            } else {
+            }
+            else if(resultType.equals(String.class.getName())){
 
-                response.put("Bad request", "No sub catalog with given id");
+                response.put("BadRequest", result);
                 responseEntity = new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
             }
         } catch(Exception e) {
@@ -117,12 +126,12 @@ public class SubCatalogController {
                 responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
             } else {
 
-                response.put("Bad request", "No sub catalog with given id");
+                response.put("BadRequest", "No sub catalog with given id");
                 responseEntity = new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
             }
         } catch(Exception e) {
 
-            response.put("Error message", e.getMessage());
+            response.put("Error", e.getMessage());
             responseEntity = new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return responseEntity;

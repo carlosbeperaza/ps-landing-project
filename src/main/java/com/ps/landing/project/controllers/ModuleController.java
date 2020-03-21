@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+
 import com.ps.landing.project.dto.ModuleDTO;
 import com.ps.landing.project.models.Module;
 import com.ps.landing.project.services.ModuleService;
@@ -76,9 +77,16 @@ public class ModuleController {
         ResponseEntity<?> responseEntity;
         try {
 
-            ModuleDTO moduleDTO = service.save(module);
-            response.put("New module", moduleDTO);
-            responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
+        	ModuleDTO moduleDTO = service.save(module);
+            if(moduleDTO != null) {
+
+                response.put("Success", moduleDTO);
+                responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
+            } else {
+
+                response.put("BadRequest", "this module name is already in use");
+                responseEntity = new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+            }
         } catch(Exception e) {
 
             response.put("Error", e.getMessage());
@@ -91,19 +99,24 @@ public class ModuleController {
     public ResponseEntity<?> updateModule(@RequestBody Module module) {
 
         Map<String, Object> response = new HashMap<>();
-        ResponseEntity<?> responseEntity;
+        ResponseEntity<?> responseEntity = null;
         try {
 
-            ModuleDTO updatedModule = service.update(module);
-            if(updatedModule != null) {
+        	Object result = service.update(module);
+            String resultType = result.getClass().getName();
 
-                response.put("Updated module", updatedModule);
+            if(resultType.equals(ModuleDTO.class.getName())) {
+
+                ModuleDTO updatedModule = (ModuleDTO) result;
+                response.put("Success", updatedModule);
                 responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
-            } else {
+            }
+            else if(resultType.equals(String.class.getName())) {
 
-                response.put("Bad request", "No module with given id");
+                response.put("BadRequest", result);
                 responseEntity = new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
             }
+            
         } catch(Exception e) {
 
             response.put("Error", e.getMessage());
