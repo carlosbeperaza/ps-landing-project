@@ -1,6 +1,7 @@
 package com.ps.landing.project.controllers;
 
 import com.ps.landing.project.dto.SystemParameterDTO;
+import com.ps.landing.project.exceptions.SystemParameterException;
 import com.ps.landing.project.models.SystemParameter;
 import com.ps.landing.project.services.SystemParameterService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,9 +33,9 @@ public class SystemParameterController {
 
             List<SystemParameterDTO> systemParameterDTOList = service.findAll();
             if(!systemParameterDTOList.isEmpty())
-                response.put("System parameter list", systemParameterDTOList);
+                response.put("Success", systemParameterDTOList);
             else
-                response.put("No system parameter", "list is empty");
+                response.put("Success", "list is empty");
 
             responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
         } catch (Exception e) {
@@ -53,10 +54,10 @@ public class SystemParameterController {
         ResponseEntity<?> responseEntity;
 
         if(systemParameterDTO != null) {
-            response.put("System parameter", systemParameterDTO);
+            response.put("Success", systemParameterDTO);
             responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
         } else {
-            response.put("System parameter", "No system parameter with given id");
+            response.put("BadRequest", "No system parameter with given id");
             responseEntity = new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
 
@@ -71,8 +72,12 @@ public class SystemParameterController {
         try {
 
             SystemParameterDTO systemParameterDTO = service.save(systemParameter);
-            response.put("New system parameter", systemParameterDTO);
+            response.put("Success", systemParameterDTO);
             responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
+        } catch(SystemParameterException e) {
+
+            response.put("BadRequest", e.getMessage());
+            responseEntity = new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         } catch(Exception e) {
 
             response.put("Error", e.getMessage());
@@ -81,7 +86,6 @@ public class SystemParameterController {
         return responseEntity;
     }
 
-    //TODO: validaciones, estandarización y mejora de los mensajes de respuesta.
     @PutMapping("/update")
     public ResponseEntity<?> updateSystemParameter(@RequestBody SystemParameter systemParameter) {
 
@@ -90,16 +94,13 @@ public class SystemParameterController {
         try {
 
             SystemParameterDTO updatedSystemParameter = service.update(systemParameter);
-            if(updatedSystemParameter != null) {
+            response.put("Success", updatedSystemParameter);
+            responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
+        } catch(SystemParameterException e) {
 
-                response.put("Updated system parameter", updatedSystemParameter);
-                responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
-            } else {
-
-                response.put("Bad request", "No system parameter with given id");
-                responseEntity = new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-            }
-        } catch(Exception e) {
+            response.put("BadRequest", e.getMessage());
+            responseEntity = new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }  catch(Exception e) {
 
             response.put("Error", e.getMessage());
             responseEntity = new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -120,12 +121,12 @@ public class SystemParameterController {
                 responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
             } else {
 
-                response.put("Bad request", "No system parameter with given id");
+                response.put("BadRequest", "No system parameter with given id");
                 responseEntity = new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
             }
         } catch(Exception e) {
 
-            response.put("Error message", e.getMessage());
+            response.put("Error", e.getMessage());
             responseEntity = new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return responseEntity;

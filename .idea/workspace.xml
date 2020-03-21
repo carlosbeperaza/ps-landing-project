@@ -2,13 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="15fbc0cb-4575-4833-98ba-7e1df12a1ed3" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/ps/landing/project/exceptions/CatalogException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/ps/landing/project/exceptions/SubCatalogException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/ps/landing/project/exceptions/SystemParameterException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/artifacts/ps_landing_project_war_exploded.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/artifacts/ps_landing_project_war_exploded.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ps/landing/project/controllers/CatalogController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ps/landing/project/controllers/CatalogController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ps/landing/project/controllers/SystemParameterController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ps/landing/project/controllers/SystemParameterController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ps/landing/project/services/CatalogService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ps/landing/project/services/CatalogService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ps/landing/project/servicesImpls/CatalogServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ps/landing/project/servicesImpls/CatalogServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ps/landing/project/repos/SystemParameterRepo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ps/landing/project/repos/SystemParameterRepo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ps/landing/project/services/SystemParameterService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ps/landing/project/services/SystemParameterService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ps/landing/project/servicesImpls/SystemParameterServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ps/landing/project/servicesImpls/SystemParameterServiceImpl.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -172,6 +171,7 @@
       <workItem from="1584715346604" duration="14699000" />
       <workItem from="1584732434202" duration="2370000" />
       <workItem from="1584756673138" duration="3687000" />
+      <workItem from="1584830381354" duration="3331000" />
     </task>
     <servers />
   </component>
@@ -221,14 +221,14 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="433" y="195" key="#com.intellij.ide.actions.ChooseComponentsToExportDialog/0.0.1366.728@0.0.1366.728" timestamp="1584650044550" />
-    <state x="486" y="75" key="#com.intellij.ide.util.MemberChooser" timestamp="1584758487864">
+    <state x="486" y="75" key="#com.intellij.ide.util.MemberChooser" timestamp="1584832976740">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="486" y="75" key="#com.intellij.ide.util.MemberChooser/0.0.1366.728@0.0.1366.728" timestamp="1584758487864" />
-    <state x="106" y="110" width="1155" height="498" key="DiffContextDialog" timestamp="1583865058137">
+    <state x="486" y="75" key="#com.intellij.ide.util.MemberChooser/0.0.1366.728@0.0.1366.728" timestamp="1584832976740" />
+    <state x="106" y="110" width="1155" height="498" key="DiffContextDialog" timestamp="1584832845300">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="106" y="110" width="1155" height="498" key="DiffContextDialog/0.0.1366.728@0.0.1366.728" timestamp="1583865058137" />
+    <state x="106" y="110" width="1155" height="498" key="DiffContextDialog/0.0.1366.728@0.0.1366.728" timestamp="1584832845300" />
     <state x="479" y="61" key="ExecutionTargetDialog" timestamp="1583511470610">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
@@ -309,10 +309,10 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="397" y="1" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog/0.0.1366.728@0.0.1366.728" timestamp="1584757691061" />
-    <state x="377" y="183" key="com.intellij.ide.util.TipDialog" timestamp="1584756711721">
+    <state x="377" y="183" key="com.intellij.ide.util.TipDialog" timestamp="1584830467243">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="377" y="183" key="com.intellij.ide.util.TipDialog/0.0.1366.728@0.0.1366.728" timestamp="1584756711721" />
+    <state x="377" y="183" key="com.intellij.ide.util.TipDialog/0.0.1366.728@0.0.1366.728" timestamp="1584830467243" />
     <state x="377" y="0" width="607" height="728" key="find.popup" timestamp="1583430652671">
       <screen x="0" y="0" width="1366" height="728" />
     </state>

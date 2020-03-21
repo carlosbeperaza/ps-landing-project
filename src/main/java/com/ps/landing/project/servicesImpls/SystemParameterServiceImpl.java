@@ -2,6 +2,7 @@ package com.ps.landing.project.servicesImpls;
 
 import com.ps.landing.project.converters.SystemParameterConverter;
 import com.ps.landing.project.dto.SystemParameterDTO;
+import com.ps.landing.project.exceptions.SystemParameterException;
 import com.ps.landing.project.models.SystemParameter;
 import com.ps.landing.project.repos.SystemParameterRepo;
 import com.ps.landing.project.services.SystemParameterService;
@@ -46,19 +47,31 @@ public class SystemParameterServiceImpl implements SystemParameterService {
 
     @Override
     @Transactional
-    public SystemParameterDTO save(SystemParameter systemParameter) {
-        return converter.convertToDTO(repo.save(systemParameter));
+    public SystemParameterDTO save(SystemParameter systemParameter) throws SystemParameterException {
+
+        SystemParameter coincidence = repo.findByName(systemParameter.getName()).orElse(null);
+        if(coincidence == null)
+            return converter.convertToDTO(repo.save(systemParameter));
+        else throw new SystemParameterException("There's already a system parameter with this name");
     }
 
     @Override
     @Transactional
-    public SystemParameterDTO update(SystemParameter systemParameter) {
+    public SystemParameterDTO update(SystemParameter systemParameter) throws SystemParameterException {
 
         SystemParameter formerSystemParameter = repo.findById(systemParameter.getId()).orElse(null);
         if(formerSystemParameter != null) {
 
             if(systemParameter.getName() == null)
                 systemParameter.setName(formerSystemParameter.getName());
+            else {
+
+                SystemParameter coincidence = repo.findByNameAndIdNot(
+                        systemParameter.getName(),systemParameter.getId()
+                ).orElse(null);
+                if(coincidence != null)
+                    throw new SystemParameterException("There's already a system parameter with this name");
+            }
             if(systemParameter.getValue() == null)
                 systemParameter.setValue(formerSystemParameter.getValue());
             if(systemParameter.getDescription() == null)
@@ -69,7 +82,7 @@ public class SystemParameterServiceImpl implements SystemParameterService {
 
             return converter.convertToDTO(repo.save(systemParameter));
         }
-        return null;
+        else throw new SystemParameterException("No system parameter with given id");
     }
 
     @Override
