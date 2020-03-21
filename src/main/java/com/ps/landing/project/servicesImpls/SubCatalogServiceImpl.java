@@ -2,6 +2,7 @@ package com.ps.landing.project.servicesImpls;
 
 import com.ps.landing.project.converters.SubCatalogConverter;
 import com.ps.landing.project.dto.SubCatalogDTO;
+import com.ps.landing.project.exceptions.SubCatalogException;
 import com.ps.landing.project.models.SubCatalog;
 import com.ps.landing.project.repos.SubCatalogRepo;
 import com.ps.landing.project.services.SubCatalogService;
@@ -45,19 +46,18 @@ public class SubCatalogServiceImpl implements SubCatalogService {
     }
 
     @Override
-    public SubCatalogDTO save(SubCatalog subCatalog) {
+    public SubCatalogDTO save(SubCatalog subCatalog) throws SubCatalogException {
 
         SubCatalog coincidence = repo.findByNameAndParent(
                 subCatalog.getName(), subCatalog.getParent()
         ).orElse(null);
         if(coincidence == null)
             return converter.convertToDTO(repo.save(subCatalog));
-        else
-            return null;
+        else throw new SubCatalogException("there's already a sub catalog with this name and parent");
     }
 
     @Override
-    public Object update(SubCatalog subCatalog) {
+    public SubCatalogDTO update(SubCatalog subCatalog) throws SubCatalogException {
 
         SubCatalog formerSubCatalog = repo.findById(subCatalog.getId()).orElse(null);
         if(formerSubCatalog != null) {
@@ -76,9 +76,8 @@ public class SubCatalogServiceImpl implements SubCatalogService {
             ).orElse(null);
             if(coincidence == null)
                 return converter.convertToDTO(repo.save(subCatalog));
-            else return "The parent catalog already have a sub catalog with this name";
-        }
-        return "No sub catalog with given id";
+            else throw new SubCatalogException("The parent catalog already have a sub catalog with this name");
+        } else throw new SubCatalogException("No sub catalog with given id");
     }
 
     @Override

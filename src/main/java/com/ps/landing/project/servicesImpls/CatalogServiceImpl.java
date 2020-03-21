@@ -2,6 +2,8 @@ package com.ps.landing.project.servicesImpls;
 
 import com.ps.landing.project.converters.CatalogConverter;
 import com.ps.landing.project.dto.CatalogDTO;
+import com.ps.landing.project.exceptions.CatalogException;
+import com.ps.landing.project.exceptions.SubCatalogException;
 import com.ps.landing.project.models.Catalog;
 import com.ps.landing.project.models.SubCatalog;
 import com.ps.landing.project.repos.CatalogRepo;
@@ -53,7 +55,7 @@ public class CatalogServiceImpl implements CatalogService {
 
     @Override
     @Transactional
-    public CatalogDTO save(Catalog catalog) {
+    public CatalogDTO save(Catalog catalog) throws CatalogException {
 
         Catalog coincidence = repo.findByName(catalog.getName()).orElse(null);
         if(coincidence == null) {
@@ -77,13 +79,12 @@ public class CatalogServiceImpl implements CatalogService {
             newCatalog.setSubCatalogs(newSubCatalogs);
             return converter.convertToDTO(newCatalog);
         }
-        else
-            return null;
+        else throw new CatalogException("This catalog name is already in use");
     }
 
     @Override
     @Transactional
-    public Object update(Catalog catalog) {
+    public CatalogDTO update(Catalog catalog) throws CatalogException {
 
         Catalog formerCatalog = repo.findById(catalog.getId()).orElse(null);
         if(formerCatalog != null) {
@@ -101,9 +102,8 @@ public class CatalogServiceImpl implements CatalogService {
             Catalog coincidence = repo.findByNameAndIdNot(catalog.getName(), catalog.getId()).orElse(null);
             if(coincidence == null)
                 return converter.convertToDTO(repo.save(catalog));
-            else return "This catalog name is already in use";
-        }
-        return "No catalog with given id";
+            else throw new CatalogException("This catalog name is already in use");
+        } else throw new CatalogException("There's no catalog with given id");
     }
 
     @Override

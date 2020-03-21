@@ -1,6 +1,7 @@
 package com.ps.landing.project.controllers;
 
 import com.ps.landing.project.dto.CatalogDTO;
+import com.ps.landing.project.exceptions.CatalogException;
 import com.ps.landing.project.models.Catalog;
 import com.ps.landing.project.services.CatalogService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,15 +72,12 @@ public class CatalogController {
         try {
 
             CatalogDTO catalogDTO = service.save(catalog);
-            if(catalogDTO != null) {
+            response.put("Success", catalogDTO);
+            responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
+        } catch(CatalogException e) {
 
-                response.put("Success", catalogDTO);
-                responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
-            } else {
-
-                response.put("BadRequest", "this catalog name is already in use");
-                responseEntity = new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-            }
+            response.put("BadRequest", e.getMessage());
+            responseEntity = new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         } catch(Exception e) {
 
             response.put("Error", e.getMessage());
@@ -92,23 +90,16 @@ public class CatalogController {
     public ResponseEntity<?> updateCatalog(@RequestBody Catalog catalog) {
 
         Map<String, Object> response = new HashMap<>();
-        ResponseEntity<?> responseEntity = null;
+        ResponseEntity<?> responseEntity;
         try {
 
-            Object result = service.update(catalog);
-            String resultType = result.getClass().getName();
+            CatalogDTO updatedCatalog = service.update(catalog);
+            response.put("Success", updatedCatalog);
+            responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
+        } catch(CatalogException e) {
 
-            if(resultType.equals(CatalogDTO.class.getName())) {
-
-                CatalogDTO updatedCatalog = (CatalogDTO) result;
-                response.put("Success", updatedCatalog);
-                responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
-            }
-            else if(resultType.equals(String.class.getName())) {
-
-                response.put("BadRequest", result);
-                responseEntity = new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-            }
+            response.put("BadRequest", e.getMessage());
+            responseEntity = new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         } catch(Exception e) {
 
             response.put("Error", e.getMessage());

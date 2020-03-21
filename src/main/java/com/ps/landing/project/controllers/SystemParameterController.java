@@ -81,6 +81,7 @@ public class SystemParameterController {
         return responseEntity;
     }
 
+    //TODO: validaciones, estandarización y mejora de los mensajes de respuesta.
     @PutMapping("/update")
     public ResponseEntity<?> updateSystemParameter(@RequestBody SystemParameter systemParameter) {
 

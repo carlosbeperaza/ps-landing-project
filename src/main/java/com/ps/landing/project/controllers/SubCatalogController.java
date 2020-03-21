@@ -1,6 +1,7 @@
 package com.ps.landing.project.controllers;
 
 import com.ps.landing.project.dto.SubCatalogDTO;
+import com.ps.landing.project.exceptions.SubCatalogException;
 import com.ps.landing.project.models.SubCatalog;
 import com.ps.landing.project.services.SubCatalogService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,13 +70,12 @@ public class SubCatalogController {
         try {
 
             SubCatalogDTO subCatalogDTO = service.save(subCatalog);
-            if(subCatalogDTO != null) {
-                response.put("Success", subCatalogDTO);
-                responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
-            } else {
-                response.put("BadRequest", "there's already a sub catalog with this name and parent");
-                responseEntity = new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-            }
+            response.put("Success", subCatalogDTO);
+            responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
+        } catch(SubCatalogException e) {
+
+            response.put("BadRequest", e.getMessage());
+            responseEntity = new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         } catch(Exception e) {
 
             response.put("Error", e.getMessage());
@@ -88,23 +88,16 @@ public class SubCatalogController {
     public ResponseEntity<?> updateSubCatalog(@RequestBody SubCatalog subCatalog) {
 
         Map<String, Object> response = new HashMap<>();
-        ResponseEntity<?> responseEntity = null;
+        ResponseEntity<?> responseEntity;
         try {
 
-            Object result = service.update(subCatalog);
-            String resultType = result.getClass().getName();
+            SubCatalogDTO updatedSubCatalog = service.update(subCatalog);
+            response.put("Success", updatedSubCatalog);
+            responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
+        } catch(SubCatalogException e) {
 
-            if(resultType.equals(SubCatalogDTO.class.getName())) {
-
-                SubCatalogDTO updatedSubCatalog = (SubCatalogDTO) result;
-                response.put("Success", updatedSubCatalog);
-                responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
-            }
-            else if(resultType.equals(String.class.getName())){
-
-                response.put("BadRequest", result);
-                responseEntity = new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-            }
+            response.put("BadRequest", e.getMessage());
+            responseEntity = new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         } catch(Exception e) {
 
             response.put("Error", e.getMessage());
