@@ -11,22 +11,29 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+
 import com.ps.landing.project.converters.ModuleConverter;
 import com.ps.landing.project.dto.ModuleDTO;
 import com.ps.landing.project.models.Module;
+import com.ps.landing.project.models.SubModule;
 import com.ps.landing.project.repos.ModuleRepo;
+import com.ps.landing.project.repos.SubModuleRepo;
 import com.ps.landing.project.services.ModuleService;
 
 @Service
 public class ModuleServiceImpl implements ModuleService {
 	
 	private Logger log = LoggerFactory.getLogger(ModuleServiceImpl.class.getName());
-    
-    @Autowired
     private ModuleRepo repo;
+    private SubModuleRepo subRepo;
+    private ModuleConverter converter;
     
     @Autowired
-    private ModuleConverter converter;
+    public ModuleServiceImpl(ModuleRepo repo, SubModuleRepo subRepo,ModuleConverter converter) {
+        this.repo = repo;
+        this.subRepo = subRepo;
+        this.converter = converter;
+    }
 
 	@Override
 	public List<ModuleDTO> findAll() {
@@ -47,8 +54,25 @@ public class ModuleServiceImpl implements ModuleService {
 	public ModuleDTO save(Module module) {
 		Module coincidence = repo.findByName(module.getName()).orElse(null);
         if(coincidence == null) {
+            
+        	List<SubModule> subModules = module.getSubModules();
             module.setSubModules(new ArrayList<>());
-            return converter.convertToDTO(repo.save(module));
+            Module newModule = repo.save(module);
+            List<SubModule> newSubModules = new ArrayList<>();
+            for(SubModule subModule: subModules) {
+
+                subModule.setParent(newModule.getId());
+                SubModule subCoincidence = subRepo.findByNameAndParent(
+                        subModule.getName(), subModule.getParent()
+                ).orElse(null);
+                if(subCoincidence == null) {
+
+                    subRepo.save(subModule);
+                    newSubModules.add(subModule);
+                }
+            }
+            newModule.setSubModules(newSubModules);
+            return converter.convertToDTO(newModule);
         }
         else
             return null;
@@ -56,7 +80,7 @@ public class ModuleServiceImpl implements ModuleService {
 	}
 
 	@Override
-	public ModuleDTO update(Module module) {
+	public Object update(Module module) {
 		
 		 Module formerModule = repo.findById(module.getId()).orElse(null);
 	        if(formerModule != null) {
@@ -85,8 +109,9 @@ public class ModuleServiceImpl implements ModuleService {
 	            Module coincidence = repo.findByNameAndIdNot(module.getName(), module.getId()).orElse(null);
 	            if(coincidence == null)
 	                return converter.convertToDTO(repo.save(module));
+	            	else return "This module name is already in use";
 	        }
-	        return null;
+	        return "No module with given id";
 	}
 
 	@Override

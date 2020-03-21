@@ -9,7 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ps.landing.project.converters.SubModuleConverter;
 import com.ps.landing.project.dto.SubModuleDTO;
-import com.ps.landing.project.models.Module;
 import com.ps.landing.project.models.SubModule;
 import com.ps.landing.project.repos.SubModuleRepo;
 import com.ps.landing.project.services.SubModuleService;
@@ -46,11 +45,17 @@ public class SubModuleServiceImpl implements SubModuleService{
 
 	@Override
 	public SubModuleDTO save(SubModule subModule) {
-		return converter.convertToDTO(repo.save(subModule));
+		SubModule coincidence = repo.findByNameAndParent(
+                subModule.getName(), subModule.getParent()
+        ).orElse(null);
+        if(coincidence == null)
+            return converter.convertToDTO(repo.save(subModule));
+        else
+            return null;
 	}
 
 	@Override
-	public SubModuleDTO update(SubModule subModule) {
+	public Object update(SubModule subModule) {
 		SubModule formerSubModule = repo.findById(subModule.getId()).orElse(null);
         if(formerSubModule != null) {
 
@@ -72,9 +77,14 @@ public class SubModuleServiceImpl implements SubModuleService{
             subModule.setStatus(formerSubModule.isStatus());
             subModule.setCreateDate(formerSubModule.getCreateDate());
 
-            return converter.convertToDTO(repo.save(subModule));
+            SubModule coincidence = repo.findByNameAndIdNotAndParent(
+                    subModule.getName(), subModule.getId(), subModule.getParent()
+            ).orElse(null);
+            if(coincidence == null)
+                return converter.convertToDTO(repo.save(subModule));
+            else return "The parent sub-module already have a sub catalog with this name";
         }
-        return null;
+        return "No sub module with given id";
 	}
 
 	@Override
