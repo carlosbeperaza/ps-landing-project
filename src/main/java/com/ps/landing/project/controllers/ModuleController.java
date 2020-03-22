@@ -16,8 +16,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-
+import com.ps.landing.project.dto.CatalogDTO;
 import com.ps.landing.project.dto.ModuleDTO;
+import com.ps.landing.project.exceptions.CatalogException;
+import com.ps.landing.project.exceptions.ModuleException;
 import com.ps.landing.project.models.Module;
 import com.ps.landing.project.services.ModuleService;
 
@@ -78,16 +80,13 @@ public class ModuleController {
         try {
 
         	ModuleDTO moduleDTO = service.save(module);
-            if(moduleDTO != null) {
+            response.put("Success", moduleDTO);
+            responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
+        } catch(ModuleException e) {
 
-                response.put("Success", moduleDTO);
-                responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
-            } else {
-
-                response.put("BadRequest", "this module name is already in use");
-                responseEntity = new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-            }
-        } catch(Exception e) {
+        	response.put("BadRequest", e.getMessage());
+            responseEntity = new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }catch(Exception e) {
 
             response.put("Error", e.getMessage());
             responseEntity = new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -102,21 +101,13 @@ public class ModuleController {
         ResponseEntity<?> responseEntity = null;
         try {
 
-        	Object result = service.update(module);
-            String resultType = result.getClass().getName();
+        	ModuleDTO updatedModule = service.update(module);
+            response.put("Success", updatedModule);
+            responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
+        } catch(ModuleException e) {
 
-            if(resultType.equals(ModuleDTO.class.getName())) {
-
-                ModuleDTO updatedModule = (ModuleDTO) result;
-                response.put("Success", updatedModule);
-                responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
-            }
-            else if(resultType.equals(String.class.getName())) {
-
-                response.put("BadRequest", result);
-                responseEntity = new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-            }
-            
+            response.put("BadRequest", e.getMessage());
+            responseEntity = new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         } catch(Exception e) {
 
             response.put("Error", e.getMessage());

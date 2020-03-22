@@ -8,9 +8,7 @@ import org.springframework.stereotype.Component;
 
 
 import com.ps.landing.project.models.Module;
-import com.ps.landing.project.models.SubCatalog;
 import com.ps.landing.project.dto.ModuleDTO;
-import com.ps.landing.project.dto.SubCatalogDTO;
 import com.ps.landing.project.dto.SubModuleDTO;
 import com.ps.landing.project.models.SubModule;
 

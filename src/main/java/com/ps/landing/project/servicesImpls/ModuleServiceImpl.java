@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ps.landing.project.converters.ModuleConverter;
 import com.ps.landing.project.dto.ModuleDTO;
+import com.ps.landing.project.exceptions.ModuleException;
 import com.ps.landing.project.models.Module;
 import com.ps.landing.project.models.SubModule;
 import com.ps.landing.project.repos.ModuleRepo;
@@ -50,8 +51,9 @@ public class ModuleServiceImpl implements ModuleService {
         return (module != null) ? converter.convertToDTO(module) : null;
 	}
 
-	@Override
-	public ModuleDTO save(Module module) {
+	 @Override
+	 @Transactional
+	public ModuleDTO save(Module module) throws ModuleException {
 		Module coincidence = repo.findByName(module.getName()).orElse(null);
         if(coincidence == null) {
             
@@ -74,13 +76,11 @@ public class ModuleServiceImpl implements ModuleService {
             newModule.setSubModules(newSubModules);
             return converter.convertToDTO(newModule);
         }
-        else
-            return null;
-	
+        else throw new ModuleException("This module name is already in use");
 	}
 
 	@Override
-	public Object update(Module module) {
+	public ModuleDTO update(Module module) throws ModuleException{
 		
 		 Module formerModule = repo.findById(module.getId()).orElse(null);
 	        if(formerModule != null) {
@@ -109,9 +109,8 @@ public class ModuleServiceImpl implements ModuleService {
 	            Module coincidence = repo.findByNameAndIdNot(module.getName(), module.getId()).orElse(null);
 	            if(coincidence == null)
 	                return converter.convertToDTO(repo.save(module));
-	            	else return "This module name is already in use";
-	        }
-	        return "No module with given id";
+	            else throw new ModuleException("This module name is already in use");
+	        } else throw new ModuleException("There's no module with given id");
 	}
 
 	@Override

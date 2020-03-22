@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ps.landing.project.dto.SubCatalogDTO;
 import com.ps.landing.project.dto.SubModuleDTO;
+import com.ps.landing.project.exceptions.SubModuleException;
 import com.ps.landing.project.models.SubModule;
 import com.ps.landing.project.services.SubModuleService;
 
@@ -72,18 +72,17 @@ public class SubModuleController {
     @PostMapping("/add")
     public ResponseEntity<?> addSubModule(@RequestBody SubModule subModule) {
 
-        Map<String, Object> response = new HashMap<>();
-        ResponseEntity<?> responseEntity;
-        try {
+    	 Map<String, Object> response = new HashMap<>();
+         ResponseEntity<?> responseEntity;
+    	try {
 
-        	SubModuleDTO subModuleDTO = service.save(subModule);
-            if(subModuleDTO != null) {
-                response.put("Success", subModuleDTO);
-                responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
-            } else {
-                response.put("BadRequest", "there's already a sub catalog with this name and parent");
-                responseEntity = new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-            }
+            SubModuleDTO subModuleDTO = service.save(subModule);
+            response.put("Success", subModuleDTO);
+            responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
+        } catch(SubModuleException e) {
+
+            response.put("BadRequest", e.getMessage());
+            responseEntity = new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         } catch(Exception e) {
 
             response.put("Error", e.getMessage());
@@ -99,23 +98,16 @@ public class SubModuleController {
         ResponseEntity<?> responseEntity = null;
         try {
 
-        	Object result = service.update(subModule);
-            String resultType = result.getClass().getName();
+            SubModuleDTO updatedSubModule = service.update(subModule);
+            response.put("Success", updatedSubModule);
+            responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
+        } catch(SubModuleException e) {
 
-            if(resultType.equals(SubModuleDTO.class.getName())) {
-
-                SubModuleDTO updatedSubModule = (SubModuleDTO) result;
-                response.put("Success", updatedSubModule);
-                responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
-            }
-            else if(resultType.equals(String.class.getName())){
-
-                response.put("BadRequest", result);
-                responseEntity = new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-            }
+            response.put("BadRequest", e.getMessage());
+            responseEntity = new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         } catch(Exception e) {
 
-            response.put("Error", e.getStackTrace());
+            response.put("Error", e.getMessage());
             responseEntity = new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return responseEntity;
