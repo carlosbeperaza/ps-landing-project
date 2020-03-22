@@ -12,7 +12,7 @@
 	<groupId>com.ps.landing.project</groupId>
 	<artifactId>spring-boot-base-project</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>war</packaging>
+	<packaging>jar</packaging>
 
 
 	<name>spring-boot-base-project</name>
