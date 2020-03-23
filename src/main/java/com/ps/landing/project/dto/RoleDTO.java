@@ -1,6 +1,7 @@
 package com.ps.landing.project.dto;
 
 import java.util.Date;
+import java.util.List;
 
 
 public class RoleDTO {
@@ -11,6 +12,7 @@ public class RoleDTO {
     private Date createDate;
     private Date lastUpdateDate;
     private boolean status;
+    private List<ModuleDTO> modules;
     
 	public Long getId() {
 		return id;
@@ -48,7 +50,10 @@ public class RoleDTO {
 	public void setStatus(boolean status) {
 		this.status = status;
 	}
-	
-
-    
+	public List<ModuleDTO> getModules() {
+		return modules;
+	}
+	public void setModules(List<ModuleDTO> modules) {
+		this.modules = modules;
+	}
 }

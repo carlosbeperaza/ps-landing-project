@@ -1,10 +1,8 @@
 package com.ps.landing.project.dto;
 
-import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
-import com.ps.landing.project.models.Role;
 
 public class UserDTO {
 
@@ -17,7 +15,8 @@ public class UserDTO {
 		private boolean status;
 		private Date registrationDate;
 		private Date updateDate;
-		private List<Role> roles;
+		private List<RoleDTO> roles;
+		
 		public Long getId() {
 			return id;
 		}
@@ -73,10 +72,10 @@ public class UserDTO {
 		public void setUpdateDate(Date updateDate) {
 			this.updateDate = updateDate;
 		}
-		public List<Role> getRoles() {
+		public List<RoleDTO> getRoles() {
 			return roles;
 		}
-		public void setRoles(List<Role> roles) {
+		public void setRoles(List<RoleDTO> roles) {
 			this.roles = roles;
 		}
 		

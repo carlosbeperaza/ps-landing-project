@@ -31,12 +31,7 @@ import com.ps.landing.project.servicesImpls.EmailServiceImpl;
 public class UserController {
 
 	private UserService service;
-	
-	
-	
-	
-	
-	
+
 	@Autowired
 	void setService(UserService service) {
 		this.service = service;
@@ -73,7 +68,8 @@ public class UserController {
 		UserDTO userDto = service.findById(id);
 
 		if (userDto == null) {
-			response.put("data", "Usuario No Existente");
+			response.put("message", "Usuario No Existente");
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_ACCEPTABLE);
 		} else {
 			response.put("data", userDto);
 		}
@@ -83,10 +79,9 @@ public class UserController {
 		// return userService.getUsers();
 	}
 
-	
 	@PostMapping("/add")
 	public ResponseEntity<?> addUser(@RequestBody PSUser user) {
-		
+
 		Map<String, Object> response = new HashMap<>();
 		ResponseEntity<?> responseEntity;
 		try {
@@ -94,7 +89,7 @@ public class UserController {
 			UserDTO UserDTO = service.save(user);
 			response.put("New User", UserDTO);
 			responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
-			
+
 		} catch (Exception e) {
 
 			response.put("Error", e.getStackTrace());
@@ -102,56 +97,55 @@ public class UserController {
 		}
 		return responseEntity;
 	}
-	
+
 	@PutMapping("/update")
-    public ResponseEntity<?> updateUser(@RequestBody PSUser user) {
+	public ResponseEntity<?> updateUser(@RequestBody PSUser user) {
 
-        Map<String, Object> response = new HashMap<>();
-        ResponseEntity<?> responseEntity;
-        try {
+		Map<String, Object> response = new HashMap<>();
+		ResponseEntity<?> responseEntity;
+		try {
 
-            UserDTO updatedUser = service.update(user);
-            if(updatedUser != null) {
+			UserDTO updatedUser = service.update(user);
+			if (updatedUser != null) {
 
-                response.put("Updated user", updatedUser);
-                responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
-            } else {
+				response.put("Updated user", updatedUser);
+				responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
+			} else {
 
-                response.put("Bad request", "No user with given id");
-                responseEntity = new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-            }
-        } catch(Exception e) {
+				response.put("message", "No user with given id");
+				responseEntity = new ResponseEntity<>(response, HttpStatus.NOT_ACCEPTABLE);
+			}
+		} catch (Exception e) {
 
-            response.put("Error", e.getMessage());
-            responseEntity = new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-        return responseEntity;
-    }
-	
-	 @DeleteMapping("/disable/{id}")
-	    public ResponseEntity<?> disableCatalog(@PathVariable Long id) {
+			response.put("Error", e.getMessage());
+			responseEntity = new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		return responseEntity;
+	}
 
-	        Map<String, Object> response = new HashMap<>();
-	        ResponseEntity<?> responseEntity;
-	        try {
+	@DeleteMapping("/{id}")
+	public ResponseEntity<?> disableCatalog(@PathVariable Long id) {
 
-	            if(service.disable(id)) {
+		Map<String, Object> response = new HashMap<>();
+		ResponseEntity<?> responseEntity;
+		try {
 
-	                response.put("Success", "User disabled");
-	                responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
-	            } else {
+			if (service.disable(id)) {
 
-	                response.put("Bad request", "No user with given id");
-	                responseEntity = new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-	            }
-	        } catch(Exception e) {
+				response.put("Success", "User disabled");
+				responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
+			} else {
 
-	            response.put("Error message", e.getMessage());
-	            response.put("Stack trace", e.getStackTrace());
-	            responseEntity = new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
-	        }
-	        return responseEntity;
-	    }
+				response.put("message", "No user with given id");
+				responseEntity = new ResponseEntity<>(response, HttpStatus.NOT_ACCEPTABLE);
+			}
+		} catch (Exception e) {
 
+			response.put("Error message", e.getMessage());
+			response.put("Stack trace", e.getStackTrace());
+			responseEntity = new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		return responseEntity;
+	}
 
 }
