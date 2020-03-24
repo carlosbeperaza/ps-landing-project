@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,6 +21,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ps.landing.project.dto.CatalogDTO;
 import com.ps.landing.project.dto.UserDTO;
+import com.ps.landing.project.exceptions.CatalogException;
+import com.ps.landing.project.exceptions.UserException;
 import com.ps.landing.project.models.Catalog;
 import com.ps.landing.project.models.PSUser;
 import com.ps.landing.project.services.CatalogService;
@@ -36,6 +39,9 @@ public class UserController {
 	void setService(UserService service) {
 		this.service = service;
 	}
+	
+	@Autowired
+    private BCryptPasswordEncoder passwordEncoder;
 
 	@GetMapping("/")
 	public ResponseEntity<?> getAllUser() {
@@ -47,10 +53,10 @@ public class UserController {
 			List<UserDTO> userDTOList = service.findAll();
 			if (!userDTOList.isEmpty()) {
 
-				response.put("User list", userDTOList);
+				response.put("Success", userDTOList);
 			} else {
 
-				response.put("No user", "list is empty");
+				response.put("Success", "list is empty");
 			}
 			responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
 		} catch (Exception e) {
@@ -85,11 +91,15 @@ public class UserController {
 		Map<String, Object> response = new HashMap<>();
 		ResponseEntity<?> responseEntity;
 		try {
-
-			UserDTO UserDTO = service.save(user);
-			response.put("New User", UserDTO);
+			String passwordBcrypt = passwordEncoder.encode(user.getPassword());
+			//user.setPassword(passwordBcrypt);
+			UserDTO UserDTO = service.save(user,passwordBcrypt);
+			response.put("Success", UserDTO);
 			responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
-
+			
+		} catch(UserException e) {
+			response.put("message", e.getMessage());
+			responseEntity = new ResponseEntity<>(response, HttpStatus.NOT_ACCEPTABLE);
 		} catch (Exception e) {
 
 			response.put("Error", e.getStackTrace());
@@ -104,17 +114,17 @@ public class UserController {
 		Map<String, Object> response = new HashMap<>();
 		ResponseEntity<?> responseEntity;
 		try {
-
+			//String passwordBcrypt = passwordEncoder.encode(user.getPassword());
 			UserDTO updatedUser = service.update(user);
-			if (updatedUser != null) {
+			//if (updatedUser != null) {
 
-				response.put("Updated user", updatedUser);
+				response.put("Success", updatedUser);
 				responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
-			} else {
-
-				response.put("message", "No user with given id");
+			//} else {
+		} catch(UserException e) {
+				response.put("message", e.getMessage());
 				responseEntity = new ResponseEntity<>(response, HttpStatus.NOT_ACCEPTABLE);
-			}
+			//}
 		} catch (Exception e) {
 
 			response.put("Error", e.getMessage());
@@ -142,7 +152,7 @@ public class UserController {
 		} catch (Exception e) {
 
 			response.put("Error message", e.getMessage());
-			response.put("Stack trace", e.getStackTrace());
+			//response.put("Stack trace", e.getStackTrace());
 			responseEntity = new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		return responseEntity;

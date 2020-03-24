@@ -42,7 +42,7 @@ public class UserConverter {
 		userDTO.setUsername(user.getUsername());
 		userDTO.setLastname(user.getLastname());
 		userDTO.setEmail(user.getEmail());
-//			 userDTO.setPassword( user.getPassword());
+		 userDTO.setPassword( user.getPassword());
 		userDTO.setStatus(user.isStatus());
 //		userDTO.setRegistrationDate(user.getRegistrationDate());
 //		userDTO.setUpdateDate(user.getUpdateDate());

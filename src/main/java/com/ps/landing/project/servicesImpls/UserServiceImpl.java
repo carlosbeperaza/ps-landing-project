@@ -14,15 +14,16 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.security.core.userdetails.User;
 
 import com.ps.landing.project.converters.UserConverter;
 import com.ps.landing.project.dto.UserDTO;
-import com.ps.landing.project.models.Catalog;
+import com.ps.landing.project.exceptions.CatalogException;
+import com.ps.landing.project.exceptions.UserException;
 import com.ps.landing.project.models.PSUser;
-import com.ps.landing.project.models.Role;
 import com.ps.landing.project.repos.UserRepo;
 import com.ps.landing.project.services.UserService;
 
@@ -39,6 +40,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 	
 	@Autowired
 	public EmailServiceImpl Gmail;
+	
+	/*@Autowired
+    private BCryptPasswordEncoder passwordEncoder;*/
 
 	@Override
 	public List<UserDTO> findAll() {
@@ -51,15 +55,18 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 	}
 
 	@Override
-	public UserDTO save(PSUser user) {
+	@Transactional
+	public UserDTO save(PSUser user, String passwordBcrypt) throws UserException{
 		//String username;
-		PSUser formerUser = userRepo.findByUsername(user.getUsername());
+		PSUser formerUser = userRepo.findFirstByUsernameOrEmail(user.getUsername(),user.getEmail()).orElse(null);
 		if(formerUser == null) {
 			//String a =user.setEmail(formerUser.getEmail());
+			//String passwordBcrypt = passwordEncoder.encode(user.getPassword());
+			user.setPassword(passwordBcrypt);
 			Gmail.sendSimpleMessage(user.getEmail(), "Bienvenido "+ user.getName(), "Hola "+ user.getName() +" " + user.getLastname()+", te haz registrado exitosamente uWu");
 			return userconverter.UsertoUserDTO(userRepo.save(user));
 		}
-		return null;
+		else throw new UserException("This username is already in use");
 	}
 
 	@Override
@@ -72,28 +79,42 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 	
 
 	@Override
-	public UserDTO update(PSUser user) {
+	@Transactional
+	public UserDTO update(PSUser user) throws UserException {
 		PSUser formerUser = userRepo.findById(user.getId()).orElse(null);
         if(formerUser != null) {
 
-            if(user.getName() == null)
+        	System.out.println("Entro1");
+        	if(user.getName() == null)
             	user.setName(formerUser.getName());
             if(user.getLastname() == null)
             	user.setLastname(formerUser.getLastname());
             if(user.getEmail() == null)
             	user.setEmail(formerUser.getEmail());
-            if(user.getPassword() == null)
+            if(user.getPassword() == null) 
             	user.setPassword(formerUser.getPassword());
-            
+           
             user.setStatus(formerUser.isStatus());
             user.setRegistrationDate(formerUser.getRegistrationDate());
             user.setUpdateDate(new Date());
             user.setUsername(formerUser.getUsername());
             
-
-            return userconverter.UsertoUserDTO(userRepo.save(user));
+            
+            PSUser coincidence = userRepo.b(user.getUsername(),user.getEmail(),user.getId()).orElse(null);
+            
+            /*PSUser coincidence = userRepo.findByUsernameAndIdNot(user.getUsername(),user.getId()).orElse(null);
+            PSUser coincidence2 = userRepo.findByEmailAndIdNot(user.getEmail(),user.getId()).orElse(null);*/
+            if(coincidence == null)
+            {
+            	
+            		System.out.println("Entro2");
+            		return userconverter.UsertoUserDTO(userRepo.save(user));
+               
+            	
+            }
+            else throw new UserException("This Username or email is already in use");
         }
-        return null;
+        else throw new UserException("There's no user with given id");
 	}
 	
 	@Override
