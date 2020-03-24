@@ -41,9 +41,9 @@ public class SubModuleController {
 
             List<SubModuleDTO> subModuleDTOList = service.findAll();
             if(!subModuleDTOList.isEmpty())
-                response.put("Sub Module list", subModuleDTOList);
+                response.put("Success", subModuleDTOList);
             else
-                response.put("No sub Modules", "List is empty");
+                response.put("Success", "List is empty");
             responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
         } catch (Exception e) {
 
@@ -60,11 +60,11 @@ public class SubModuleController {
         SubModuleDTO subModuleDTO = service.findById(id);
 
         if(subModuleDTO != null) {
-            response.put("Sub Module", subModuleDTO);
+            response.put("Success", subModuleDTO);
             responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
         } else {
-            response.put("Sub Module", "No sub Module with given id");
-            responseEntity = new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+            response.put("message", "No sub Module with given id");
+            responseEntity = new ResponseEntity<>(response, HttpStatus.NOT_ACCEPTABLE);
         }
         return responseEntity;
     }
@@ -81,8 +81,8 @@ public class SubModuleController {
             responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
         } catch(SubModuleException e) {
 
-            response.put("BadRequest", e.getMessage());
-            responseEntity = new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+            response.put("message", e.getMessage());
+            responseEntity = new ResponseEntity<>(response, HttpStatus.NOT_ACCEPTABLE);
         } catch(Exception e) {
 
             response.put("Error", e.getMessage());
@@ -103,8 +103,8 @@ public class SubModuleController {
             responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
         } catch(SubModuleException e) {
 
-            response.put("BadRequest", e.getMessage());
-            responseEntity = new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+            response.put("message", e.getMessage());
+            responseEntity = new ResponseEntity<>(response, HttpStatus.NOT_ACCEPTABLE);
         } catch(Exception e) {
 
             response.put("Error", e.getMessage());
@@ -113,7 +113,7 @@ public class SubModuleController {
         return responseEntity;
     }
     
-    @DeleteMapping("/disable/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<?> disableSubModule(@PathVariable Long id) {
 
         Map<String, Object> response = new HashMap<>();
@@ -126,8 +126,8 @@ public class SubModuleController {
                 responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
             } else {
 
-                response.put("Bad request", "No sub Module with given id");
-                responseEntity = new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+                response.put("message", "No sub Module with given id");
+                responseEntity = new ResponseEntity<>(response, HttpStatus.NOT_ACCEPTABLE);
             }
         } catch(Exception e) {
 
