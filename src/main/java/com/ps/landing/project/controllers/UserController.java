@@ -127,7 +127,7 @@ public class UserController {
 			//}
 		} catch (Exception e) {
 
-			response.put("Error", e.getMessage());
+			response.put("Error", e.getStackTrace());
 			responseEntity = new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		return responseEntity;

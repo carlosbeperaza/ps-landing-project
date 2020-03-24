@@ -57,16 +57,19 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 	@Override
 	@Transactional
 	public UserDTO save(PSUser user, String passwordBcrypt) throws UserException{
-		//String username;
-		PSUser formerUser = userRepo.findFirstByUsernameOrEmail(user.getUsername(),user.getEmail()).orElse(null);
-		if(formerUser == null) {
-			//String a =user.setEmail(formerUser.getEmail());
-			//String passwordBcrypt = passwordEncoder.encode(user.getPassword());
-			user.setPassword(passwordBcrypt);
-			Gmail.sendSimpleMessage(user.getEmail(), "Bienvenido "+ user.getName(), "Hola "+ user.getName() +" " + user.getLastname()+", te haz registrado exitosamente uWu");
-			return userconverter.UsertoUserDTO(userRepo.save(user));
-		}
-		else throw new UserException("This username is already in use");
+
+		PSUser coincidenceByUserName = userRepo.findByUsername(user.getUsername()).orElse(null);
+		PSUser coincidenceByEmail = userRepo.findByEmail(user.getEmail()).orElse(null);
+
+		if(coincidenceByUserName == null) {
+
+			if(coincidenceByEmail == null) {
+
+				user.setPassword(passwordBcrypt);
+				Gmail.sendSimpleMessage(user.getEmail(), "Bienvenido "+ user.getName(), "Hola "+ user.getName() +" " + user.getLastname()+", te haz registrado exitosamente uWu");
+				return userconverter.UsertoUserDTO(userRepo.save(user));
+			} else throw new UserException("This email is already in use");
+		} else throw new UserException("This username is already in use");
 	}
 
 	@Override
@@ -93,28 +96,31 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             	user.setEmail(formerUser.getEmail());
             if(user.getPassword() == null) 
             	user.setPassword(formerUser.getPassword());
+            if(user.getUsername() == null)
+            	user.setUsername(formerUser.getUsername());
            
             user.setStatus(formerUser.isStatus());
             user.setRegistrationDate(formerUser.getRegistrationDate());
             user.setUpdateDate(new Date());
-            user.setUsername(formerUser.getUsername());
-            
-            
-            PSUser coincidence = userRepo.b(user.getUsername(),user.getEmail(),user.getId()).orElse(null);
-            
-            /*PSUser coincidence = userRepo.findByUsernameAndIdNot(user.getUsername(),user.getId()).orElse(null);
-            PSUser coincidence2 = userRepo.findByEmailAndIdNot(user.getEmail(),user.getId()).orElse(null);*/
-            if(coincidence == null)
-            {
-            	
-            		System.out.println("Entro2");
-            		return userconverter.UsertoUserDTO(userRepo.save(user));
-               
-            	
-            }
-            else throw new UserException("This Username or email is already in use");
-        }
-        else throw new UserException("There's no user with given id");
+
+			PSUser coincidenceByUserName = userRepo.findByUsernameAndIdNot(
+					user.getUsername(),
+					user.getId()
+			).orElse(null);
+			PSUser coincidenceByEmail = userRepo.findByEmailAndIdNot(
+					user.getEmail(),
+					user.getId()
+			).orElse(null);
+
+            if(coincidenceByUserName == null) {
+
+            	if(coincidenceByEmail == null) {
+
+					System.out.println("Entro2");
+					return userconverter.UsertoUserDTO(userRepo.save(user));
+				} else throw new UserException("This email is already in use");
+            } else throw new UserException("This username is already in use");
+        } else throw new UserException("There's no user with given id");
 	}
 	
 	@Override
@@ -131,7 +137,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
 	@Override
 	public PSUser findByFirstName(String firstName) {
-		return userRepo.findByName(firstName);
+		return userRepo.findByName(firstName).orElse(null);
 	}
 
 	// Generic Methods
@@ -140,7 +146,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 	@Transactional(readOnly = true)
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-		PSUser user = userRepo.findByUsername(username);
+		PSUser user = userRepo.findByUsername(username).orElse(null);
 
 		if (user == null) {
 			log.error("Error en el login: no existe el usuario '" + username + "' en el sistema!");
