@@ -4,11 +4,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.jboss.logging.Logger;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,15 +18,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ps.landing.project.dto.CatalogDTO;
+
 import com.ps.landing.project.dto.UserDTO;
-import com.ps.landing.project.exceptions.CatalogException;
 import com.ps.landing.project.exceptions.UserException;
-import com.ps.landing.project.models.Catalog;
 import com.ps.landing.project.models.PSUser;
-import com.ps.landing.project.services.CatalogService;
 import com.ps.landing.project.services.UserService;
-import com.ps.landing.project.servicesImpls.EmailServiceImpl;
 
 @RestController
 @RequestMapping("/user")
@@ -102,7 +97,7 @@ public class UserController {
 			responseEntity = new ResponseEntity<>(response, HttpStatus.NOT_ACCEPTABLE);
 		} catch (Exception e) {
 
-			response.put("Error", e.getStackTrace());
+			response.put("Error", e.getMessage());
 			responseEntity = new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		return responseEntity;
@@ -127,14 +122,14 @@ public class UserController {
 			//}
 		} catch (Exception e) {
 
-			response.put("Error", e.getStackTrace());
+			response.put("Error", e.getMessage());
 			responseEntity = new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		return responseEntity;
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<?> disableCatalog(@PathVariable Long id) {
+	public ResponseEntity<?> disableUser(@PathVariable Long id) {
 
 		Map<String, Object> response = new HashMap<>();
 		ResponseEntity<?> responseEntity;

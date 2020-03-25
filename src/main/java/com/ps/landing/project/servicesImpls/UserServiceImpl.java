@@ -3,7 +3,6 @@ package com.ps.landing.project.servicesImpls;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
@@ -14,14 +13,12 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.security.core.userdetails.User;
 
 import com.ps.landing.project.converters.UserConverter;
 import com.ps.landing.project.dto.UserDTO;
-import com.ps.landing.project.exceptions.CatalogException;
 import com.ps.landing.project.exceptions.UserException;
 import com.ps.landing.project.models.PSUser;
 import com.ps.landing.project.repos.UserRepo;
