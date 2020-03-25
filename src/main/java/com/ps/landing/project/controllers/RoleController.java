@@ -3,7 +3,6 @@ package com.ps.landing.project.controllers;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,9 +14,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-
 import com.ps.landing.project.dto.RoleDTO;
+import com.ps.landing.project.exceptions.RoleException;
 import com.ps.landing.project.models.Role;
 import com.ps.landing.project.services.RoleService;
 
@@ -72,20 +70,17 @@ public class RoleController {
     
     @PostMapping("/add")
     public ResponseEntity<?> addRole(@RequestBody Role role) {
-
         Map<String, Object> response = new HashMap<>();
         ResponseEntity<?> responseEntity;
         try {
 
-            RoleDTO roleDTO = service.save(role);
-            if(roleDTO != null) {
-            	response.put("New role", roleDTO);
-                responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
-            }else {
-            	response.put("Error", "this role name is already in use");
-                responseEntity = new ResponseEntity<>(response, HttpStatus.CONFLICT);
-            }
-            
+        	RoleDTO roleDTO = service.save(role);
+            response.put("Success", roleDTO);
+            responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
+        } catch(RoleException e) {
+
+            response.put("BadRequest", e.getMessage());
+            responseEntity = new ResponseEntity<>(response, HttpStatus.NOT_ACCEPTABLE);
         } catch(Exception e) {
 
             response.put("Error", e.getMessage());
@@ -96,21 +91,17 @@ public class RoleController {
 
     @PutMapping("/update")
     public ResponseEntity<?> updateRole(@RequestBody Role role) {
-
         Map<String, Object> response = new HashMap<>();
         ResponseEntity<?> responseEntity;
         try {
 
-            RoleDTO updatedRole = service.update(role);
-            if(updatedRole != null) {
+        	RoleDTO updatedRole = service.update(role);
+            response.put("Success", updatedRole);
+            responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
+        } catch(RoleException e) {
 
-                response.put("Updated role", updatedRole);
-                responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
-            } else {
-
-                response.put("Error", "No role with given id or name in use");
-                responseEntity = new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-            }
+            response.put("BadRequest", e.getMessage());
+            responseEntity = new ResponseEntity<>(response, HttpStatus.NOT_ACCEPTABLE);
         } catch(Exception e) {
 
             response.put("Error", e.getMessage());
