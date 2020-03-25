@@ -85,9 +85,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 	@Transactional
 	public UserDTO update(PSUser user) throws UserException {
 		PSUser formerUser = userRepo.findById(user.getId()).orElse(null);
+
         if(formerUser != null) {
 
-        	System.out.println("Entro1");
         	if(user.getName() == null)
             	user.setName(formerUser.getName());
             if(user.getLastname() == null)
@@ -98,28 +98,25 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             	user.setPassword(formerUser.getPassword());
             if(user.getUsername() == null)
             	user.setUsername(formerUser.getUsername());
-           
             user.setStatus(formerUser.isStatus());
             user.setRegistrationDate(formerUser.getRegistrationDate());
             user.setUpdateDate(new Date());
 
-			PSUser coincidenceByUserName = userRepo.findByUsernameAndIdNot(
-					user.getUsername(),
-					user.getId()
-			).orElse(null);
-			PSUser coincidenceByEmail = userRepo.findByEmailAndIdNot(
-					user.getEmail(),
-					user.getId()
-			).orElse(null);
+			List<PSUser> coincidences = new ArrayList<>();
+			userRepo.findByUsernameOrEmail(user.getUsername(), user.getEmail()).forEach(coincidences::add);
 
-            if(coincidenceByUserName == null) {
+			for(PSUser coincidence: coincidences) {
 
-            	if(coincidenceByEmail == null) {
+				if(!coincidence.getId().equals(user.getId())) {
 
-					System.out.println("Entro2");
-					return userconverter.UsertoUserDTO(userRepo.save(user));
-				} else throw new UserException("This email is already in use");
-            } else throw new UserException("This username is already in use");
+					if(coincidence.getUsername().equals(user.getUsername()))
+						throw new UserException("This username is already in use");
+					if(coincidence.getEmail().equals(user.getEmail()))
+						throw new UserException("This email is already in use");
+				}
+			}
+
+			return userconverter.UsertoUserDTO(userRepo.save(user));
         } else throw new UserException("There's no user with given id");
 	}
 	
