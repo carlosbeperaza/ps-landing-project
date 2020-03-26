@@ -16,17 +16,17 @@ public class RoleConverter {
 	@Autowired
 	private ModuleConverter moduleConverter;
 
-	public Role convertToModel(RoleDTO dto) {
+	public Role convertToModel(RoleDTO roleDTO) {
 
 		Role role = new Role();
 
-		role.setId(dto.getId());
-		role.setName(dto.getName());
-		role.setDescription(dto.getDescription());
-		role.setStatus(dto.isStatus());
-		role.setCreateDate((Timestamp) dto.getCreateDate());
-		role.setLastUpdateDate((Timestamp) dto.getLastUpdateDate());
-		role.setModules(moduleConverter.convertToModel(dto.getModules()));
+		role.setId(roleDTO.getId());
+		role.setName(roleDTO.getName());
+		role.setDescription(roleDTO.getDescription());
+		role.setStatus(roleDTO.isStatus());
+		role.setCreateDate((Timestamp) roleDTO.getCreateDate());
+		role.setLastUpdateDate((Timestamp) roleDTO.getLastUpdateDate());
+		role.setModules(moduleConverter.convertToModel(roleDTO.getModules()));
 
 		return role;
 	}

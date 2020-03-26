@@ -4,17 +4,15 @@ package com.ps.landing.project.servicesImpls;
 
 import com.ps.landing.project.converters.RoleConverter;
 import com.ps.landing.project.dto.RoleDTO;
-import com.ps.landing.project.models.Catalog;
 import com.ps.landing.project.models.Role;
 import com.ps.landing.project.repos.RoleRepo;
 import com.ps.landing.project.services.RoleService;
-
+import com.ps.landing.project.exceptions.RoleException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,18 +45,19 @@ public class RoleServiceImpl implements RoleService {
 
 	@Override
 	@Transactional
-	public RoleDTO save(Role role) {
+	public RoleDTO save(Role role) throws RoleException {
 		Role formerRole = repo.findByName(role.getName()).orElse(null);
+		
 		if(formerRole == null) {
             return converter.convertToDTO(repo.save(role));
         }
         else
-            return null;
+            throw new RoleException("This role name is already in use");
 	}
 
 	@Override
 	@Transactional
-	public RoleDTO update(Role role) {
+	public RoleDTO update(Role role) throws RoleException {
 		Role formerRole = repo.findById(role.getId()).orElse(null);
         if(formerRole != null) {
 
@@ -73,8 +72,10 @@ public class RoleServiceImpl implements RoleService {
             Role formerRoleUpdate = repo.findByName(role.getName()).orElse(null);
             if(formerRoleUpdate == null)
             	return converter.convertToDTO(repo.save(role));
-        }
-        return null;
+            else throw new RoleException("This role name is already in use");
+        }else 
+        	throw new RoleException("There's no role with given id");
+        
 	}
 
 	@Override

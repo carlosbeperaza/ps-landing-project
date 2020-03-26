@@ -50,8 +50,8 @@ public class SubModuleConverter {
         subModuleDTO.setUrl(model.getUrl());
         subModuleDTO.setIcon(model.getIcon());
         subModuleDTO.setStatus(model.isStatus());
-        subModuleDTO.setCreateDate(model.getCreateDate());
-        subModuleDTO.setLastUpdateDate(model.getLastUpdateDate());
+        //subModuleDTO.setCreateDate(model.getCreateDate());
+        //subModuleDTO.setLastUpdateDate(model.getLastUpdateDate());
 
         return subModuleDTO;
     }

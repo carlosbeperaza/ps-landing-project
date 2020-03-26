@@ -3,7 +3,6 @@ package com.ps.landing.project.servicesImpls;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
@@ -20,9 +19,8 @@ import org.springframework.security.core.userdetails.User;
 
 import com.ps.landing.project.converters.UserConverter;
 import com.ps.landing.project.dto.UserDTO;
-import com.ps.landing.project.models.Catalog;
+import com.ps.landing.project.exceptions.UserException;
 import com.ps.landing.project.models.PSUser;
-import com.ps.landing.project.models.Role;
 import com.ps.landing.project.repos.UserRepo;
 import com.ps.landing.project.services.UserService;
 
@@ -39,6 +37,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 	
 	@Autowired
 	public EmailServiceImpl Gmail;
+	
+	/*@Autowired
+    private BCryptPasswordEncoder passwordEncoder;*/
 
 	@Override
 	public List<UserDTO> findAll() {
@@ -51,15 +52,21 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 	}
 
 	@Override
-	public UserDTO save(PSUser user) {
-		//String username;
-		PSUser formerUser = userRepo.findByUsername(user.getUsername());
-		if(formerUser == null) {
-			//String a =user.setEmail(formerUser.getEmail());
-			Gmail.sendSimpleMessage(user.getEmail(), "Bienvenido "+ user.getName(), "Hola "+ user.getName() +" " + user.getLastname()+", te haz registrado exitosamente uWu");
-			return userconverter.UsertoUserDTO(userRepo.save(user));
-		}
-		return null;
+	@Transactional
+	public UserDTO save(PSUser user, String passwordBcrypt) throws UserException{
+
+		PSUser coincidenceByUserName = userRepo.findByUsername(user.getUsername()).orElse(null);
+		PSUser coincidenceByEmail = userRepo.findByEmail(user.getEmail()).orElse(null);
+
+		if(coincidenceByUserName == null) {
+
+			if(coincidenceByEmail == null) {
+
+				user.setPassword(passwordBcrypt);
+				Gmail.sendSimpleMessage(user.getEmail(), "Bienvenido "+ user.getName(), "Hola "+ user.getName() +" " + user.getLastname()+", te haz registrado exitosamente uWu");
+				return userconverter.UsertoUserDTO(userRepo.save(user));
+			} else throw new UserException("This email is already in use");
+		} else throw new UserException("This username is already in use");
 	}
 
 	@Override
@@ -72,28 +79,42 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 	
 
 	@Override
-	public UserDTO update(PSUser user) {
+	@Transactional
+	public UserDTO update(PSUser user) throws UserException {
 		PSUser formerUser = userRepo.findById(user.getId()).orElse(null);
+
         if(formerUser != null) {
 
-            if(user.getName() == null)
+        	if(user.getName() == null)
             	user.setName(formerUser.getName());
             if(user.getLastname() == null)
             	user.setLastname(formerUser.getLastname());
             if(user.getEmail() == null)
             	user.setEmail(formerUser.getEmail());
-            if(user.getPassword() == null)
+            if(user.getPassword() == null) 
             	user.setPassword(formerUser.getPassword());
-            
+            if(user.getUsername() == null)
+            	user.setUsername(formerUser.getUsername());
             user.setStatus(formerUser.isStatus());
             user.setRegistrationDate(formerUser.getRegistrationDate());
             user.setUpdateDate(new Date());
-            user.setUsername(formerUser.getUsername());
-            
 
-            return userconverter.UsertoUserDTO(userRepo.save(user));
-        }
-        return null;
+			List<PSUser> coincidences = new ArrayList<>();
+			userRepo.findByUsernameOrEmail(user.getUsername(), user.getEmail()).forEach(coincidences::add);
+
+			for(PSUser coincidence: coincidences) {
+
+				if(!coincidence.getId().equals(user.getId())) {
+
+					if(coincidence.getUsername().equals(user.getUsername()))
+						throw new UserException("This username is already in use");
+					if(coincidence.getEmail().equals(user.getEmail()))
+						throw new UserException("This email is already in use");
+				}
+			}
+
+			return userconverter.UsertoUserDTO(userRepo.save(user));
+        } else throw new UserException("There's no user with given id");
 	}
 	
 	@Override
@@ -110,7 +131,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
 	@Override
 	public PSUser findByFirstName(String firstName) {
-		return userRepo.findByName(firstName);
+		return userRepo.findByName(firstName).orElse(null);
 	}
 
 	// Generic Methods
@@ -119,7 +140,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 	@Transactional(readOnly = true)
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-		PSUser user = userRepo.findByUsername(username);
+		PSUser user = userRepo.findByUsername(username).orElse(null);
 
 		if (user == null) {
 			log.error("Error en el login: no existe el usuario '" + username + "' en el sistema!");

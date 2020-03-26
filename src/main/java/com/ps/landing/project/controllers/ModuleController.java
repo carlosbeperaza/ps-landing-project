@@ -16,9 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ps.landing.project.dto.CatalogDTO;
 import com.ps.landing.project.dto.ModuleDTO;
-import com.ps.landing.project.exceptions.CatalogException;
 import com.ps.landing.project.exceptions.ModuleException;
 import com.ps.landing.project.models.Module;
 import com.ps.landing.project.services.ModuleService;
@@ -44,10 +42,10 @@ public class ModuleController {
             List<ModuleDTO> moduleDTOList = service.findAll();
             if(!moduleDTOList.isEmpty()) {
 
-                response.put("Module list", moduleDTOList);
+                response.put("Success", moduleDTOList);
             } else {
 
-                response.put("No modules", "list is empty");
+                response.put("Success", "list is empty");
             }
             responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
         } catch (Exception e) {
@@ -63,13 +61,17 @@ public class ModuleController {
 
         Map<String, Object> response = new HashMap<>();
         ModuleDTO moduleDTO = service.findById(id);
+        ResponseEntity<?> responseEntity;
 
         if(moduleDTO != null) {
-            response.put("Module", moduleDTO);
+            response.put("Success", moduleDTO);
+            responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
         } else {
-            response.put("Module", "No module with given id");
+            response.put("message", "No module with given id");
+            responseEntity = new ResponseEntity<>(response, HttpStatus.NOT_ACCEPTABLE);
         }
-        return new ResponseEntity<>(response, HttpStatus.ACCEPTED);
+
+        return responseEntity;
     }
 
     @PostMapping("/add")
@@ -84,8 +86,8 @@ public class ModuleController {
             responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
         } catch(ModuleException e) {
 
-        	response.put("BadRequest", e.getMessage());
-            responseEntity = new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        	response.put("message", e.getMessage());
+            responseEntity = new ResponseEntity<>(response, HttpStatus.NOT_ACCEPTABLE);
         }catch(Exception e) {
 
             response.put("Error", e.getMessage());
@@ -106,8 +108,8 @@ public class ModuleController {
             responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
         } catch(ModuleException e) {
 
-            response.put("BadRequest", e.getMessage());
-            responseEntity = new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+            response.put("message", e.getMessage());
+            responseEntity = new ResponseEntity<>(response, HttpStatus.NOT_ACCEPTABLE);
         } catch(Exception e) {
 
             response.put("Error", e.getMessage());
@@ -116,7 +118,7 @@ public class ModuleController {
         return responseEntity;
     }
 
-    @DeleteMapping("/disable/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<?> disableModule(@PathVariable Long id) {
 
         Map<String, Object> response = new HashMap<>();
@@ -129,8 +131,8 @@ public class ModuleController {
                 responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
             } else {
 
-                response.put("Bad request", "No module with given id");
-                responseEntity = new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+                response.put("message", "No module with given id");
+                responseEntity = new ResponseEntity<>(response, HttpStatus.NOT_ACCEPTABLE);
             }
         } catch(Exception e) {
 

@@ -58,7 +58,7 @@ public class CatalogController {
             responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
         } else {
             response.put("BadRequest", "No catalog with given id");
-            responseEntity = new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+            responseEntity = new ResponseEntity<>(response, HttpStatus.NOT_ACCEPTABLE);
         }
 
         return responseEntity;
@@ -77,7 +77,7 @@ public class CatalogController {
         } catch(CatalogException e) {
 
             response.put("BadRequest", e.getMessage());
-            responseEntity = new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+            responseEntity = new ResponseEntity<>(response, HttpStatus.NOT_ACCEPTABLE);
         } catch(Exception e) {
 
             response.put("Error", e.getMessage());
@@ -99,7 +99,7 @@ public class CatalogController {
         } catch(CatalogException e) {
 
             response.put("BadRequest", e.getMessage());
-            responseEntity = new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+            responseEntity = new ResponseEntity<>(response, HttpStatus.NOT_ACCEPTABLE);
         } catch(Exception e) {
 
             response.put("Error", e.getMessage());
@@ -122,7 +122,7 @@ public class CatalogController {
             } else {
 
                 response.put("BadRequest", "No catalog with given id");
-                responseEntity = new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+                responseEntity = new ResponseEntity<>(response, HttpStatus.NOT_ACCEPTABLE);
             }
         } catch(Exception e) {
 
