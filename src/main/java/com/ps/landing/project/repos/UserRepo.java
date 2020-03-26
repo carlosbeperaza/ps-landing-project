@@ -2,11 +2,11 @@ package com.ps.landing.project.repos;
 
 import java.util.Optional;
 
-import org.springframework.data.jpa.repository.Query;
+
 import org.springframework.data.repository.CrudRepository;
 
 import com.ps.landing.project.models.PSUser;
-import com.ps.landing.project.models.Usuario;
+
 
 public interface UserRepo extends CrudRepository<PSUser, Long> {
 

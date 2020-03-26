@@ -2,7 +2,7 @@ package com.ps.landing.project.services;
 
 import java.util.List;
 
-import com.ps.landing.project.dto.CatalogDTO;
+
 import com.ps.landing.project.dto.UserDTO;
 import com.ps.landing.project.exceptions.UserException;
 import com.ps.landing.project.models.PSUser;
