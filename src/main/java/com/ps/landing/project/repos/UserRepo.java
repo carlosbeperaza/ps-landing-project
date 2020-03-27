@@ -13,5 +13,6 @@ public interface UserRepo extends CrudRepository<PSUser, Long> {
     Optional<PSUser> findByName(String name);
     Optional<PSUser> findByUsername(String username);
     Optional<PSUser> findByEmail(String email);
+    Optional<PSUser> findByUsernameAndEmail(String username, String email);
     Iterable<PSUser> findByUsernameOrEmail(String username, String email);
 }

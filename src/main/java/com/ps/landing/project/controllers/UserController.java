@@ -1,28 +1,22 @@
 package com.ps.landing.project.controllers;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.method.P;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
 import com.ps.landing.project.dto.UserDTO;
 import com.ps.landing.project.exceptions.UserException;
 import com.ps.landing.project.models.PSUser;
 import com.ps.landing.project.services.UserService;
+
+import javax.websocket.server.PathParam;
 
 @RestController
 @RequestMapping("/user")
@@ -98,6 +92,83 @@ public class UserController {
 		} catch (Exception e) {
 
 			response.put("Error", e.getMessage());
+			responseEntity = new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		return responseEntity;
+	}
+
+	/**
+	 * Método que recibe la petición de envío de correo de confirmación para restablecer una contraseña.
+	 * @param username nombre de usuario en base 64.
+	 * @param email correo del usuario en base 64.
+	 * @return Respuesta con la información del estado de esta petición.
+	 * */
+	@PostMapping("/forgot-password")
+	public ResponseEntity<?> forgotPass(
+			@RequestHeader("username") String username,
+			@RequestHeader("email") String email
+	) {
+
+		Map<String, Object> response = new HashMap<>();
+		ResponseEntity<?> responseEntity;
+
+		try {
+
+			service.forgotPass(
+					/*new String(Base64.getDecoder().decode(username)),
+					new String(Base64.getDecoder().decode(email))*/
+					username, email);
+			response.put("message", "Please wait for confirmation email");
+			responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
+		} catch (UserException e) {
+
+			response.put("message", e.getMessage());
+			responseEntity = new ResponseEntity<>(response, HttpStatus.NOT_ACCEPTABLE);
+		} catch (Exception e) {
+
+			response.put("message", e.getStackTrace());
+			responseEntity = new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		return responseEntity;
+	}
+
+	/**
+	 * Método que recibe la petición de restablecer una contraseña.
+	 * @param id id del usuario en base 64.
+	 * @param pass nueva contraseña en base 64.
+	 * @param securityString Contraseña antigua codificada en base 64.
+	 * @return Respuesta con la información del estado de esta petición.
+	 * */
+	@PutMapping("/password-reset")
+	public ResponseEntity<?> resetUserPass(
+			@RequestHeader("id") String id,
+			@RequestHeader("pass") String pass,
+			@RequestHeader("security-string") String securityString
+	) {
+
+		Map<String, Object> response = new HashMap<>();
+		ResponseEntity<?> responseEntity;
+
+		try{
+
+			Long userId = Long.parseLong(new String(Base64.getDecoder().decode(id)));
+			String userPass = passwordEncoder.encode(new String(Base64.getDecoder().decode(pass.getBytes())));
+			securityString = new String(Base64.getDecoder().decode(securityString));
+			PSUser user = new PSUser();
+
+			user.setId(userId);
+			user.setPassword(userPass);
+			UserDTO updatedUser = service.resetPass(user, securityString);
+
+			response.put("message", updatedUser);
+			responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
+		} catch (UserException e) {
+
+			response.put("message", e.getMessage());
+			responseEntity = new ResponseEntity<>(response, HttpStatus.NOT_ACCEPTABLE);
+		} catch (Exception e) {
+
+			response.put("message", e.getStackTrace());
 			responseEntity = new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		return responseEntity;

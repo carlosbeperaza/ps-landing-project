@@ -1,6 +1,7 @@
 package com.ps.landing.project.servicesImpls;
 
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -13,6 +14,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.security.core.userdetails.User;
@@ -91,10 +93,12 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             	user.setLastname(formerUser.getLastname());
             if(user.getEmail() == null)
             	user.setEmail(formerUser.getEmail());
-            if(user.getPassword() == null) 
+            if(user.getPassword() == null)
             	user.setPassword(formerUser.getPassword());
             if(user.getUsername() == null)
             	user.setUsername(formerUser.getUsername());
+            if(user.getRoles() == null)
+            	user.setRoles(formerUser.getRoles());
             user.setStatus(formerUser.isStatus());
             user.setRegistrationDate(formerUser.getRegistrationDate());
             user.setUpdateDate(new Date());
@@ -132,6 +136,55 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 	@Override
 	public PSUser findByFirstName(String firstName) {
 		return userRepo.findByName(firstName).orElse(null);
+	}
+
+	/**
+	 * Método responsable de enviar el correo de confirmación para restablecer una contraseña según el nombre de usuario
+	 * y su correo electrónico, este método solo funcionara para los usuarios activos.
+	 * @param username usado en conjunto con 'email' para validar que el usuario existe.
+	 * @param email correo electrónico de destino para el correo de confirmación.
+	 * @throws UserException si no existe un usuario con el nombre de usuario y correo proporcionados o si este NO esta
+	 * activo.
+	 * */
+	@Override
+	public void forgotPass(String username, String email) throws UserException {
+
+		PSUser user = userRepo.findByUsernameAndEmail(username, email).orElse(null);
+
+		if (user != null) {
+
+			if (user.isStatus()) {
+
+				// contiene: id/valor numérico de la contraseña antigua
+				String securityString = user.getId() + "/" + user.getPassword();
+				securityString = new String(Base64.getEncoder().encode(securityString.getBytes()));
+				//TODO: reemplazar la parte **** AQUÍ VA EL LINK **** con el link al formulario en Angular.
+				Gmail.sendSimpleMessage(
+						email,
+						"Confirmar restablecimiento de contraseña",
+						"Se ha solicitado el restablecimiento de contraseña para la cuenta '"+username+"' asociada" +
+								"a esta dirección de correo electrónico, si este es el caso por favor siga el siguiente " +
+								"enlace: **** AQUÍ VA EL LINK AL FORMULARIO/securityString ****, de lo contrario puede" +
+								"descartar este correo."
+				);
+				System.out.println("securityString = " + securityString);
+			} else throw new UserException("This user is not active");
+		} else throw new UserException("Invalid credentials");
+	}
+
+	@Override
+	public UserDTO resetPass(PSUser user, String securityString) throws UserException {
+
+		PSUser target = userRepo.findById(user.getId()).orElse(null);
+
+		if(target != null) {
+
+			System.out.println(securityString);
+			System.out.println(target.getPassword());
+			if(target.getPassword().equals(securityString)) {
+				return update(user);
+			} else throw new UserException("Operation aborted, security violation");
+		} else throw new UserException("No user with given id");
 	}
 
 	// Generic Methods
