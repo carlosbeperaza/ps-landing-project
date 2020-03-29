@@ -7,8 +7,9 @@ import com.ps.landing.project.dto.UserDataDTO;
 import com.ps.landing.project.models.PSUser;
 import com.ps.landing.project.repos.UserRepo;
 import com.ps.landing.project.services.UserDataService;
+import org.springframework.stereotype.Service;
 
-
+@Service
 public class UserDataServiceImpl implements UserDataService {
 
 	@Autowired
