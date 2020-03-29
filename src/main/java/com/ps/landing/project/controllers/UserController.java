@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-
+import com.ps.landing.project.dto.SidebarDTO;
 import com.ps.landing.project.dto.UserDTO;
 import com.ps.landing.project.exceptions.UserException;
 import com.ps.landing.project.models.PSUser;
@@ -151,6 +151,22 @@ public class UserController {
 			responseEntity = new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		return responseEntity;
+	}
+	
+	@GetMapping("sidebar/{id}")
+	public ResponseEntity<?> getSideBar(@PathVariable Long id) {
+		Map<String, Object> response = new HashMap<>();
+
+		List<SidebarDTO> sidebar = service.getSidebarByUserId(id);
+
+		if (sidebar == null) {
+			response.put("message", "No se pudo obtener el menú de navegación");
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_ACCEPTABLE);
+		} else {
+			response.put("data", sidebar);
+		}
+
+		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.ACCEPTED);
 	}
 
 }

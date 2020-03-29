@@ -17,7 +17,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.security.core.userdetails.User;
 
+import com.ps.landing.project.converters.SidebarConverter;
 import com.ps.landing.project.converters.UserConverter;
+import com.ps.landing.project.dto.SidebarDTO;
 import com.ps.landing.project.dto.UserDTO;
 import com.ps.landing.project.exceptions.UserException;
 import com.ps.landing.project.models.PSUser;
@@ -34,6 +36,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
 	@Autowired
 	private UserConverter userconverter;
+	
+	@Autowired
+	private SidebarConverter sidebarConverter;
 	
 	@Autowired
 	public EmailServiceImpl Gmail;
@@ -153,6 +158,19 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 				.peek(authority -> log.info("Role: " + authority.getAuthority())).collect(Collectors.toList());
 
 		return new User(user.getUsername(), user.getPassword(), user.isStatus(), true, true, true, authorities);
+	}
+
+	@Override
+	public List<SidebarDTO> getSidebarByUserId(long id) {
+		
+		PSUser user = userRepo.findById(id).orElse(null);
+		List<SidebarDTO> sidebar = null;
+		
+		if (user != null && !user.getRoles().isEmpty() && !user.getRoles().get(0).getModules().isEmpty()) {
+			sidebar = sidebarConverter.convertToSidebar(user.getRoles().get(0).getModules());
+		}
+		
+		return sidebar;
 	}
 
 	

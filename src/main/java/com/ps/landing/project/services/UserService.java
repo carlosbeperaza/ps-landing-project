@@ -2,7 +2,7 @@ package com.ps.landing.project.services;
 
 import java.util.List;
 
-
+import com.ps.landing.project.dto.SidebarDTO;
 import com.ps.landing.project.dto.UserDTO;
 import com.ps.landing.project.exceptions.UserException;
 import com.ps.landing.project.models.PSUser;
@@ -20,6 +20,7 @@ public interface UserService {
 	UserDTO update(PSUser user) throws UserException;
 
 	PSUser findByFirstName(String fistName);
-
 	
+	List<SidebarDTO> getSidebarByUserId(long id);
+
 }
