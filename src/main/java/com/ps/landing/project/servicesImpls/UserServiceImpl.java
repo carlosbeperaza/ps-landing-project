@@ -68,6 +68,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 			if(coincidenceByEmail == null) {
 
 				user.setPassword(passwordBcrypt);
+				userRepo.save(user);
+				
 				Gmail.sendSimpleMessage(user.getEmail(), "Bienvenido "+ user.getName(), "Hola "+ user.getName() +" " + user.getLastname()+", te haz registrado exitosamente uWu");
 				return userconverter.UsertoUserDTO(userRepo.save(user));
 			} else throw new UserException("This email is already in use");

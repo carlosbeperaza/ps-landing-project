@@ -26,9 +26,9 @@ public class UserConverter {
 		user.setEmail(userDTO.getEmail());
 		user.setPassword(userDTO.getPassword());
 		user.setStatus(userDTO.isStatus());
-		user.setRegistrationDate(userDTO.getRegistrationDate());
-		user.setUpdateDate(userDTO.getUpdateDate());
-		user.setRoles(roleConverter.convertToModel(userDTO.getRoles()));
+//		user.setRegistrationDate(userDTO.getRegistrationDate());
+//		user.setUpdateDate(userDTO.getUpdateDate());
+		user.setRoles(roleConverter.convertToModel(userDTO.getRoles() != null ? userDTO.getRoles() : new ArrayList()));
 
 		return user;
 	}
