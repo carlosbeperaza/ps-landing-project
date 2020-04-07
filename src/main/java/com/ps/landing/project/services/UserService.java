@@ -21,7 +21,7 @@ public interface UserService {
 
 	PSUser findByFirstName(String fistName);
 
-	void forgotPass(String username, String email) throws UserException;
+	void forgotPass(PSUser targetUser) throws UserException;
 
 	UserDTO resetPass(PSUser user, String securityString) throws UserException;
 }

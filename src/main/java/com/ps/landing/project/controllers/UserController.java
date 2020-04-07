@@ -99,25 +99,18 @@ public class UserController {
 
 	/**
 	 * Método que recibe la petición de envío de correo de confirmación para restablecer una contraseña.
-	 * @param username nombre de usuario en base 64.
-	 * @param email correo del usuario en base 64.
+	 * @param targetUser Usuario objetivo, solo se necesita el nombre de usuario y el correo electrónico.
 	 * @return Respuesta con la información del estado de esta petición.
 	 * */
 	@PostMapping("/forgot-password")
-	public ResponseEntity<?> forgotPass(
-			@RequestHeader("username") String username,
-			@RequestHeader("email") String email
-	) {
+	public ResponseEntity<?> forgotPass(@RequestBody PSUser targetUser) {
 
 		Map<String, Object> response = new HashMap<>();
 		ResponseEntity<?> responseEntity;
 
 		try {
 
-			service.forgotPass(
-					/*new String(Base64.getDecoder().decode(username)),
-					new String(Base64.getDecoder().decode(email))*/
-					username, email);
+			service.forgotPass(targetUser);
 			response.put("message", "Please wait for confirmation email");
 			responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
 		} catch (UserException e) {

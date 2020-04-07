@@ -141,14 +141,20 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 	/**
 	 * Método responsable de enviar el correo de confirmación para restablecer una contraseña según el nombre de usuario
 	 * y su correo electrónico, este método solo funcionara para los usuarios activos.
-	 * @param username usado en conjunto con 'email' para validar que el usuario existe.
-	 * @param email correo electrónico de destino para el correo de confirmación.
+	 * @param targetUser Usuario objetivo, solo se necesita el nombre de usuario y el correo electrónico para realizar
+	 *                   la validación.
 	 * @throws UserException si no existe un usuario con el nombre de usuario y correo proporcionados o si este NO esta
 	 * activo.
 	 * */
 	@Override
-	public void forgotPass(String username, String email) throws UserException {
+	public void forgotPass(PSUser targetUser) throws UserException {
 
+		if ((targetUser.getUsername() == null || targetUser.getUsername().equals("")) ||
+				(targetUser.getEmail() == null || targetUser.getEmail().equals(""))) {
+			throw new UserException("Missing credentials");
+		}
+		String username = new String(Base64.getDecoder().decode(targetUser.getUsername()));
+		String email = new String(Base64.getDecoder().decode(targetUser.getEmail()));
 		PSUser user = userRepo.findByUsernameAndEmail(username, email).orElse(null);
 
 		if (user != null) {
