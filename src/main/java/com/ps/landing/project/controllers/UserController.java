@@ -127,16 +127,16 @@ public class UserController {
 
 	/**
 	 * Método que recibe la petición de restablecer una contraseña.
-	 * @param id id del usuario en base 64.
-	 * @param pass nueva contraseña en base 64.
-	 * @param securityString Contraseña antigua codificada en base 64.
+	 * @param id cadena en base 64 que corresponde al id del usuario a restablecer la contraseña
+	 * @param newPass cadena en base 64 que corresponde la nueva contraseña
+	 * @param formerPass Contraseña antigua codificada en base 64.
 	 * @return Respuesta con la información del estado de esta petición.
 	 * */
-	@PutMapping("/password-reset")
+	@PutMapping("/password-reset/{id}/{newPass}/{formerPass}")
 	public ResponseEntity<?> resetUserPass(
-			@RequestHeader("id") String id,
-			@RequestHeader("pass") String pass,
-			@RequestHeader("security-string") String securityString
+			@PathVariable String id,
+			@PathVariable String newPass,
+			@PathVariable String formerPass
 	) {
 
 		Map<String, Object> response = new HashMap<>();
@@ -144,16 +144,11 @@ public class UserController {
 
 		try{
 
-			Long userId = Long.parseLong(new String(Base64.getDecoder().decode(id)));
-			String userPass = passwordEncoder.encode(new String(Base64.getDecoder().decode(pass.getBytes())));
-			securityString = new String(Base64.getDecoder().decode(securityString));
-			PSUser user = new PSUser();
+			newPass = passwordEncoder.encode(new String(Base64.getDecoder().decode(newPass)));
+			UserDTO updatedUser = service.resetPass(id, newPass, formerPass);
 
-			user.setId(userId);
-			user.setPassword(userPass);
-			UserDTO updatedUser = service.resetPass(user, securityString);
-
-			response.put("message", updatedUser);
+			response.put("message", "Contraseña modificada exitosamente");
+			response.put("updatedUser", updatedUser);
 			responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
 		} catch (UserException e) {
 
@@ -161,7 +156,7 @@ public class UserController {
 			responseEntity = new ResponseEntity<>(response, HttpStatus.NOT_ACCEPTABLE);
 		} catch (Exception e) {
 
-			response.put("message", e.getStackTrace());
+			response.put("message", e.getMessage());
 			responseEntity = new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		return responseEntity;

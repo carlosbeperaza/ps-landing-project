@@ -39,9 +39,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 	
 	@Autowired
 	public EmailServiceImpl Gmail;
-	
-	/*@Autowired
-    private BCryptPasswordEncoder passwordEncoder;*/
 
 	@Override
 	public List<UserDTO> findAll() {
@@ -161,34 +158,35 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
 			if (user.isStatus()) {
 
-				// contiene: id/valor numérico de la contraseña antigua
-				String securityString = user.getId() + "/" + user.getPassword();
-				securityString = new String(Base64.getEncoder().encode(securityString.getBytes()));
-				//TODO: reemplazar la parte **** AQUÍ VA EL LINK **** con el link al formulario en Angular.
+				String userId = new String(Base64.getEncoder().encode((user.getId() + "").getBytes()))
+						.replaceAll("=", "");
+				String formerPass = new String(Base64.getEncoder().encode((user.getPassword()).getBytes()));
 				Gmail.sendSimpleMessage(
 						email,
 						"Confirmar restablecimiento de contraseña",
 						"Se ha solicitado el restablecimiento de contraseña para la cuenta '"+username+"' asociada" +
 								"a esta dirección de correo electrónico, si este es el caso por favor siga el siguiente " +
-								"enlace: **** AQUÍ VA EL LINK AL FORMULARIO/securityString ****, de lo contrario puede" +
-								"descartar este correo."
+								"enlace: http://localhost:4200/#/change/newPassword/"+userId+"/"+formerPass+", de lo " +
+								"contrario puede descartar este correo."
 				);
-				System.out.println("securityString = " + securityString);
 			} else throw new UserException("This user is not active");
 		} else throw new UserException("Invalid credentials");
 	}
 
 	@Override
-	public UserDTO resetPass(PSUser user, String securityString) throws UserException {
+	public UserDTO resetPass(String id, String newPass, String formerPass) throws UserException {
 
-		PSUser target = userRepo.findById(user.getId()).orElse(null);
+		Long targetId = Long.parseLong(new String(Base64.getDecoder().decode(id)));
+		formerPass = new String(Base64.getDecoder().decode(formerPass));
+		PSUser coincidence = userRepo.findById(targetId).orElse(null);
 
-		if(target != null) {
+		if(coincidence != null) {
 
-			System.out.println(securityString);
-			System.out.println(target.getPassword());
-			if(target.getPassword().equals(securityString)) {
-				return update(user);
+			System.out.println(formerPass);
+			System.out.println(coincidence.getPassword());
+			if(coincidence.getPassword().equals(formerPass)) {
+				coincidence.setPassword(newPass);
+				return update(coincidence);
 			} else throw new UserException("Operation aborted, security violation");
 		} else throw new UserException("No user with given id");
 	}
