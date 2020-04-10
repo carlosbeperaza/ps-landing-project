@@ -29,41 +29,43 @@ import com.ps.landing.project.services.UserService;
 @Service
 public class UserServiceImpl implements UserService, UserDetailsService {
 
-	private Logger log = LoggerFactory.getLogger(UserServiceImpl.class.getName());
+	private final Logger log = LoggerFactory.getLogger(UserServiceImpl.class.getName());
+	private final UserRepo repo;
+	private final UserConverter converter;
+	private final EmailServiceImpl gmail;
+	private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
 	@Autowired
-	private UserRepo userRepo;
-
-	@Autowired
-	private UserConverter userconverter;
-	
-	@Autowired
-	public EmailServiceImpl Gmail;
+	UserServiceImpl(UserRepo repo, UserConverter converter, EmailServiceImpl gmail) {
+		this.repo = repo;
+		this.converter = converter;
+		this.gmail = gmail;
+	}
 
 	@Override
 	public List<UserDTO> findAll() {
 
 		List<PSUser> users = new ArrayList<>();
-		userRepo.findAll().forEach(users::add);
-		//Gmail.sendSimpleMessage("brianreach117@hotmail.com", "Prueba", "yase");
+		repo.findAll().forEach(users::add);
+		//Gmail.sendSimpleMessage("brianreach117@hotmail.com", "Prueba", "Prueba");
 
-		return userconverter.convertToDTO(users);
+		return converter.convertToDTO(users);
 	}
 
 	@Override
 	@Transactional
-	public UserDTO save(PSUser user, String passwordBcrypt) throws UserException{
+	public UserDTO save(PSUser user) throws UserException{
 
-		PSUser coincidenceByUserName = userRepo.findByUsername(user.getUsername()).orElse(null);
-		PSUser coincidenceByEmail = userRepo.findByEmail(user.getEmail()).orElse(null);
+		PSUser coincidenceByUserName = repo.findByUsername(user.getUsername()).orElse(null);
+		PSUser coincidenceByEmail = repo.findByEmail(user.getEmail()).orElse(null);
 
 		if(coincidenceByUserName == null) {
 
 			if(coincidenceByEmail == null) {
 
-				user.setPassword(passwordBcrypt);
-				Gmail.sendSimpleMessage(user.getEmail(), "Bienvenido "+ user.getName(), "Hola "+ user.getName() +" " + user.getLastname()+", te haz registrado exitosamente uWu");
-				return userconverter.UsertoUserDTO(userRepo.save(user));
+				user.setPassword(passwordEncoder.encode(user.getPassword()));
+				gmail.sendSimpleMessage(user.getEmail(), "Bienvenido "+ user.getName(), "Hola "+ user.getName() +" " + user.getLastname()+", te haz registrado exitosamente uWu");
+				return converter.UsertoUserDTO(repo.save(user));
 			} else throw new UserException("This email is already in use");
 		} else throw new UserException("This username is already in use");
 	}
@@ -71,16 +73,16 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 	@Override
 	@Transactional(readOnly = true)
 	public UserDTO findById(long id) {
-		PSUser user = userRepo.findById(id).orElse(null);
+		PSUser user = repo.findById(id).orElse(null);
 
-		return (user != null) ? userconverter.UsertoUserDTO(user) : null;
+		return (user != null) ? converter.UsertoUserDTO(user) : null;
 	}
 	
 
 	@Override
 	@Transactional
 	public UserDTO update(PSUser user) throws UserException {
-		PSUser formerUser = userRepo.findById(user.getId()).orElse(null);
+		PSUser formerUser = repo.findById(user.getId()).orElse(null);
 
         if(formerUser != null) {
 
@@ -101,7 +103,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             user.setUpdateDate(new Date());
 
 			List<PSUser> coincidences = new ArrayList<>();
-			userRepo.findByUsernameOrEmail(user.getUsername(), user.getEmail()).forEach(coincidences::add);
+			repo.findByUsernameOrEmail(user.getUsername(), user.getEmail()).forEach(coincidences::add);
 
 			for(PSUser coincidence: coincidences) {
 
@@ -114,17 +116,17 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 				}
 			}
 
-			return userconverter.UsertoUserDTO(userRepo.save(user));
+			return converter.UsertoUserDTO(repo.save(user));
         } else throw new UserException("There's no user with given id");
 	}
 	
 	@Override
 	public boolean disable(long id) {
-		 PSUser user = userRepo.findById(id).orElse(null);
+		 PSUser user = repo.findById(id).orElse(null);
 	        if(user != null) {
 
 	        	user.setStatus(false);
-	        	userRepo.save(user);
+	        	repo.save(user);
 	            return true;
 	        }
 	        return false;
@@ -132,7 +134,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
 	@Override
 	public PSUser findByFirstName(String firstName) {
-		return userRepo.findByName(firstName).orElse(null);
+		return repo.findByName(firstName).orElse(null);
 	}
 
 	/**
@@ -152,7 +154,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 		}
 		String username = new String(Base64.getDecoder().decode(targetUser.getUsername()));
 		String email = new String(Base64.getDecoder().decode(targetUser.getEmail()));
-		PSUser user = userRepo.findByUsernameAndEmail(username, email).orElse(null);
+		PSUser user = repo.findByUsernameAndEmail(username, email).orElse(null);
 
 		if (user != null) {
 
@@ -161,7 +163,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 				String userId = new String(Base64.getEncoder().encode((user.getId() + "").getBytes()))
 						.replaceAll("=", "");
 				String formerPass = new String(Base64.getEncoder().encode((user.getPassword()).getBytes()));
-				Gmail.sendSimpleMessage(
+				gmail.sendSimpleMessage(
 						email,
 						"Confirmar restablecimiento de contraseña",
 						"Se ha solicitado el restablecimiento de contraseña para la cuenta '"+username+"' asociada" +
@@ -177,8 +179,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 	public UserDTO resetPass(String id, String newPass, String formerPass) throws UserException {
 
 		Long targetId = Long.parseLong(new String(Base64.getDecoder().decode(id)));
+		PSUser coincidence = repo.findById(targetId).orElse(null);
 		formerPass = new String(Base64.getDecoder().decode(formerPass));
-		PSUser coincidence = userRepo.findById(targetId).orElse(null);
+		newPass = passwordEncoder.encode(new String(Base64.getDecoder().decode(newPass)));
 
 		if(coincidence != null) {
 
@@ -197,7 +200,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 	@Transactional(readOnly = true)
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-		PSUser user = userRepo.findByUsername(username).orElse(null);
+		PSUser user = repo.findByUsername(username).orElse(null);
 
 		if (user == null) {
 			log.error("Error en el login: no existe el usuario '" + username + "' en el sistema!");

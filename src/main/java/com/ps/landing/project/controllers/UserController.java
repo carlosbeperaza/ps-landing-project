@@ -6,8 +6,6 @@ import java.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.method.P;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -15,8 +13,6 @@ import com.ps.landing.project.dto.UserDTO;
 import com.ps.landing.project.exceptions.UserException;
 import com.ps.landing.project.models.PSUser;
 import com.ps.landing.project.services.UserService;
-
-import javax.websocket.server.PathParam;
 
 @RestController
 @RequestMapping("/user")
@@ -28,9 +24,6 @@ public class UserController {
 	void setService(UserService service) {
 		this.service = service;
 	}
-	
-	@Autowired
-    private BCryptPasswordEncoder passwordEncoder;
 
 	@GetMapping("/")
 	public ResponseEntity<?> getAllUser() {
@@ -64,12 +57,12 @@ public class UserController {
 
 		if (userDto == null) {
 			response.put("message", "Usuario No Existente");
-			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_ACCEPTABLE);
+			return new ResponseEntity<>(response, HttpStatus.NOT_ACCEPTABLE);
 		} else {
 			response.put("data", userDto);
 		}
 
-		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.ACCEPTED);
+		return new ResponseEntity<>(response, HttpStatus.ACCEPTED);
 
 		// return userService.getUsers();
 	}
@@ -80,9 +73,8 @@ public class UserController {
 		Map<String, Object> response = new HashMap<>();
 		ResponseEntity<?> responseEntity;
 		try {
-			String passwordBcrypt = passwordEncoder.encode(user.getPassword());
 			//user.setPassword(passwordBcrypt);
-			UserDTO UserDTO = service.save(user,passwordBcrypt);
+			UserDTO UserDTO = service.save(user);
 			response.put("Success", UserDTO);
 			responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
 			
@@ -143,8 +135,6 @@ public class UserController {
 		ResponseEntity<?> responseEntity;
 
 		try{
-
-			newPass = passwordEncoder.encode(new String(Base64.getDecoder().decode(newPass)));
 			UserDTO updatedUser = service.resetPass(id, newPass, formerPass);
 
 			response.put("message", "Contraseña modificada exitosamente");
