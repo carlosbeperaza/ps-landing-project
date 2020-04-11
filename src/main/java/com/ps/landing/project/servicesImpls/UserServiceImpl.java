@@ -186,9 +186,50 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 			System.out.println(coincidence.getPassword());
 			if(coincidence.getPassword().equals(formerPass)) {
 				coincidence.setPassword(newPass);
+				coincidence.setStatus(true);
 				return update(coincidence);
 			} else throw new UserException("Operation aborted, security violation");
 		} else throw new UserException("No user with given id");
+	}
+	
+	/**
+	 * Método responsable de enviar el correo de confirmación para restablecer una contraseña según el nombre de usuario
+	 * y su correo electrónico, este método solo funcionara para los usuarios activos.
+	 * @param targetUser Usuario objetivo, solo se necesita el nombre de usuario y el correo electrónico para realizar
+	 *                   la validación.
+	 * @throws UserException si no existe un usuario con el nombre de usuario y correo proporcionados o si este NO esta
+	 * activo.
+	 * */
+	@Override
+	public void emailPass(PSUser targetUser) throws UserException {
+
+		if ((targetUser.getUsername() == null || targetUser.getUsername().equals("")) ||
+				(targetUser.getEmail() == null || targetUser.getEmail().equals(""))) {
+			throw new UserException("Missing credentials");
+		}
+		String username = new String(Base64.getDecoder().decode(targetUser.getUsername()));
+		String email = new String(Base64.getDecoder().decode(targetUser.getEmail()));
+		PSUser user = userRepo.findByUsernameAndEmail(username, email).orElse(null);
+
+		if (user != null) {
+
+			
+
+				String userId = new String(Base64.getEncoder().encode((user.getId() + "").getBytes()))
+						.replaceAll("=", "");
+				String formerPass = new String(Base64.getEncoder().encode((user.getPassword()).getBytes()));
+				Gmail.sendSimpleMessage(
+						email,
+						"Actualizar Contraseña",
+						"Debido a su previo registro por uno de nuestros adminitsradores debera actualizar la contraseña ya que se le asigno "+
+						" uno por default, una vez actualizada podra ingresar con el siguiente usuario '"+
+								username+"' asociado " +
+								"a esta dirección de correo electrónico, actualize su contraseña en el siguiente " +
+								"enlace: http://localhost:4200/#/change/newPassword/"+userId+"/"+formerPass+", gracias por " +
+								"formar parte de nosotros."
+				);
+			
+		} else throw new UserException("Invalid credentials");
 	}
 
 	// Generic Methods

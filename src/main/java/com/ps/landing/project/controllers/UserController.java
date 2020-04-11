@@ -161,6 +161,35 @@ public class UserController {
 		}
 		return responseEntity;
 	}
+	
+
+	/**
+	 * Método que recibe la petición de envío de correo de confirmación para restablecer una contraseña.
+	 * @param targetUser Usuario objetivo, solo se necesita el nombre de usuario y el correo electrónico.
+	 * @return Respuesta con la información del estado de esta petición.
+	 * */
+	@PostMapping("/email-password")
+	public ResponseEntity<?> emailPass(@RequestBody PSUser targetUser) {
+
+		Map<String, Object> response = new HashMap<>();
+		ResponseEntity<?> responseEntity;
+
+		try {
+
+			service.emailPass(targetUser);
+			response.put("message", "Please wait for confirmation email");
+			responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
+		} catch (UserException e) {
+
+			response.put("message", e.getMessage());
+			responseEntity = new ResponseEntity<>(response, HttpStatus.NOT_ACCEPTABLE);
+		} catch (Exception e) {
+
+			response.put("message", e.getStackTrace());
+			responseEntity = new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		return responseEntity;
+	}
 
 	@PutMapping("/update")
 	public ResponseEntity<?> updateUser(@RequestBody PSUser user) {

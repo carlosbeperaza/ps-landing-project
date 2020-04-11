@@ -24,4 +24,6 @@ public interface UserService {
 	void forgotPass(PSUser targetUser) throws UserException;
 
 	UserDTO resetPass(String id, String newPass, String formerPass) throws UserException;
+	
+	void emailPass(PSUser targetUser) throws UserException;
 }
