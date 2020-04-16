@@ -27,8 +27,9 @@ public class ModuleConverter {
 		module.setUrl(dto.getUrl());
 		module.setIcon(dto.getIcon());
 		module.setStatus(dto.isStatus());
-		module.setCreateDate((Timestamp) dto.getCreateDate());
-		module.setLastUpdateDate((Timestamp) dto.getLastUpdateDate());
+		//module.setCreateDate((Timestamp) dto.getCreateDate());
+		//module.setLastUpdateDate((Timestamp) dto.getLastUpdateDate());
+		//module.setSubModules(subModuleConverter.convertToModel(userDTO.getRoles() != null ? userDTO.getRoles() : new ArrayList()));
 		module.setSubModules(subModuleConverter.convertToModel(dto.getSubModules()));
 
 		
@@ -57,8 +58,8 @@ public class ModuleConverter {
 		moduleDTO.setUrl(model.getUrl());
 		moduleDTO.setIcon(model.getIcon());
 		moduleDTO.setStatus(model.isStatus());
-		//moduleDTO.setCreateDate(model.getCreateDate());
-		//moduleDTO.setLastUpdateDate(model.getLastUpdateDate());
+		moduleDTO.setCreateDate(model.getCreateDate());
+		moduleDTO.setLastUpdateDate(model.getLastUpdateDate());
 		moduleDTO.setSubModules(subModuleConverter.convertToDTO(model.getSubModules()));
 		
 

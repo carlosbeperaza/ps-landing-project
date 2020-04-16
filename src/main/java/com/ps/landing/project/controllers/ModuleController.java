@@ -21,11 +21,22 @@ import com.ps.landing.project.exceptions.ModuleException;
 import com.ps.landing.project.models.Module;
 import com.ps.landing.project.services.ModuleService;
 
-@RestController
+import  org.springframework.http.MediaType ;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+import com.ps.landing.project.converters.ModuleConverter;
+
+
+
+@Controller
 @RequestMapping("/Module")
 public class ModuleController {
 	
 	private ModuleService service;
+	
+	@Autowired
+	private ModuleConverter moduleConverter;
 
     @Autowired
     void setService(ModuleService service) {
@@ -75,13 +86,15 @@ public class ModuleController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<?> addModule(@RequestBody Module module) {
-
-        Map<String, Object> response = new HashMap<>();
+    
+    @ResponseBody
+    public ResponseEntity<?> addModule(@RequestBody ModuleDTO module) {
+    	
+    Map<String, Object> response = new HashMap<>();
         ResponseEntity<?> responseEntity;
         try {
 
-        	ModuleDTO moduleDTO = service.save(module);
+        	ModuleDTO moduleDTO = service.save(moduleConverter.convertToModel(module));
             response.put("Success", moduleDTO);
             responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
         } catch(ModuleException e) {

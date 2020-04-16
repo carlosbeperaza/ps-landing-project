@@ -41,14 +41,14 @@ public class Module implements Serializable{
 	private boolean status;
 	
 	@Column(name = "creation_date")
-	 @Temporal(TemporalType.TIMESTAMP)
-	 @CreationTimestamp
-	 private Date createDate;
-
+	@Temporal(TemporalType.TIMESTAMP)
+    @CreationTimestamp 
+    private Date createDate;
+	
 	@Column(name = "last_update_date")
-	 @Temporal(TemporalType.TIMESTAMP)
-	 @UpdateTimestamp
-	 private Date lastUpdateDate;
+	@Temporal(TemporalType.TIMESTAMP)
+	@UpdateTimestamp
+	private Date lastUpdateDate;
 	
 	 @OneToMany(cascade = CascadeType.ALL)
 	 @JoinColumn(name = "parent")
@@ -107,6 +107,7 @@ public class Module implements Serializable{
 		this.status = status;
 	}
 
+	
 	public Date getCreateDate() {
 		return createDate;
 	}
@@ -122,8 +123,6 @@ public class Module implements Serializable{
 	public void setLastUpdateDate(Date lastUpdateDate) {
 		this.lastUpdateDate = lastUpdateDate;
 	}
-
-	
 
 	public List<SubModule> getSubModules() {
 		return subModules;
