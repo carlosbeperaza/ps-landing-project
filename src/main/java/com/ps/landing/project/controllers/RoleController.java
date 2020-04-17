@@ -79,11 +79,11 @@ public class RoleController {
             responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
         } catch(RoleException e) {
 
-            response.put("BadRequest", e.getMessage());
+            response.put("message", e.getMessage());
             responseEntity = new ResponseEntity<>(response, HttpStatus.NOT_ACCEPTABLE);
         } catch(Exception e) {
 
-            response.put("Error", e.getMessage());
+            response.put("Error message", e.getMessage());
             responseEntity = new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return responseEntity;
@@ -100,17 +100,17 @@ public class RoleController {
             responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
         } catch(RoleException e) {
 
-            response.put("BadRequest", e.getMessage());
+            response.put("Message", e.getMessage());
             responseEntity = new ResponseEntity<>(response, HttpStatus.NOT_ACCEPTABLE);
         } catch(Exception e) {
 
-            response.put("Error", e.getMessage());
+            response.put("Error message", e.getMessage());
             responseEntity = new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return responseEntity;
     }
     
-    @DeleteMapping("/disable/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<?> disableRole(@PathVariable Long id) {
 
         Map<String, Object> response = new HashMap<>();
@@ -123,13 +123,13 @@ public class RoleController {
                 responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
             } else {
 
-                response.put("Bad request", "No Role with given id");
-                responseEntity = new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+                response.put("Message", "No Role with given id");
+                responseEntity = new ResponseEntity<>(response, HttpStatus.NOT_ACCEPTABLE);
             }
         } catch(Exception e) {
 
             response.put("Error message", e.getMessage());
-            response.put("Stack trace", e.getStackTrace());
+            //response.put("Stack trace", e.getStackTrace());
             responseEntity = new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return responseEntity;
