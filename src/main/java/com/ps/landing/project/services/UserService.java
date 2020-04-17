@@ -19,7 +19,7 @@ public interface UserService {
 
 	UserDTO update(PSUser user) throws UserException;
 
-	PSUser findByFirstName(String fistName);
+	PSUser findByUsername(String username);
 
 	void forgotPass(PSUser targetUser) throws UserException;
 

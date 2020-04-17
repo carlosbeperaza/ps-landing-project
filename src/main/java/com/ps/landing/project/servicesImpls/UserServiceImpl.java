@@ -133,8 +133,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 	    }
 
 	@Override
-	public PSUser findByFirstName(String firstName) {
-		return repo.findByName(firstName).orElse(null);
+	public PSUser findByUsername(String username) {
+		return repo.findByUsername(username).orElse(null);
 	}
 
 	/**
