@@ -79,18 +79,20 @@ public class RoleServiceImpl implements RoleService {
 	@Override
 	@Transactional
 	public RoleDTO update(Role role) throws RoleException {
-		Role formerRole = repo.findById(role.getId()).orElse(null);
-        if(formerRole != null) {
+		Role coincidence = repo.findById(role.getId()).orElse(null);
+        if(coincidence != null) {
 
             if(role.getName() == null)
-            	role.setName(formerRole.getName());
+            	role.setName(coincidence.getName());
             if(role.getDescription() == null)
-            	role.setDescription(formerRole.getDescription());
+            	role.setDescription(coincidence.getDescription());
+            if(role.getModules() == null)
+            	role.setModules(coincidence.getModules());
             
-            role.setStatus(formerRole.isStatus());
-            role.setCreateDate(formerRole.getCreateDate());
+            role.setStatus(coincidence.isStatus());
+            role.setCreateDate(coincidence.getCreateDate());
             
-            Role formerRoleUpdate = repo.findByName(role.getName()).orElse(null);
+            Role formerRoleUpdate = repo.findByNameAndIdNot(role.getName(), role.getId()).orElse(null);
             if(formerRoleUpdate == null)
             	return converter.convertToDTO(repo.save(role));
             else throw new RoleException("This role name is already in use");
