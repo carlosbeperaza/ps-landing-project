@@ -1,5 +1,6 @@
 package com.ps.landing.project.controllers;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,15 +41,15 @@ public class RoleController {
             List<RoleDTO> roleDTOList = service.findAll();
             if(!roleDTOList.isEmpty()) {
 
-                response.put("Role list",roleDTOList);
+                response.put("roles",roleDTOList);
             } else {
 
-                response.put("No roles", "list is empty");
+                response.put("roles", new ArrayList<>());
             }
             responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
         } catch (Exception e) {
 
-            response.put("Error", e.getMessage());
+            response.put("error", e.getMessage());
             responseEntity = new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return responseEntity;
@@ -61,9 +62,9 @@ public class RoleController {
         RoleDTO roleDTO = service.findById(id);
 
         if(roleDTO != null) {
-            response.put("Role", roleDTO);
+            response.put("role", roleDTO);
         } else {
-            response.put("Role", "No role with given id");
+            response.put("role", null);
         }
         return new ResponseEntity<>(response, HttpStatus.ACCEPTED);
     }
@@ -75,7 +76,7 @@ public class RoleController {
         try {
 
         	RoleDTO roleDTO = service.save(role);
-            response.put("Success", roleDTO);
+            response.put("success", roleDTO);
             responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
         } catch(RoleException e) {
 
@@ -83,7 +84,7 @@ public class RoleController {
             responseEntity = new ResponseEntity<>(response, HttpStatus.NOT_ACCEPTABLE);
         } catch(Exception e) {
 
-            response.put("Error message", e.getMessage());
+            response.put("error", e.getMessage());
             responseEntity = new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return responseEntity;
@@ -96,15 +97,15 @@ public class RoleController {
         try {
 
         	RoleDTO updatedRole = service.update(role);
-            response.put("Success", updatedRole);
+            response.put("success", updatedRole);
             responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
         } catch(RoleException e) {
 
-            response.put("Message", e.getMessage());
+            response.put("message", e.getMessage());
             responseEntity = new ResponseEntity<>(response, HttpStatus.NOT_ACCEPTABLE);
         } catch(Exception e) {
 
-            response.put("Error message", e.getMessage());
+            response.put("error", e.getMessage());
             responseEntity = new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return responseEntity;
@@ -119,16 +120,16 @@ public class RoleController {
 
             if(service.disable(id)) {
 
-                response.put("Success", "Role disabled");
+                response.put("success", "Role disabled");
                 responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
             } else {
 
-                response.put("Message", "No Role with given id");
+                response.put("message", "No Role with given id");
                 responseEntity = new ResponseEntity<>(response, HttpStatus.NOT_ACCEPTABLE);
             }
         } catch(Exception e) {
 
-            response.put("Error message", e.getMessage());
+            response.put("error", e.getMessage());
             //response.put("Stack trace", e.getStackTrace());
             responseEntity = new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }

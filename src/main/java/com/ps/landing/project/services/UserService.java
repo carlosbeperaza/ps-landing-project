@@ -11,7 +11,7 @@ public interface UserService {
 
 	List<UserDTO> findAll();
 
-	UserDTO save(PSUser user, String passwordBcrypt) throws UserException;
+	UserDTO save(PSUser user) throws UserException;
 
 	UserDTO findById(long id);
 
@@ -19,7 +19,7 @@ public interface UserService {
 
 	UserDTO update(PSUser user) throws UserException;
 
-	PSUser findByFirstName(String fistName);
+	PSUser findByUsername(String username);
 
 	void forgotPass(PSUser targetUser) throws UserException;
 

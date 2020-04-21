@@ -13,8 +13,6 @@ public interface RoleService {
     RoleDTO findById(long id);
     RoleDTO save(Role role) throws RoleException;
     RoleDTO update(Role role) throws RoleException;
-
     boolean disable(long id);
-	
-	
+    boolean isValid(Role role);
 }
