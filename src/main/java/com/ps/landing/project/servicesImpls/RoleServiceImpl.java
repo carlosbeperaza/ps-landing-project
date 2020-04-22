@@ -82,14 +82,11 @@ public class RoleServiceImpl implements RoleService {
 		Role coincidence = repo.findById(role.getId()).orElse(null);
         if(coincidence != null) {
 
-            if(role.getName() == null)
-            	role.setName(coincidence.getName());
-            if(role.getDescription() == null)
-            	role.setDescription(coincidence.getDescription());
-            if(role.getModules() == null)
-            	role.setModules(coincidence.getModules());
-            
-            role.setStatus(coincidence.isStatus());
+            if(role.getName() == null) 			{ role.setName(coincidence.getName()); 					}
+            if(role.getDescription() == null) 	{ role.setDescription(coincidence.getDescription()); 	}
+            if(role.getModules() == null) 		{ role.setModules(coincidence.getModules()); 			}
+            if(!role.isStatus()) 				{ role.setStatus(coincidence.isStatus()); 				}
+
             role.setCreateDate(coincidence.getCreateDate());
             
             Role formerRoleUpdate = repo.findByNameAndIdNot(role.getName(), role.getId()).orElse(null);
