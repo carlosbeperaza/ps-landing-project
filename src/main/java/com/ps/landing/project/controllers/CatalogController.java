@@ -57,7 +57,7 @@ public class CatalogController {
             response.put("Success", catalogDTO);
             responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
         } else {
-            response.put("BadRequest", "No catalog with given id");
+            response.put("NotAcceptable", "No catalog with given id");
             responseEntity = new ResponseEntity<>(response, HttpStatus.NOT_ACCEPTABLE);
         }
 
@@ -76,7 +76,7 @@ public class CatalogController {
             responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
         } catch(CatalogException e) {
 
-            response.put("BadRequest", e.getMessage());
+            response.put("NotAcceptable", e.getMessage());
             responseEntity = new ResponseEntity<>(response, HttpStatus.NOT_ACCEPTABLE);
         } catch(Exception e) {
 
@@ -98,7 +98,7 @@ public class CatalogController {
             responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
         } catch(CatalogException e) {
 
-            response.put("BadRequest", e.getMessage());
+            response.put("NotAcceptable", e.getMessage());
             responseEntity = new ResponseEntity<>(response, HttpStatus.NOT_ACCEPTABLE);
         } catch(Exception e) {
 
@@ -108,7 +108,7 @@ public class CatalogController {
         return responseEntity;
     }
 
-    @DeleteMapping("/disable/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<?> disableCatalog(@PathVariable Long id) {
 
         Map<String, Object> response = new HashMap<>();
@@ -121,7 +121,7 @@ public class CatalogController {
                 responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
             } else {
 
-                response.put("BadRequest", "No catalog with given id");
+                response.put("NotAcceptable", "No catalog with given id");
                 responseEntity = new ResponseEntity<>(response, HttpStatus.NOT_ACCEPTABLE);
             }
         } catch(Exception e) {

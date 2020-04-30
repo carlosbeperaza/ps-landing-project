@@ -18,9 +18,12 @@ public interface UserService {
 	boolean disable(long id);
 
 	UserDTO update(PSUser user) throws UserException;
-
-	PSUser findByFirstName(String fistName);
 	
 	List<SidebarDTO> getSidebarByUserId(long id);
 
+	PSUser findByUsername(String username);
+
+	void forgotPass(PSUser targetUser) throws UserException;
+
+	UserDTO resetPass(String id, String newPass, String formerPass) throws UserException;
 }

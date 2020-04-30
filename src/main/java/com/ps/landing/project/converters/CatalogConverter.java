@@ -4,6 +4,7 @@ import com.ps.landing.project.dto.CatalogDTO;
 import com.ps.landing.project.dto.SubCatalogDTO;
 import com.ps.landing.project.models.Catalog;
 import com.ps.landing.project.models.SubCatalog;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -11,6 +12,13 @@ import java.util.List;
 
 @Component("CatalogConverter")
 public class CatalogConverter {
+
+    private SubCatalogConverter subConverter;
+
+    @Autowired
+    public CatalogConverter(SubCatalogConverter subConverter) {
+        this.subConverter = subConverter;
+    }
 
     public Catalog convertToModel(CatalogDTO dto) {
 
@@ -29,7 +37,7 @@ public class CatalogConverter {
 
             for(SubCatalogDTO subCatalogDTO : subCatalogDTOS) {
 
-                SubCatalog subCatalog = new SubCatalogConverter().convertToModel(subCatalogDTO);
+                SubCatalog subCatalog = subConverter.convertToModel(subCatalogDTO);
                 subCatalogs.add(subCatalog);
             }
         }
@@ -65,7 +73,7 @@ public class CatalogConverter {
 
             for(SubCatalog subCatalog : subCatalogs) {
 
-                SubCatalogDTO subCatalogDTO = new SubCatalogConverter().convertToDTO(subCatalog);
+                SubCatalogDTO subCatalogDTO = subConverter.convertToDTO(subCatalog);
                 subCatalogDTOS.add(subCatalogDTO);
             }
         }

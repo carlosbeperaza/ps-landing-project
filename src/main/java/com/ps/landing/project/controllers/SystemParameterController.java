@@ -57,8 +57,8 @@ public class SystemParameterController {
             response.put("Success", systemParameterDTO);
             responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
         } else {
-            response.put("BadRequest", "No system parameter with given id");
-            responseEntity = new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+            response.put("NotAcceptable", "No system parameter with given id");
+            responseEntity = new ResponseEntity<>(response, HttpStatus.NOT_ACCEPTABLE);
         }
 
         return responseEntity;
@@ -76,8 +76,8 @@ public class SystemParameterController {
             responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
         } catch(SystemParameterException e) {
 
-            response.put("BadRequest", e.getMessage());
-            responseEntity = new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+            response.put("NotAcceptable", e.getMessage());
+            responseEntity = new ResponseEntity<>(response, HttpStatus.NOT_ACCEPTABLE);
         } catch(Exception e) {
 
             response.put("Error", e.getMessage());
@@ -98,8 +98,8 @@ public class SystemParameterController {
             responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
         } catch(SystemParameterException e) {
 
-            response.put("BadRequest", e.getMessage());
-            responseEntity = new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+            response.put("NotAcceptable", e.getMessage());
+            responseEntity = new ResponseEntity<>(response, HttpStatus.NOT_ACCEPTABLE);
         }  catch(Exception e) {
 
             response.put("Error", e.getMessage());
@@ -108,7 +108,7 @@ public class SystemParameterController {
         return responseEntity;
     }
 
-    @DeleteMapping("/disable/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<?> disableSystemParameter(@PathVariable Long id) {
 
         Map<String, Object> response = new HashMap<>();
@@ -121,8 +121,8 @@ public class SystemParameterController {
                 responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
             } else {
 
-                response.put("BadRequest", "No system parameter with given id");
-                responseEntity = new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+                response.put("NotAcceptable", "No system parameter with given id");
+                responseEntity = new ResponseEntity<>(response, HttpStatus.NOT_ACCEPTABLE);
             }
         } catch(Exception e) {
 

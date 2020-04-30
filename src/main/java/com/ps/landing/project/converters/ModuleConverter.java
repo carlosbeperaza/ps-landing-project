@@ -27,9 +27,8 @@ public class ModuleConverter {
 		module.setUrl(dto.getUrl());
 		module.setIcon(dto.getIcon());
 		module.setStatus(dto.isStatus());
-		//module.setCreateDate((Timestamp) dto.getCreateDate());
-		//module.setLastUpdateDate((Timestamp) dto.getLastUpdateDate());
-		//module.setSubModules(subModuleConverter.convertToModel(userDTO.getRoles() != null ? userDTO.getRoles() : new ArrayList()));
+		module.setCreateDate((Timestamp) dto.getCreateDate());
+		module.setLastUpdateDate((Timestamp) dto.getLastUpdateDate());
 		module.setSubModules(subModuleConverter.convertToModel(dto.getSubModules()));
 
 		

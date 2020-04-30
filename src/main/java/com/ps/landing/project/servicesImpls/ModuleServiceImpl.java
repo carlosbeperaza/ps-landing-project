@@ -85,7 +85,7 @@ public class ModuleServiceImpl implements ModuleService {
 		 Module formerModule = repo.findById(module.getId()).orElse(null);
 	        if(formerModule != null) {
 
-	            if(module.getName() == null)
+	            /*if(module.getName() == null)
 	                module.setName(formerModule.getName());
 	            
 	            if(module.getDescription() == null)
@@ -100,9 +100,17 @@ public class ModuleServiceImpl implements ModuleService {
 	            module.setStatus(formerModule.isStatus());
 	            
 	            if(module.getSubModules() == null || module.getSubModules().isEmpty())
-	                module.setSubModules(formerModule.getSubModules());
+	                module.setSubModules(formerModule.getSubModules());*/
+	        	
+	        	if(module.getName() == null) 			{ module.setName(formerModule.getName()); }	
+	        	if(module.getDescription() == null) 			{ module.setDescription(formerModule.getDescription()); }
+	        	if(module.getUrl() == null) 			{ module.setUrl(formerModule.getUrl()); }
+	        	if(module.getIcon() == null) 			{ module.setIcon(formerModule.getIcon()); }
+	        	if(module.getName() == null) 			{ module.setName(formerModule.getName()); }	
+	        	if(module.getSubModules() == null) 		{ module.setSubModules(formerModule.getSubModules()); }
+	        	if(!module.isStatus()) 				    { module.setStatus(formerModule.isStatus());}
 	            
-	            module.setCreateDate(formerModule.getCreateDate());
+	        	module.setCreateDate(formerModule.getCreateDate());
 	            
 	            module.setLastUpdateDate(new Date());
 

@@ -56,8 +56,8 @@ public class SubCatalogController {
             response.put("Success", subCatalogDTO);
             responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
         } else {
-            response.put("BadRequest", "No sub catalog with given id");
-            responseEntity = new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+            response.put("NotAcceptable", "No sub catalog with given id");
+            responseEntity = new ResponseEntity<>(response, HttpStatus.NOT_ACCEPTABLE);
         }
         return responseEntity;
     }
@@ -74,8 +74,8 @@ public class SubCatalogController {
             responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
         } catch(SubCatalogException e) {
 
-            response.put("BadRequest", e.getMessage());
-            responseEntity = new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+            response.put("NotAcceptable", e.getMessage());
+            responseEntity = new ResponseEntity<>(response, HttpStatus.NOT_ACCEPTABLE);
         } catch(Exception e) {
 
             response.put("Error", e.getMessage());
@@ -96,8 +96,8 @@ public class SubCatalogController {
             responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
         } catch(SubCatalogException e) {
 
-            response.put("BadRequest", e.getMessage());
-            responseEntity = new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+            response.put("NotAcceptable", e.getMessage());
+            responseEntity = new ResponseEntity<>(response, HttpStatus.NOT_ACCEPTABLE);
         } catch(Exception e) {
 
             response.put("Error", e.getMessage());
@@ -106,7 +106,7 @@ public class SubCatalogController {
         return responseEntity;
     }
 
-    @DeleteMapping("/disable/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<?> disableSubCatalog(@PathVariable Long id) {
 
         Map<String, Object> response = new HashMap<>();
@@ -119,8 +119,8 @@ public class SubCatalogController {
                 responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
             } else {
 
-                response.put("BadRequest", "No sub catalog with given id");
-                responseEntity = new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+                response.put("NotAcceptable", "No sub catalog with given id");
+                responseEntity = new ResponseEntity<>(response, HttpStatus.NOT_ACCEPTABLE);
             }
         } catch(Exception e) {
 
