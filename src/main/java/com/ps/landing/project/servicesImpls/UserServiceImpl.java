@@ -98,7 +98,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             	user.setUsername(formerUser.getUsername());
             if(user.getRoles() == null)
             	user.setRoles(formerUser.getRoles());
+            if(!user.isStatus())
             user.setStatus(formerUser.isStatus());
+            
             user.setRegistrationDate(formerUser.getRegistrationDate());
             user.setUpdateDate(new Date());
 
@@ -212,7 +214,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 		}
 		String username = new String(Base64.getDecoder().decode(targetUser.getUsername()));
 		String email = new String(Base64.getDecoder().decode(targetUser.getEmail()));
-		PSUser user = userRepo.findByUsernameAndEmail(username, email).orElse(null);
+		PSUser user = repo.findByUsernameAndEmail(username, email).orElse(null);
 
 		if (user != null) {
 
@@ -221,7 +223,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 				String userId = new String(Base64.getEncoder().encode((user.getId() + "").getBytes()))
 						.replaceAll("=", "");
 				String formerPass = new String(Base64.getEncoder().encode((user.getPassword()).getBytes()));
-				Gmail.sendSimpleMessage(
+				gmail.sendSimpleMessage(
 						email,
 						"Actualizar Contraseña",
 						"Debido a su previo registro por uno de nuestros adminitsradores debera actualizar la contraseña ya que se le asigno "+

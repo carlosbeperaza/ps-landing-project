@@ -35,10 +35,10 @@ public class UserController {
 			List<UserDTO> userDTOList = service.findAll();
 			if (!userDTOList.isEmpty()) {
 
-				response.put("Success", userDTOList);
+				response.put("users", userDTOList);
 			} else {
 
-				response.put("Success", "list is empty");
+				response.put("users", "list is empty");
 			}
 			responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
 		} catch (Exception e) {
@@ -56,10 +56,10 @@ public class UserController {
 		UserDTO userDto = service.findById(id);
 
 		if (userDto == null) {
-			response.put("message", "Usuario No Existente");
+			response.put("user", "Usuario No Existente");
 			return new ResponseEntity<>(response, HttpStatus.NOT_ACCEPTABLE);
 		} else {
-			response.put("data", userDto);
+			response.put("user", userDto);
 		}
 
 		return new ResponseEntity<>(response, HttpStatus.ACCEPTED);
@@ -75,7 +75,7 @@ public class UserController {
 		try {
 			//user.setPassword(passwordBcrypt);
 			UserDTO UserDTO = service.save(user);
-			response.put("Success", UserDTO);
+			response.put("success", UserDTO);
 			responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
 			
 		} catch(UserException e) {
@@ -167,7 +167,7 @@ public class UserController {
 		try {
 
 			service.emailPass(targetUser);
-			response.put("message", "Please wait for confirmation email");
+			response.put("success", "Please wait for confirmation email");
 			responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
 		} catch (UserException e) {
 
@@ -175,7 +175,7 @@ public class UserController {
 			responseEntity = new ResponseEntity<>(response, HttpStatus.NOT_ACCEPTABLE);
 		} catch (Exception e) {
 
-			response.put("message", e.getStackTrace());
+			response.put("error", e.getStackTrace());
 			responseEntity = new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		return responseEntity;
@@ -191,7 +191,7 @@ public class UserController {
 			UserDTO updatedUser = service.update(user);
 			//if (updatedUser != null) {
 
-				response.put("Success", updatedUser);
+				response.put("success", updatedUser);
 				responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
 			//} else {
 		} catch(UserException e) {
@@ -200,7 +200,7 @@ public class UserController {
 			//}
 		} catch (Exception e) {
 
-			response.put("Error", e.getMessage());
+			response.put("error", e.getMessage());
 			responseEntity = new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		return responseEntity;
@@ -215,7 +215,7 @@ public class UserController {
 
 			if (service.disable(id)) {
 
-				response.put("Success", "User disabled");
+				response.put("success", "User disabled");
 				responseEntity = new ResponseEntity<>(response, HttpStatus.ACCEPTED);
 			} else {
 
@@ -224,7 +224,7 @@ public class UserController {
 			}
 		} catch (Exception e) {
 
-			response.put("Error message", e.getMessage());
+			response.put("error", e.getMessage());
 			//response.put("Stack trace", e.getStackTrace());
 			responseEntity = new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
